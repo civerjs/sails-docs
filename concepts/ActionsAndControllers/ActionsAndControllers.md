@@ -1,10 +1,10 @@
-# Actions and controllers
+# 脚本和控制器
 
-### Overview
+### 简介
 
-_Actions_ are the principal objects in your Sails application that are responsible for responding to *requests* from a web browser, mobile application or any other system capable of communicating with a server.  They often act as a middleman between your [models](https://sailsjs.com/documentation/concepts/models-and-orm) and [views](https://sailsjs.com/documentation/concepts/views). With rare exceptions, the actions will orchestrate the bulk of your project&rsquo;s [business logic](http://en.wikipedia.org/wiki/Business_logic).
+_Actions_ 是您的Sails应用程序中的首要对象，它们负责响应来自Web浏览器的*请求*, 同时应用于移动APP或任何其他能够与服务器通信的系统.  他们作为模型和视图的中间件。 [models](https://sailsjs.com/documentation/concepts/models-and-orm) and [views](https://sailsjs.com/documentation/concepts/views). 除了少数例外, actions负责项目中的大部分操作&rsquo;s [business logic](http://en.wikipedia.org/wiki/Business_logic).
 
-Actions are bound to [routes](https://sailsjs.com/documentation/concepts/Routes) in your application, so that when a user agent requests a particular URL, the bound action is executed to perform some business logic and send a response.  For example, the `GET /hello` route in your application could be bound to an action like:
+Actions和路由绑定[routes](https://sailsjs.com/documentation/concepts/Routes), 以便当用户请求特定的URL时，会执行绑定的action对业务逻辑发送响应。  例如, 在项目中访问 `GET /hello` 路由，他绑定action是:
 
 ```javascript
 async function (req, res) {
@@ -12,22 +12,22 @@ async function (req, res) {
 }
 ```
 
-Any time a web browser is pointed to the `/hello` URL on your app's server, the page will display the message: &ldquo;Hi there!&rdquo;.
+任何适合当用户访问 `/hello` 这个URL, 页面会显示: &ldquo;Hi there!&rdquo;.
 
-### Where are actions defined?
-Actions are defined in the `api/controllers/` folder and subfolders (we&rsquo;ll talk more about _controllers_ in a bit). In order for a file to be recognized as an action, it must be _kebab-cased_ (containing only lowercase letters, numbers and dashes).  When referring to an action in Sails (for example, when [binding it to a route](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax)), use its path relative to `api/controllers`, without any file extension.  For example, the `api/controllers/user/find.js` file represents an action with the identity `user/find`.
+### actions在哪里定义?
+Actions 在 `api/controllers/` 文件夹和子文件夹 (we&rsquo;ll talk more about _controllers_ in a bit). 为了在文件中识别action, action的格式必须是_kebab-cased_（仅包含小写字母，数字和破折号）.  当引用Sails中的action(例如, 引用[binding it to a route](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax)), 使用相对路径 `api/controllers`,不需要文件扩展名.  例如, 文件 `api/controllers/user/find.js` 可以直接访问 `user/find`.
 
-##### File extensions for actions
+##### actions 扩展名
 
-An action can have any file extension besides `.md` (Markdown) and `.txt` (text).  By default, Sails only knows how to interpret `.js` files, but you can customize your app to use things like [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) or [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script) as well.
+action 可以使用任意后缀，比如 `.md` (Markdown) 或者 `.txt` (text). 默认情况下, Sails只解析 `.js` 文件, 但你可以自定项目APP使用 [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) 或者 [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script).
 
-### What does an action file look like?
+### action 文件的命名规则？
 
-Action files can use one of two formats: _classic_ or _actions2_.
+Action 文件可以使用两种命名方式: _classic_ or _actions2_.
 
-##### Classic actions
+##### 经典 actions
 
-The traditional way of getting started creating a Sails action is to declare it as a function.  When a client requests a route that is bound to that action, the function will be called using the [incoming request object](https://sailsjs.com/documentation/reference/request-req) as the first argument (typically named `req`), and the [outgoing response object](https://sailsjs.com/documentation/reference/response-res) as the second argument (typically named `res`).  Here's a sample action function that looks up a user by ID, and either displays a "welcome" view or redirects to a signup page if the user can't be found:
+创建Sails action的传统方式是将其声明为函数。 当客户端请求绑定该操作的路由时， 函数将调用 [传入请求](https://sailsjs.com/documentation/reference/request-req) 作为第一个对象 (通常名为 `req`), 或者[传出请求](https://sailsjs.com/documentation/reference/response-res) 作为第二个对象 (通常名为 `res`).  以下是一个示例，它根据ID查找用户，如果无法找到用户，则显示“欢迎”视图或重定向到注册页面：
 
 ```javascript
 module.exports = async function welcomeUser (req, res) {
@@ -58,7 +58,7 @@ module.exports = async function welcomeUser (req, res) {
 
 ##### actions2
 
-Another, more structured way to create an action is by writing it in the more modern ("actions2") syntax.  In much the same way that Sails [helpers](https://sailsjs.com/documentation/concepts/helpers) work, by defining your action with a declarative definition ("_machine_"), it is essentially self-documenting and self-validating.  Here's the same action as above, rewritten using the actions2 format:
+另一种更结构化的创建action的方法是将其写入更现代的（“actions2”）语法中。 与Sails [helpers](https://sailsjs.com/documentation/concepts/helpers)的工作方式大致相同, 通过用声明来定义你的动作 ("_machine_"), 本质上是自我记录和自我验证.  这是与上面相同的操作，使用actions2格式重写:
 
 ```javascript
 module.exports = {
@@ -107,9 +107,9 @@ module.exports = {
 };
 ```
 
-Sails uses the [machine-as-action](https://github.com/treelinehq/machine-as-action) module to automatically create route-handling functions out of machines like the example above.  See the [machine-as-action docs](https://github.com/treelinehq/machine-as-action#customizing-the-response) for more information.
+Sails使用模块[machine-as-action](https://github.com/treelinehq/machine-as-action)自动创建路由处理功能，就像上面的例子一样。 查看 [machine-as-action docs](https://github.com/treelinehq/machine-as-action#customizing-the-response) 以了解更多信息.
 
-> Note that machine-as-action provides actions with access to the [request object](https://sailsjs.com/documentation/reference/request-req) as `this.req`.
+> 请注意machine-as-action提供actions访问 [request object](https://sailsjs.com/documentation/reference/request-req) as `this.req`.
 
 <!--
 Removed in order to reduce the amount of information:  (Mike nov 14, 2017)
