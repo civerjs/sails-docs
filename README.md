@@ -37,7 +37,7 @@ Sails当前稳定版本的官方文档位于这里[master branch]（github.com/b
 
 #### 这些文档如何编译并推送到网站？
 
-我们使用`doc-templater`模块将.md文件转换为网站的html。 您可以在[doc-templater repo]（https://github.com/uncletammy/doc-templater）中了解更多。
+我们使用`doc-templater`模块将.md文件转换为网站的html。 您可以在 [doc-templater repo]（https://github.com/uncletammy/doc-templater） 中了解更多。
 
 每个.md文件在网站上都有自己的页面（即所有的参考，概念和解析文件），并且应该包含一个特殊的<docmeta name =“displayName”>“标签，其中带有`value`属性，用于指定当前页。 这会影响文档页面在搜索引擎结果中的显示方式，并且还会在sailsjs.com上的导航菜单中作为显示名称。 例如：
 
