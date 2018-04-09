@@ -1,28 +1,30 @@
-# Routing to actions
+# 路由指定actions
 
-### Manual routing
+### 手动路由指定
 
-By default, controller actions in your Sails app will be inaccessible to users until you _bind_ them to a route in your [`config/routes.js` file](https://sailsjs.com/documentation/reference/configuration/sails-config-routes).  When you bind a route, you specify a URL that users can access the action at, along with options like [CORS security settings](https://sailsjs.com/documentation/concepts/security/cors#?configuring-cors-for-individual-routes).
+默认情况下，用户将无法访问Sails app中控制器的actions，除非您将它们绑定到[`config/routes.js` file](https://sailsjs.com/documentation/reference/configuration/sails-config-routes).  绑定路由, 指定一个用户可以访问该action的URL, 诸如此类像 [CORS security settings](https://sailsjs.com/documentation/concepts/security/cors#?configuring-cors-for-individual-routes).
 
-To bind a route to an action in the `config/routes.js` file, you can use the HTTP verb and path (i.e. the **route address**) as the key, and the action identity as the value (i.e. the **route target**).
+绑定action到路由在 `config/routes.js` 文件中, 你可以使用HTTP verb或者路径 (i.e. the **route address**) 作为关键字, 并将动作作为值 (i.e. the **route target**).
 
-For example, the following manual route will cause your app to trigger the `makeIt` action in `api/controllers/SandwichController.js` whenever it receives a POST request to `/make/a/sandwich`:
+例如，下面的手动路由，当应用接收到一个POST请求`/make/a/sandwich`就会触发 `api/controllers/SandwichController.js`中的`makeIt`动作：
 
 ```js
   'POST /make/a/sandwich': 'SandwichController.make'
 ```
 
-If you&rsquo;re using standalone actions, so that you had an `api/controllers/sandwich/make.js` file, a more intuitive syntax exists which uses the path to the action (relative to `api/controllers`):
+如果你使用独立actions, 你会有一个 `api/controllers/sandwich/make.js` 文件, 使用action路径更直接的语法是 (relative to `api/controllers`):
 
 ```js
   'POST /make/a/sandwich': 'sandwich/make'
 ```
 
-For a full discussion of routing, please see the [routes documentation](https://sailsjs.com/documentation/concepts/Routes).
+有关路由的完整讨论，请参阅 [routes documentation](https://sailsjs.com/documentation/concepts/Routes).
 
-### Automatic routing
+### 自动路由指定
 
-Sails can also automatically bind routes to your controller actions so that a `GET` request to `/:actionIdentity` will trigger the action.  This is called _blueprint action routing_, and it can be activated by setting `actions` to `true` in the [`config/blueprints.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-blueprints) file.  For example, with blueprint action routing turned on, a `signup` action saved in `api/controllers/UserController.js` or `api/controllers/user/signup.js` would be bound to a `/user/signup` route.  See the [blueprints documentation](https://sailsjs.com/documentation/reference/blueprint-api) for more information about Sails&rsquo; automatic route binding.
+Sails也可以自动绑定路由到你的控制器动作，发送到`/：actionIdentity`的`GET`请求就会触发这个action。
+
+Sails can also automatically bind routes to your controller actions so that a `GET` request to `/:actionIdentity` will trigger the action.  我们称它为 _blueprint action routing_, 他可以通过设置 `actions` 为 `true`进行激活，请参考 [`config/blueprints.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-blueprints) 文件.  例如, 打开 blueprint action routing 后, `signup` action 存储在 `api/controllers/UserController.js` or `api/controllers/user/signup.js` 会自动绑定到 `/user/signup` 路由.  参考 [blueprints documentation](https://sailsjs.com/documentation/reference/blueprint-api) 获得更多信息关于Sails&rsquo; 自动路由指定.
 
 
 <docmeta name="displayName" value="Routing to actions">
