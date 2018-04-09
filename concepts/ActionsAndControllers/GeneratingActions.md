@@ -1,17 +1,17 @@
-# Generating controllers or standalone actions
+# 生成controllers或者独立actions
 
-You can use [`sails-generate`](https://sailsjs.com/documentation/reference/command-line-interface/sails-generate) from the Sails command line tool to quickly generate a controller, or even just an individual action.
+你可以使用 [`sails-generate`](https://sailsjs.com/documentation/reference/command-line-interface/sails-generate) 从Sails命令行工具快速生成控制器，甚至只是一个独立actions。
 
 
-### Generating controllers
+### 生成控制器 controllers
 
-For example, to generate a controller:
+实例, 创建一个控制器:
 
 ```sh
 $ sails generate controller user
 ```
 
-Sails will generate `api/controllers/UserController.js`:
+Sails 会创建 `api/controllers/UserController.js`:
 
 ```javascript
 /**
@@ -25,9 +25,9 @@ module.exports = {
 }
 ```
 
-### Generating standalone actions
+### 创建独立actions
 
-Run the following command to generate a standalone action:
+运行以下命令以生成独立action:
 
 ```sh
 $ sails generate action user/signup
@@ -36,7 +36,7 @@ Using "actions2"...
 [?] https://sailsjs.com/docs/concepts/actions
 ```
 
-Sails will create `api/controllers/user/sign-up.js`:
+Sails会创建 `api/controllers/user/sign-up.js`:
 
 ```javascript
 /**
@@ -76,7 +76,7 @@ module.exports = {
 ```
 
 
-Or, using the [classic actions](https://sailsjs.com/documentation/concepts/actions-and-controllers#?classic-actions) interface:
+或者，使用 [classic actions](https://sailsjs.com/documentation/concepts/actions-and-controllers#?classic-actions) 界面:
 
 
 ```sh
@@ -84,7 +84,7 @@ $ sails generate action user/signup --no-actions2
 info: Created a traditional (req,res) controller action, but as a standalone file
 ```
 
-Sails will create `api/controllers/user/sign-up.js`:
+Sails会创建`api/controllers/user/sign-up.js`:
 
 ```javascript
 /**
@@ -106,7 +106,6 @@ module.exports = function signup(req, res) {
 
 };
 ```
-
 
 
 
