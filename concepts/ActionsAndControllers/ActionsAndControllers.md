@@ -58,7 +58,7 @@ module.exports = async function welcomeUser (req, res) {
 
 ##### actions2
 
-另一种更结构化的创建action的方法是将其写入更现代的（“actions2”）语法中。 与Sails [helpers](https://sailsjs.com/documentation/concepts/helpers)的工作方式大致相同, 通过用声明来定义你的动作 ("_machine_"), 本质上是自我记录和自我验证.  这是与上面相同的操作，使用actions2格式重写:
+另一种更结构化的创建action的方法是将其写入更现代的（“actions2”）语法中。 与Sails [helpers](https://sailsjs.com/documentation/concepts/helpers) 的工作方式大致相同, 通过用声明来定义你的动作 ("_machine_"), 本质上是自我记录和自我验证.  这是与上面相同的操作，使用actions2格式重写:
 
 ```javascript
 module.exports = {
@@ -109,7 +109,7 @@ module.exports = {
 
 Sails使用模块[machine-as-action](https://github.com/treelinehq/machine-as-action)自动创建路由功能，就像上面的例子一样。 查看 [machine-as-action docs](https://github.com/treelinehq/machine-as-action#customizing-the-response) 以了解更多信息.
 
-> 请注意machine-as-action提供actions访问 [request object](https://sailsjs.com/documentation/reference/request-req) as `this.req`.
+> 请注意machine-as-action提供actions访问 [request object] (https://sailsjs.com/documentation/reference/request-req) as `this.req`.
 
 <!--
 Removed in order to reduce the amount of information:  (Mike nov 14, 2017)
@@ -160,7 +160,7 @@ module.exports = {
 };
 ```
 
-你可以使用 [`sails generate controller`](https://sailsjs.com/documentation/reference/command-line-interface/sails-generate#?sails-generate-controller-foo-action-1-action-2) 快速创建控制器文件.
+你可以使用 [`sails generate controller`] (https://sailsjs.com/documentation/reference/command-line-interface/sails-generate#?sails-generate-controller-foo-action-1-action-2) 快速创建控制器文件.
 
 ##### controllers 控制器的后缀名
 
@@ -186,7 +186,7 @@ api/
 
 * 只需查看文件夹中包含的文件，而不是分析控制器文件中的代码，就可以更轻松地跟踪应用中包含的操作。
 * 每个action文件都很小，易于维护，而控制器文件往往会随着您的应用程序的增长而增长。
-* [路由指向独立 actions](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax)指向子文件夹比嵌套控制器文件更为直观 (`foo/bar/baz.js` vs. `foo/BarController.baz`).
+* [路由指向独立 actions](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax) 指向子文件夹比嵌套控制器文件更为直观 (`foo/bar/baz.js` vs. `foo/BarController.baz`).
 
 * Blueprint index 路由适用于顶级独立actions，因此您可以创建一个`api / controllers / index.js`文件并将其自动绑定到您的app的&rsquo;s `/` 路由（而不必创建任意控制器文件来指向根目录）。
 
