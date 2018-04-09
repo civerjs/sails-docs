@@ -2,7 +2,7 @@
 
 蓝图actions(不要与包含蓝图action的路由混淆) 是设计用于models的通用action.它们是您的应用程序的默认行为. 例如,你可以不用在一个文件名为`User.js`的model中写入`find`, `create`, `update`, `destroy`, `populate`, `add`和`remove`.
 
-默认情况下, 蓝图[RESTful路由](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?restful-routes)和[快捷路由(https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-routes) 都与他们相应的蓝图action有关. 但是，在该控制器中创建自定义action，可以覆盖蓝图action (e.g. `ParrotController.find`).
+默认情况下, 蓝图[RESTful路由](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?restful-routes)和[快捷路由](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-routes) 都与他们相应的蓝图action有关. 但是，在该控制器中创建自定义action，可以覆盖蓝图action (e.g. `ParrotController.find`).
 
 当前版本的Sails附带以下蓝图actions:
 
