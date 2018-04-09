@@ -19,7 +19,7 @@ Actions 在 `api/controllers/` 文件夹和子文件夹 (we&rsquo;ll talk more a
 
 ##### actions 扩展名
 
-action 可以使用任意后缀，比如 `.md` (Markdown) 或者 `.txt` (text). 默认情况下, Sails只解析 `.js` 文件, 但你可以自定项目APP使用 [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) 或者 [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script).
+action 可以使用任意后缀，除了 `.md` (Markdown) 和 `.txt` (text). 默认情况下, Sails只解析 `.js` 文件, 但你可以自定项目APP使用 [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) 或者 [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script).
 
 ### action 文件的命名规则？
 
@@ -107,7 +107,7 @@ module.exports = {
 };
 ```
 
-Sails使用模块[machine-as-action](https://github.com/treelinehq/machine-as-action)自动创建路由处理功能，就像上面的例子一样。 查看 [machine-as-action docs](https://github.com/treelinehq/machine-as-action#customizing-the-response) 以了解更多信息.
+Sails使用模块[machine-as-action](https://github.com/treelinehq/machine-as-action)自动创建路由功能，就像上面的例子一样。 查看 [machine-as-action docs](https://github.com/treelinehq/machine-as-action#customizing-the-response) 以了解更多信息.
 
 > 请注意machine-as-action提供actions访问 [request object](https://sailsjs.com/documentation/reference/request-req) as `this.req`.
 
@@ -117,40 +117,40 @@ Removed in order to reduce the amount of information:  (Mike nov 14, 2017)
 and to the Sails application object (in case you don&rsquo;t have [globals](https://sailsjs.com/documentation/concepts/globals) turned on) as `this.sails`.
 -->
 
-Using classic `req, res` functions for your actions is technically less typing.  However, using actions2 provides several advantages:
+虽然在actions中使用经典函数 `req, res` 是非常简洁的用法，但是使用actions2有如下几个优点:
 
- * The code you write is not directly dependent on `req` and `res`, making it easier to re-use or abstract into a [helper](https://sailsjs.com/documentation/concepts/helpers).
- * You guarantee that you&rsquo;ll be able to quickly determine the names and types of the request parameters the action expects, and you'll know that they will be automatically validated before the action is run.
- * You&rsquo;ll be able to see all of the possible outcomes from running the action without having to dissect the code.
+ * 你的代码不直接依赖于 `req` 或 `res`, 使得代码更容易重用，或者抽象为[helper](https://sailsjs.com/documentation/concepts/helpers).
+ * 你可以快速确定请求的参数和名称，并且你可以使action在运行之前进行自动验证。
+ * 可以直观的看到action所有可能的运行结果，而不用去分析代码。
 
-In a nutshell, your code will be standardized in a way that makes it easier to re-use and modify later.  And since you'll declare the action's parameters ahead of time, you'll be much less likely to expose edge cases and security holes.
+简而言之，您的代码将以一种形式进行标准化，以便稍后重新使用和修改。 由于您会提前声明action参数，因此您将不太可能暴露封包和安全漏洞。
 
-###### Exit signals
+###### Exit 操作
 
-In an action, helper, or script, throwing anything will trigger the `error` exit by default. If you want to trigger any other exit, you can do so by throwing a "special exit signal". This will either be a string (the name of the exit), or an object with the name of the exit as the key and the output data as the value.
-For example, instead of the usual syntax:
+在动作、助手或脚本中，默认情况下，抛出任何东西都会触发`error`退出。 如果想出发其他退出方式,可以通过抛出一个 "special exit signal". 可以采用一个字符串 (the name of the exit), 或者以出口名称作为key并输出数据值的object。
+例如，可以这样代替通常的语法:
 
 ```javascript
 return exits.hasConflictingCourses();
 ```
 
-You could use the shorthand:
+可以采用抛出:
 
 ```javascript
 throw 'hasConflictingCourses';
 ```
 
-Or, to include output data:
+或者，包含输出数据:
 
 ```javascript
 throw { hasConflictingCourses: ['CS 301', 'M 402'] };
 ```
 
-Aside from being an easy-to-read shorthand, exit signals are especially useful if you're inside of a `for` loop, `forEach`, etc., but still want to exit through a particular exit.
+除了易于读写, 退出信号在 `for` 循环中也特别有用, 还有`forEach`等等, 都可以通过这种方式退出.
 
-### Controllers
+### Controllers 控制器
 
-The quickest way to get started writing Sails apps is to organize your actions into _controller files_.  A controller file is a [_PascalCased_](https://en.wikipedia.org/wiki/PascalCase) file whose name must end in `Controller`, containing a dictionary of actions.  For example, a  "User controller" could be created at `api/controllers/UserController.js` file containing:
+编写Sails应用程序的最快方法是将您的action组织到_controller files_中。  控制器文件使用帕斯卡命名规则 [_PascalCased_](https://en.wikipedia.org/wiki/PascalCase) 最后必须以 `Controller`结束,并包含一个动作字典. 例如, 一个"用户控制器"创建 `api/controllers/UserController.js`文件并包含:
 
 ```javascript
 module.exports = {
@@ -160,16 +160,16 @@ module.exports = {
 };
 ```
 
-You can use [`sails generate controller`](https://sailsjs.com/documentation/reference/command-line-interface/sails-generate#?sails-generate-controller-foo-action-1-action-2) to quickly create a controller file.
+你可以使用 [`sails generate controller`](https://sailsjs.com/documentation/reference/command-line-interface/sails-generate#?sails-generate-controller-foo-action-1-action-2) 快速创建控制器文件.
 
-##### File extensions for controllers
+##### controllers 控制器的后缀名
 
-A controller can have any file extension besides `.md` (Markdown) and `.txt` (text).  By default, Sails only knows how to interpret `.js` files, but you can customize your app to use things like [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) or [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script) as well.
+控制器可以使用除了 `.md` (Markdown) and `.txt` (text)之外的任意后缀名.默认情况下, Sails 只解析`.js` 文件, 但你可以自定义后缀名如 [CoffeeScript](https://sailsjs.com/documentation/tutorials/using-coffee-script) 或者 [TypeScript](https://sailsjs.com/documentation/tutorials/using-type-script).
 
 
-### Standalone actions
+### 独立 actions
 
-For larger, more mature apps, _standalone actions_ may be a better approach than controller files.  In this scheme, rather than having multiple actions living in a single file, each action is in its own file in an appropriate subfolder of `api/controllers`.  For example, the following file structure would be equivalent to the  `UserController.js` file:
+对于大型、更成熟的APP, _standalone actions_(独立 actions) 可能是比控制器更好的方法. 在这个方案中，不是每个动作都存在一个文件中，而是每个动作都在它自己的`api / controllers`的适当子文件夹中. 以下文件结构等同于 `UserController.js` 文件:
 
 ```
 api/
@@ -180,26 +180,26 @@ api/
    signup.js
 ```
 
-where each of the three Javascript files exports a `req, res` function or an actions2 definition.
+这三个Javascript文件中的每一个都导出`req，res`函数或者一个actions2定义。
 
-Using standalone actions has several advantages over controller files:
+使用独立actions与控制器controllers相比有几个优点:
 
-* It's easier to keep track of the actions that your app contains, by simply looking at the files contained in a folder rather than scanning through the code in a controller file.
-* Each action file is small and easy to maintain, whereas controller files tend to grow as your app grows.
-* [Routing to standalone actions](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax) in nested subfolders is more intuitive than with nested controller files (`foo/bar/baz.js` vs. `foo/BarController.baz`).
+* 只需查看文件夹中包含的文件，而不是分析控制器文件中的代码，就可以更轻松地跟踪应用中包含的操作。
+* 每个action文件都很小，易于维护，而控制器文件往往会随着您的应用程序的增长而增长。
+* [路由指向独立 actions](https://sailsjs.com/documentation/concepts/routes/custom-routes#?action-target-syntax)指向子文件夹比嵌套控制器文件更为直观 (`foo/bar/baz.js` vs. `foo/BarController.baz`).
 
-* Blueprint index routes apply to top-level standalone actions, so you can create an `api/controllers/index.js` file and have it automatically bound to your app&rsquo;s `/` route (as opposed to having to create an arbitrary controller file to hold the root action).
+* Blueprint index 路由适用于顶级独立actions，因此您可以创建一个`api / controllers / index.js`文件并将其自动绑定到您的app的&rsquo;s `/` 路由（而不必创建任意控制器文件来指向根目录）。
 
 
-### Keeping it lean
+### 精益求精
 
-In the tradition of most MVC frameworks, mature Sails apps usually have "thin" controllers -- that is, your action code ends up lean, because reusable code has been moved into [helpers](https://sailsjs.com/documentation/concepts/helpers) or occasionally even extracted into separate node modules.  This approach can definitely make your app easier to maintain as it grows in complexity.
+在大多数MVC框架的传统中，成熟的Sails app 通常具有“瘦”的控制器 - 也就是说，由于可重用的代码已被移入 [helpers] (https://sailsjs.com/documentation/concepts/helpers)，或偶尔提取到单独的节点模块中。这种方法绝对可以让您的应用程序更容易维护，因为程序的复杂性日益增长。
 
-But at the same time, extrapolating code into reusable helpers _too early_ can cause maintainence issues that waste time and productivity.  So the right answer lies somewhere in the middle.
+但与此同时，过早地将代码推广到可重复使用的helpers中会导致维护问题，浪费时间和降低生产力。 所以要在两者之间寻找平衡。
 
-Sails recommends this general rule of thumb:  **Wait until you're about to use the same piece of code for the _third_ time before you extrapolate it into a separate helper.**  But as with any dogma, use your judgement!  If the code in question is very long or complex, then it might make sense to pull it out into helper a helper much sooner.  Conversely, if you know what you're building is a quick, throwaway prototype, you might just copy and paste the code to save time.
+Sails建议采用以下一般经验法则：**等到你第三次使用相同的代码时，再把它放到一个单独的助手中。**但和任何习惯一样，需要你自己判断！ 如果代码很长或很复杂，那么将它添加到helpers中可能是有意义的。 相反，如果您知道自己构建的是快速，一次性原型，则可以复制并粘贴代码以节省时间。
 
-> Whether you're developing for passion or profit, at the end of the day, the goal is to make the best possible use of your time as an engineer.  Some days that means getting more code written, and other days it means looking out for the long-term maintainability of the project.  If you're not sure which of these goals is more important at your current stage of development, you might take a step back and give it some thought.  (Better yet, have a chat with the rest of your team or [other folks building apps on Node.js/Sails](https://sailsjs.com/support).)
+> 无论您是为激情还是利润而开发，在一天结束时，作为工程师，您的目标都是尽可能地利用您的时间。 有些日子需要编写代码，其他日子要寻找项目的长期可维护性。 如果你不确定这些目标中的哪一个在你目前的发展阶段中更重要，你可以退后一步思考一下。  (更好的是和自己的团队沟通或者 [other folks building apps on Node.js/Sails](https://sailsjs.com/support).)
 
 <docmeta name="displayName" value="Actions and controllers">
 <docmeta name="nextUpLink" value="/documentation/concepts/views">
