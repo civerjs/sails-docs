@@ -1,6 +1,6 @@
-# sails-docs/concepts
+# sails-docs/概念
 
-This section contains the markdown files which are compiled to HTML and eventually made available as conceptual documentation for the Sails framework at https://sailsjs.com/documentation/concepts.
+本节包含编译为HTML的.md文件，并最终为该链接提供内容 https://sailsjs.com/documentation/concepts。
 
 ### Notes
 > - This README file **is not compiled to HTML** for the website.  It is just here to explain what you're looking at.
