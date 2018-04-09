@@ -2,7 +2,7 @@
 
 ### 手动路由指向
 
-默认情况下，用户将无法访问Sails app中控制器的actions，除非您将它们绑定到[`config/routes.js` file](https://sailsjs.com/documentation/reference/configuration/sails-config-routes).  绑定路由, 指定一个用户可以访问该action的URL, 诸如此类像 [CORS security settings](https://sailsjs.com/documentation/concepts/security/cors#?configuring-cors-for-individual-routes).
+默认情况下，用户将无法访问Sails app中控制器的actions，除非您将它们绑定到[`config/routes.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-routes).  绑定路由, 指定一个用户可以访问该action的URL, 诸如此类像 [CORS security settings](https://sailsjs.com/documentation/concepts/security/cors#?configuring-cors-for-individual-routes).
 
 绑定action到路由在 `config/routes.js` 文件中, 你可以使用HTTP verb或者路径 (i.e. the **route address**) 作为关键字, 并将动作作为值 (i.e. the **route target**).
 
