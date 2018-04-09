@@ -1,18 +1,19 @@
-# Blueprints
+# 蓝图
 
-### Overview
+### 概述
 
-Like any good web framework, Sails aims to reduce both the amount of code you write and the time it takes to get a functional app up and running.  _Blueprints_ are Sails&rsquo;s way of quickly generating API [routes](https://sailsjs.com/documentation/concepts/routes) and [actions](https://sailsjs.com/documentation/concepts/controllers#?actions) based on your application design.
+与任何良好的Web框架一样，Sails的目标是减少您编写的代码量，并减少启动运行应用程序所需的时间。 _Blueprints_ 是Sails快速生成API [路由](https://sailsjs.com/documentation/concepts/routes)和 [actions](https://sailsjs.com/documentation/concepts/controllers#?actions)的方式，以您的应用程序设计为基础。
 
-Together, [blueprint routes](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes) and [blueprint actions](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions) constitute the **blueprint API**, the built-in logic that powers the [RESTful JSON API](http://en.wikipedia.org/wiki/Representational_state_transfer) you get every time you create a model and controller.
+[蓝图路由](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes)和[蓝图actions](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions)组成**blueprint API**，这为创建[RESTful JSON API](http://en.wikipedia.org/wiki/Representational_state_transfer)格式的model和控制器提供动力的内置逻辑。
 
-For example, if you create a `User.js` model file in your project, then with blueprints enabled you will be able to immediately visit `/user/create?name=joe` to create a user, and visit `/user` to see an array of your app's users.  All without writing a single line of code!
 
-Blueprints are a powerful tool for prototyping, but in many cases can be used in production as well, since they can be overridden, protected, extended or disabled entirely.
+例如, 在项目中创建一个文件名为`User.js`的model, 在启用蓝图的情况下，你可以访问`/user/create?name=joe`来创建用户, 访问`/user`查看app所有用户.  这些都不需要写一行代码!
 
-### Up next
+蓝图是用于原型制作的强大工具，但在许多情况下也可用于生产,因为它们可以被overridden, protected, extended或者完全禁用.
 
-+ [Read more](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions) about built-in blueprint actions
-+ [Read more](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes) about implicit "shadow" routes and how to configure or override them
+### 接下来
+
++ [了解更多](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions) 关于内置的蓝图actions
++ [了解更多](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes) 怎么样重写或者配置隐式 "影子" 路由
 
 <docmeta name="displayName" value="Blueprints">
