@@ -1,105 +1,105 @@
-# Default tasks
+# 默认任务
 
-### Overview
+### 概述
 
-The asset pipeline bundled in Sails is a set of Grunt tasks configured with conventional defaults designed to make your project more consistent and productive. The entire frontend asset workflow is completely customizable, while it provides some default tasks out of the box. Sails makes it easy to [configure new tasks](https://sailsjs.com/documentation/concepts/assets/task-automation#?task-configuration) to fit your needs.
-
-
-Here are a few things that the default Grunt configuration in Sails does to help you out:
-- Automatic LESS compilation
-- Automatic JST compilation
-- Automatic Coffeescript compilation
-- Cache busting
-- Optional automatic asset injection, minification, and concatenation
-- Creation of a web ready public directory
-- File watching and syncing
-- Transpilation of client-side JavaScript in production to allow use of >=ES6 syntax while maintaining broad browser compatibility
-- Optimization of assets in production
+Sails的asset管理通道是一组默认设置的Grunt任务，旨在是您的项目更加的一直和高效. 整个前端asset工作流程是可以定制的，他提供了一些开箱即用的默认任务。Sails可以更简单的[configure new tasks](https://sailsjs.com/documentation/concepts/assets/task-automation#?task-configuration)满足你的需求.
 
 
-### Default Grunt tasks
+这里有一些Sails默认的Grunt配置可以帮助你:
+- LESS自动编译
+- JST自动编译
+- Coffeescript自动编译
+- 破坏缓存
+- 可选资源自动注入, 压缩和连接
+- 创建一个web预备公开目录
+- 文件监视和同步
+- 转换client-side JavaScript 使用 >=ES6 并保持浏览器兼容性
+- 资源优化
 
-Below is a list of the Grunt tasks that are included by default in new Sails projects:
+
+### 默认Grunt tasks
+
+下面是新Sails项目默认包含的Grunt任务列表:
 
 ##### clean
 
-> This grunt task is configured to clean out the contents in the `.tmp/public/` of your sails project.
+> 这个 grunt task任务清除 `.tmp/public/`中的内容.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-clean)
 
 ##### coffee
 
-> Compiles coffeeScript files from `assets/js/` into Javascript and places them into `.tmp/public/js/` directory.
+> 从 `assets/js/` 编译coffeeScript文件并放置到`.tmp/public/js/`目录.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-coffee)
 
 ##### hash
 
-> Creates and adds an unique hash to the end of a filename for cache busting.
+> 为需要清除缓存的文件添加一个随机hash.
 
 > [usage docs](https://github.com/jgallen23/grunt-hash/tree/0.5.0#grunt-hash)
 
 ##### concat
 
-> Concatenates JavaScript and css files, and saves concatenated files in `.tmp/public/concat/` directory.
+> 连接JavaScript和css文件,并保存在`.tmp/public/concat/`目录.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-concat)
 
 ##### copy
 
 > **dev task config**
-> Copies all directories and files, except coffeescript and less files, from the sails assets folder into the `.tmp/public/` directory.
+> 除coffeescript和less之外的所有文件和目录,从sails assets文件夹放入`.tmp/public/`目录.
 
 > **build task config**
-> Copies all directories and files from the .tmp/public directory into a www directory.
+> 将所有文件和目录.tmp/public directory放入www目录.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-copy)
 
 ##### cssmin
 
-> Minifies css files and places them into `.tmp/public/min/` directory.
+> 压缩css文件然后放入`.tmp/public/min/`目录.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-cssmin)
 
 ##### jst
 
-> Precompiles Underscore templates to a `.jst` file. (i.e. it takes HTML template files and turns them into tiny JavaScript functions). This can speed up template rendering on the client, and reduce bandwidth usage.
+> 预编译Underscore模板为 `.jst`文件. (i.e. it takes HTML template files and turns them into tiny JavaScript functions). 减少带宽使用并提高模板加载速度.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-jst)
 
 ##### less
 
-> Compiles LESS files into CSS. Only the `assets/styles/importer.less` is compiled. This allows you to control the ordering yourself, i.e. import your dependencies, mixins, variables, resets, etc. before other stylesheets.
+> 编译LESS文件为CSS. 只有`assets/styles/importer.less`被编译. 这允许您自己控制排序，在其他样式表之前导入您的依赖关系，混入、变量、重置等。
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-less)
 
 ##### sails-linker
 
-> Automatically inject `<script>` tags for JavaScript files and `<link>` tags for css files.  Also automatically links an output file containing precompiled templates using a `<script>` tag. A much more detailed description of this task can be found [here](https://github.com/balderdashy/sails-generate-frontend/blob/master/docs/overview.md#a-litte-bit-more-about-sails-linking), but the big takeaway is that script and stylesheet injection is *only* done in files containing `<!--SCRIPTS--><!--SCRIPTS END-->` and/or `<!--STYLES--><!--STYLES END-->` tags.  These are included in the default **views/layouts/layout.ejs** file in a new Sails project.  If you don't want to use the linker for your project, you can simply remove those tags.
+> 为JavaCcript文件自动插入`<script>`标签和为css文件插入`<link>`标签. 还会使用`<script>`标签自动链接包含预编译模板的输出文件。 更详细的描述在这里 [here](https://github.com/balderdashy/sails-generate-frontend/blob/master/docs/overview.md#a-litte-bit-more-about-sails-linking), but the big takeaway is that script and stylesheet injection is *only* done in files containing `<!--SCRIPTS--><!--SCRIPTS END-->` and/or `<!--STYLES--><!--STYLES END-->` tags.  These are included in the default **views/layouts/layout.ejs** file in a new Sails project.  If you don't want to use the linker for your project, you can simply remove those tags.
 
 > [usage docs](https://github.com/Zolmeister/grunt-sails-linker)
 
 ##### sync
 
-> A grunt task to keep directories in sync. It is very similar to grunt-contrib-copy but tries to copy only those files that have actually changed. It specifically synchronizes files from the `assets/` folder to `.tmp/public/`, overwriting anything that's already there.
+> 让目录保持同步的Grunk任务。它与grunt-contrib-copy非常相似，但是只会尝试复制更改过的文件。它会将`assets/`文件夹中的文件同步到`.tmp/public /`，并覆盖已经存在的内容。
 
 > [usage docs](https://github.com/tomusdrw/grunt-sync)
 
 ##### babel
 
-> This grunt task is configured to transpile any >=ES6 syntax in your front-end Javascript files into code compatible with older browsers.
+> 这个grunt任务将任何>=ES6语法的Javascript文件编译为旧版以兼容浏览器.
 
 > [usage docs](https://github.com/babel/grunt-babel)
 
 ##### uglify
 
-> Minifies client-side JavaScript assets.  Note that by default, this task will "mangle" all of your function and variable names (either by changing them to a much shorter name, or stripping them entirely).  This is usually desirable as it makes your code significantly smaller, but in some cases can lead to unexpected results (particularly when you expect an object's constructor to have a certain name).  To turn off or modify this behavior, [use the `mangle` option](https://www.npmjs.com/package/uglify-es#mangle-properties-options) when setting up this task.
+> 压缩客户端JavaScript资源.  请注意，默认情况下，此任务将“改变”所有的函数和变量名称 (either by changing them to a much shorter name, or stripping them entirely).  This is usually desirable as it makes your code significantly smaller, but in some cases can lead to unexpected results (particularly when you expect an object's constructor to have a certain name).  To turn off or modify this behavior, [use the `mangle` option](https://www.npmjs.com/package/uglify-es#mangle-properties-options) when setting up this task.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-uglify/tree/harmony)
 
 ##### watch
 
-> Runs predefined tasks whenever watched file patterns are added, changed or deleted. Watches for changes on files in the `assets/` folder, and re-runs the appropriate tasks (e.g. less and jst compilation).  This allows you to see changes to your assets reflected in your app without having to restart the Sails server.
+> 运行一个监视任务，在添加修改或删除后执行。监视`assets/`文件夹的文件变化,并重新运行任务 (e.g. less and jst compilation).  This allows you to see changes to your assets reflected in your app without having to restart the Sails server.
 
 > [usage docs](https://github.com/gruntjs/grunt-contrib-watch)
 
