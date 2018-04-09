@@ -1,21 +1,21 @@
-# Configuration
+# 配置
 
-### Overview
+### 概述
 
-While Sails dutifully adheres to the philosophy of [convention-over-configuration](http://en.wikipedia.org/wiki/Convention_over_configuration), it is important to understand how to customize those handy defaults from time to time.  For almost every convention in Sails, there is an accompanying set of configuration options that allow you to adjust or override things to fit your needs.
+Sails忠实遵守[convention-over-configuration](http://en.wikipedia.org/wiki/Convention_over_configuration)的理念，对于如何定义方便使用的默认配置非常重要。几乎Sails中的每个惯例，都有一组配置选项，您可以调整或覆盖以适应您的需求。
 
-> Here looking for a particular setting?  Head over to [Reference > Configuration](sailsjs.com/documentation/reference/configuration) to see a complete guide to all configuration options available in Sails.
+> 需要寻找某个设置？ 请参阅[参考>配置](sailsjs.com/documentation/reference/configuration)以查看Sails中所有可用配置选项的完整指南。
 
-Sails apps can be [configured programmatically](https://github.com/mikermcneil/sails-generate-new-but-like-express/blob/master/templates/app.js#L15), by specifying [environment variables](http://en.wikipedia.org/wiki/Environment_variable) or command-line arguments, by changing the local or global [`.sailsrc` files](https://sailsjs.com/documentation/anatomy/.sailsrc), or (most commonly) using the boilerplate configuration files conventionally located in the [`config/`](https://sailsjs.com/documentation/anatomy/config) folder of new projects. The authoritative, merged-together configuration used in your app is available at runtime on the `sails` global as `sails.config`.
+Sails应用程序可以[以编程方式配置](https://github.com/mikermcneil/sails-generate-new-but-like-express/blob/master/templates/app.js#L15)，通过指定[环境变量](http://en.wikipedia.org/wiki/Environment_variable)或命令行参数，通过更改本地或全局[`.sailsrc`文件](https://sailsjs.com/documentation/anatomy/.sailsrc) 或（最常见的）使用通常位于新项目的[`config/`](https://sailsjs.com/documentation/anatomy/config)文件夹中的样板文件。在运行时可以在sails全局中作为sails.config使用。
 
 
-### Standard configuration files (`config/*`)
+### 标准配置文件 (`config/*`)
 
-A number of configuration files are generated in new Sails apps by default.  These boilerplate files include a number of inline comments, which are designed to provide a quick, on-the-fly reference without having to jump back and forth between the docs and your text editor.
+默认情况下，新的Sails应用程序中会生成大量配置文件。 这些样板包含大量内嵌声明，旨在提供快速，实时的参考，而无需在文档和文本编辑器之间来回切换。
 
-In most cases, the top-level keys on the `sails.config` object (e.g. `sails.config.views`) correspond to a particular configuration file (e.g. `config/views.js`) in your app; however configuration settings may be arranged however you like across the files in your `config/` directory.  The important part is the name (i.e. key) of the setting- not the file it came from.
+在大多数情况下，`sails.config`对象上的顶级key（例如`sails.config.views`）对应于您的应用中的特定配置文件（例如`config/views.js`）; 然后，你可以通过你的`config/`目录中的文件来配置设置。 配置key的名称非常重要(i.e. key)-而不是它指向哪个的文件。
 
-For instance, let's say you add a new file, `config/foo.js`:
+例如，假设您添加一个新文件， `config/foo.js`:
 
 ```js
 // config/foo.js
@@ -24,12 +24,12 @@ module.exports.blueprints = {
   shortcuts: false
 };
 ```
+有关各个配置选项以及默认情况下它们所在的文件的详尽参考，请查看本节中的参考页面，或查看[The Anatomy of a Sails App](https://sailsjs.com/documentation/anatomy)中的更多章节["`config /`"](https://sailsjs.com/documentation/anatomy/config)。
 
-For an exhaustive reference of individual configuration options, and the file they live in by default, check out the reference pages in this section, or take a look at ["`config/`"](https://sailsjs.com/documentation/anatomy/config) in [The Anatomy of a Sails App](https://sailsjs.com/documentation/anatomy) for a higher-level overview.
 
-### Environment-specific files (`config/env/*`)
+### 特定环境文件 (`config/env/*`)
 
-Settings specified in the standard configuration files will generally be available in all environments (i.e. development, production, test, etc.).  If you'd like to have some settings take effect only in certain environments, you can use the special environment-specific files and folders:
+在标准配置文件中指定的设置通常可用于所有环境（即开发，生产，测试等）。 如果您希望某些设置仅在特定环境中生效，则可以使用特定环境特定的文件和文件夹:
 
 * Any files saved under the `/config/env/<environment-name>` folder will be loaded *only* when Sails is lifted in the `<environment-name>` environment.  For example, files saved under `config/env/production` will only be loaded when Sails is lifted in production mode.
 * Any files saved as `config/env/<environment-name>.js` will be loaded *only* when Sails is lifted in the `<environment-name>` environment, and will be merged on top of any settings loaded from the environment-specific subfolder.  For example, settings in `config/env/production.js` will take precedence over those in the files in the  `config/env/production` folder.
@@ -44,27 +44,27 @@ NODE_ENV=production node app.js
 > Also note that if you are using `config/local.js`, the configuration exported in that file takes precedence over environment-specific configuration files.
 
 
-### The `config/local.js` file
+### `config/local.js`文件
 
-You may use the `config/local.js` file to configure a Sails app for your local environment (your laptop, for example).  The settings in this file take precedence over all other config files except [.sailsrc](https://sailsjs.com/documentation/concepts/configuration/using-sailsrc-files).  Since they're intended only for local use, they should not be put under version control (and are included in the default `.gitignore` file for that reason).  Use `local.js` to store local database settings, change the port used when lifting an app on your computer, etc.
+您可以使用`config/local.js`文件为您的本地环境（例如您的笔记本电脑）配置Sails应用程序。 此文件中的设置优先于除[.sailsrc]之外的所有其他配置文件(https://sailsjs.com/documentation/concepts/configuration/using-sailsrc-files)。由于它们仅用于本地使用，因此不应将其置于版本控制之下（因此，它包含在默认的`.gitignore`文件中）。使用 `local.js`存储本地数据库设置, 更改本地调试端口,等待.
 
-See [Concepts > Configuration > The local.js file](https://sailsjs.com/documentation/concepts/configuration/the-local-js-file) for more information.
+查看[Concepts > Configuration > The local.js file](https://sailsjs.com/documentation/concepts/configuration/the-local-js-file) 获得更多内容.
 
 
-### Accessing `sails.config` in your app
+### 在您的应用中访问`sails.config`
 
-The `config` object is available on the Sails app instance (`sails`).  By default, this is exposed on the [global scope](https://sailsjs.com/documentation/concepts/globals) during lift, and therefore available from anywhere in your app.
+`config`对象在Sails应用程序实例（`sails`）上可用。 默认情况下，会在升级过程中暴露在[global scope(https://sailsjs.com/documentation/concepts/globals) 上，因此可以在应用程序的任何位置使用。
 
-##### Example
+##### 示例
 ```javascript
-// This example checks that, if we are in production mode, csrf is enabled.
+// 此示例检查是否处于生产模式，否则启用csrf。
 // It throws an error and crashes the app otherwise.
 if (sails.config.environment === 'production' && !sails.config.security.csrf) {
   throw new Error('STOP IMMEDIATELY ! CSRF should always be enabled in a production deployment!');
 }
 ```
 
-### Setting `sails.config` values directly using environment variables
+### 直接使用环境变量设置`sails.config`值
 
 In addition to using configuration _files_, you can set individual configuration values on the command line when you lift Sails by prefixing the config key names with `sails_`, and separating nested key names with double-underscores (`__`).  Any environment variable formatted this way will be parsed as JSON (if possible). For example, you could do the following to set the [allowed CORS origins](https://sailsjs.com/documentation/concepts/security/cors) (`sails.config.security.cors.allowOrigins`) to `["http://somedomain.com","https://anotherdomain.com:1337"]` on the command line:
 
