@@ -1,14 +1,15 @@
-# Task automation
+# 任务自动化
 
-### Overview
+### 概述
 
-The [`tasks/`](https://sailsjs.com/documentation/anatomy/tasks) directory contains a suite of [Grunt tasks](http://gruntjs.com/creating-tasks) and their [configurations](http://gruntjs.com/configuring-tasks).
+任务[`tasks/`]（https://sailsjs.com/documentation/anatomy/tasks） 目录包含一套 [Grunt任务] （http://gruntjs.com/creating-tasks）及其[配置]（http://gruntjs.com/configuring-tasks）。
 
-Tasks are mainly useful for bundling front-end assets, (like stylesheets, scripts, & client-side markup templates) but they can also be used to automate all kinds of repetitive development chores, from [browserify](https://github.com/jmreidy/grunt-browserify) compilation to [database migrations](https://www.npmjs.org/package/grunt-db-migrate).
+任务主要用于捆绑前端asset（如样式表，脚本和客户端标签模板），但它们也可用于自动执行各种重复性开发任务，从[browserify](https//github.com/jmreidy/grunt-browserify)编译为[数据库迁移]（https://www.npmjs.org/package/grunt-db-migrate）。
 
-Sails bundles some [default tasks](https://sailsjs.com/documentation/grunt/default-tasks) for convenience, but with [literally hundreds of plugins](http://gruntjs.com/plugins) to choose from, you can use tasks to automate just about anything with minimal effort.  If someone hasn't already built what you need, you can always [author](http://gruntjs.com/creating-tasks) and [publish your own Grunt plugin](http://gruntjs.com/creating-plugins) to [npm](http://npmjs.org)!
 
-> If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins.
+Sails为了方便捆绑了一些[默认任务 default tasks](https://sailsjs.com/documentation/grunt/default-tasks), but with [literally hundreds of plugins](http://gruntjs.com/plugins) to choose from, you can use tasks to automate just about anything with minimal effort.  If someone hasn't already built what you need, you can always [author](http://gruntjs.com/creating-tasks) and [publish your own Grunt plugin](http://gruntjs.com/creating-plugins) to [npm](http://npmjs.org)!
+
+> 如果你之前没有使用过 [Grunt](http://gruntjs.com/),请点击这里[Getting Started](http://gruntjs.com/getting-started),了解怎样创建一个[Gruntfile](http://gruntjs.com/sample-gruntfile) 以及安装和使用Grunt插件.
 
 
 ### Asset pipeline
