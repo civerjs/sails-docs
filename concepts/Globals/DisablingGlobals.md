@@ -1,15 +1,16 @@
-# Disabling globals
+# 禁用globals
 
-Sails determines which globals to expose by looking at [`sails.config.globals`](https://sailsjs.com/documentation/reference/configuration/sails-config-globals), which is conventionallly configured in [`config/globals.js`](https://sailsjs.com/documentation/anatomy/config/globals.js).
+Sails通过检查[`sails.config.globals`](https://sailsjs.com/documentation/reference/configuration/sails-config-globals)来确定要暴露的全局变量，该变量通常在[`config / globals.js`](https://sailsjs.com/documentation/anatomy/config/globals.js)。
 
-To disable all global variables, just set the setting to `false`:
+
+禁用全局变量, 只需要设置为 `false`:
 
 ```js
 // config/globals.js
 module.exports.globals = false;
 ```
 
-To disable _some_ global variables, specify an object instead, e.g.:
+禁用部分全局变量,需要指定一个object,例如:
 
 ```js
 // config/globals.js
@@ -21,9 +22,9 @@ module.exports.globals = {
 };
 ```
 
-### Notes
+### 注意
 
-> + Bear in mind that none of the globals, including `sails`, are accessible until _after_ sails has loaded.  In other words, you won't be able to use `sails.models.user` or `User` outside of a function (since `sails` will not have finished loading yet.)
+> + 请记住，在sails加载之前，全局变量、包括`sails`都不可访问。 另外，你不能在函数之外使用`sails.models.user`或`User`（因为`sails`还没有完成加载。）
 
 <!-- not true anymore:
 Most of this section of the docs focuses on the methods and properties of `sails`, the singleton object representing your app.
