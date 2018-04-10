@@ -1,20 +1,21 @@
-# FAQ
+# 常问问题
 
 
-### Can I use environment variables?
+### 我可以使用环境变量吗？
 
-Yes! Like any Node app, your environment variables are available as `process.env`.
+是的! 像任何Node应用程序一样，您可以使用环境变量`process.env`。
 
-Sails also comes with built-in support for creating your own custom configuration settings that will be exposed directly on `sails.config`.  And whether custom or built-in, any of the configuration properties in `sails.config` can be overridden using environment variables.  See the conceptual documentation on [Configuration](https://sailsjs.com/documentation/concepts/configuration) for details.
+Sails还内置创建自定义设置的支持，该设置将暴露在`sails.config`上。无论是自定义设置还是内置设置，sails.config中的任何配置属性都可以使用环境变量进行覆盖。 请参阅有关[配置](https://sailsjs.com/documentation/concepts/configuration)的概念性文档.
 
 
-### Where do I put my production database credentials?  Other settings?
+### 在哪里放置我的生产数据库凭据？ 还有其他设置？
 
-The easiest way to add configuration to your Sails app is by modifying the files in `config/` or adding new ones. Sails supports environment-specific configuration loading out of the box, so you can use `config/env/production.js`.  Again, see the conceptual documentation on [Configuration](https://sailsjs.com/documentation/concepts/configuration) for details.
+将配置添加到Sails应用程序的最简单方法是修改`config /`中的文件或添加新的文件。 Sails支持开箱即用的环境设置，使用`config /env/production.js`进行设置。 有关详细信息，请参阅[配置](https://sailsjs.com/documentation/concepts/configuration)上的概念性文档。
 
-But sometimes, you don't want to check certain configuration information in to your repository.  **The best place to put this kind of configuration is in environment variables.**
+但有时候，你会遗忘存储库中的某些配置信息。 **这种配置的最佳位置是在环境变量中。**
 
-That said, for development (e.g. on your laptop) using environment variables can sometimes be kind of awkward.  So for your other deployment/machine-specific settings, namely any kind of credentials you want to keep private, you can also use your `config/local.js` file.  This file is included in your `.gitignore` file by default-- this helps prevent you from inadvertently commiting your credentials to your code repository.
+也就是说，使用环境变量进行开发（例如，在您的笔记本电脑上）有时可能会有些尴尬。 因此，用于部署特定的设置，想要保密的证书，您可以使用`config/local.js`文件。该文件默认包含在`.gitignore`文件中-这有助于防止您无意中将凭据提交到代码库。
+
 
 **config/local.js**
 ```javascript
@@ -39,25 +40,28 @@ module.exports = {
 
 
 
-### How do I get my Sails app on the server?
+### 我如何在服务器上获得我的Sails应用程序？
 
-If you are using a Paas like Heroku or Modulus, this is easy:  just follow their instructions.
+如果你使用的是Heroku或Modulus这样的Paas，这很简单：只需根据他们的提示操作.
 
-Otherwise get the IP address of your server and `ssh` onto it.  Then `npm install -g sails` and `npm install -g forever` to install Sails and `forever` globally from NPM for the first time on the server. Finally `git clone` your project (or `scp` it onto the server if it's not in a git repo) into a new folder on the server, `cd` into it, and then run `forever start app.js`.
-
-
-### What should I expect as far as performance?
-
-Baseline performance in Sails is comparable to what you'd expect from a standard Node.js/Express application.  In other words, fast!  We've done some optimizations ourselves in Sails core, but primarily our focus is not messing up what we get for free from our dependencies.  For a quick and dirty benchmark, see [http://serdardogruyol.com/sails-vs-rails-a-quick-and-dirty-benchmark](http://serdardogruyol.com/sails-vs-rails-a-quick-and-dirty-benchmark).
-
-The most common performance bottleneck in production Sails applications is the database.  Over the lifetime of an application with a growing user base, it becomes increasingly important to set up good indexes on your tables/collections, and to use queries which return paginated results.  Eventually as your production database grows to contain tens of millions of records, you will start to locate and optimize slow queries by hand (either by calling [`.query()`](https://sailsjs.com/documentation/reference/waterline-orm/models/query) or [`.native()`](https://sailsjs.com/documentation/reference/waterline-orm/models/native), or by using the underlying database driver from NPM).  
+否则，请将你的服务器和`ssh`的IP地址放到服务器上。 然后`npm install -g sails`和`npm install -g forever`首次在服务器上从NPM全局安装Sails和`forever`。 最后`git clone`你的项目（如果它不在git仓库中，将其'scp'到服务器上）到服务器上的一个新文件夹中，`cd`它，然后运行`forever start app.js`。
 
 
-### What's this warning about the connect session memory store?
+### 我对性能应该有什么期待？
 
-If you are using sessions in your Sails app, you should not use the built-in memory store in production.  The memory session store is a development-only tool that does not scale to multiple servers; and even if you only have one server it is not particularly performant (see [#3099](https://github.com/balderdashy/sails/issues/3099) and [#2779](https://github.com/balderdashy/sails/issues/2779)).
+Sails的基础性能与从标准 Node.js/Express 应用程序中获得的性能相当。一个字，快！ 我们已经在Sails核心中做了一些优化，我们重点不会乱从我们的依赖关系中获得的东西。有关性能测试，请参阅[性能测试](http://serdardogruyol.com/sails-vs-rails-a-quick-and-dirty-benchmark）。
 
-For instructions on configuring a production session store, see [sails.config.session](https://sailsjs.com/documentation/reference/configuration/sails-config-session).  If you want to disable session support altogether, turn off the `session` hook in your app's `.sailsrc` file:
+Sails应用程序最常见的性能瓶颈是数据库。一个不断增长用户的应用程序的整个生命周期中，为您的表设置好的索引以及使用分页查询变得越来越重要。 最终，随着数据库增长到数千万条记录，您将开始手动查找和优化缓存，通过调用[`.query（）`])https://sailsjs.com/documentation/reference/waterline-orm/models/query)或[`.native（）`](https://sailsjs.com/documentation/reference/waterline-orm/models/native)，或者使用NPM的底层数据库驱动程序）。
+
+
+
+### 在连接中session内存警告是什么？
+
+如果您在Sails应用程序中使用session，则不应使用内存session存储。内存session存储是一种仅限于开发的工具，不能扩展到多个服务器; 即使你只有一台服务器，它也不是特别有效（参见[＃3099](https://github.com/balderdashy/sails/issues/3099) and [#2779](https://github.com/balderdashy/sails/issues/2779))。
+
+
+有关配置产品session存储的说明，请参见[sails.config.session](https://sailsjs.com/documentation/reference/configuration/sails-config-session)。如果您想完全禁用session支持，请关闭`.sailsrc`文件中的`session`钩子:
+
 ```javascript
 "hooks": {
   "session": false
