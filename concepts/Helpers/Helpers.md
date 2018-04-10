@@ -1,12 +1,12 @@
-# Helpers
+# 助手Helpers
 
-As of version 1.0, all Sails apps come with built-in support for **helpers**, simple utilities that let you share Node.js code in more than one place.  This helps you avoid repeating yourself, and makes development more efficient by reducing bugs and minimizing rewrites.  Like actions2, this also makes it much easier to create documentation for your app.
+从版本1.0开始，所有Sails apps都内置了对**助手**的支持，这些简单的实用程序可让您在多个地方共享Node.js代码。 这可以帮助您避免重复劳动，并减少错误、减少重写来提高开发效率。 和actions2类似，这也使得为您的应用创建文档，变得更容易。
 
-### Overview
+### 概述
 
-In Sails, helpers are the recommended approach for pulling repeated code into a separate file, then reusing that code in various [actions](https://sailsjs.com/documentation/concepts/actions-and-controllers), [custom responses](https://sailsjs.com/documentation/concepts/extending-sails/custom-responses), [command-line scripts](https://www.npmjs.com/package/machine-as-script), [unit tests](https://sailsjs.com/documentation/concepts/testing), or even other helpers. You don't _have_ to use helpers-- in fact you might not even need them right at first.  But as your code base grows, helpers will become more and more important for your app's maintainability.  (Plus, they're really convenient.)
+在Sails中，helpers将重复代码放入单独文件，然后在各种[action](https://sailsjs.com/documentation/concepts/actions-and-controllers)，[自定义响应]中重用该代码(https://sailsjs.com/documentation/concepts/extending-sails/custom-responses），[命令行脚本]（https://www.npmjs.com/package/machine-as-script)，[unit 测试](https://sailsjs.com/documentation/concepts/testing)，或者其他可用项。 我不需要使用助手-可能一开始你就不需要它们。 但随着代码库的增长，helpers对于应用程序的可维护性将变得越来越重要。 （另外，他们真的很方便。）
 
-For example, in the course of creating the actions that your Node.js/Sails app uses to respond to client requests, you will sometimes find yourself repeating code in several places.  That can be pretty bug-prone, of course, not to mention annoying.  Fortunately, there's a neat solution: replace the duplicate code with a call to a custom helper:
+例如，在创建Node.js/Sails 应用程序用于响应客户端请求的过程中，有时会发现自己在几个地方重复了代码。这可能会非常容易出错，更不用说烦人了。 幸运的是，有一个很好的解决方案：用一个自定义助手的调用替换重复的代码:
 
 ```javascript
 var greeting = await sails.helpers.formatWelcomeMessage('Bubba');
@@ -14,12 +14,12 @@ sails.log(greeting);
 // => "Hello, Bubba!"
 ```
 
-> Helpers can be called from almost anywhere in your code; as long as that place has access to the [`sails` app instance](https://sailsjs.com/documentation/reference/application).
+> helpers可以从代码中的任何地方调用; 只要该地点可以访问[`sails`应用程序实例](https://sailsjs.com/documentation/reference/application).
 
 
-### How helpers are defined
+### 如何定义助手
 
-Here's an example of a simple, well-defined helper:
+这是一个简单的示例, 明确定义helper:
 
 ```javascript
 // api/helpers/format-welcome-message.js
@@ -51,56 +51,57 @@ module.exports = {
 };
 ```
 
-Though simple, this file displays several characteristics of a good helper: it starts with a friendly name and description that make it immediately clear what the utility does, it describes its inputs so that it&rsquo;s easy to see how the utility is used, and it accomplishes a discrete task in the simplest way possible.
+虽然很简单，但该文件表现出了helper的优势：它以名称和描述开头。可以立即了解该实用程序的功能，并描述其使用方式。这以最简单的方式完成了一项离散任务。
 
-> Look familiar?  Helpers follow the same specification as [shell scripts](https://sailsjs.com/documentation/concepts/shell-scripts) and [actions2](https://sailsjs.com/documentation/concepts/actions-and-controllers#?actions-2).
 
-##### The `fn` function
+> 看起来熟悉？ helpers遵循与 [shell scripts](https://sailsjs.com/documentation/concepts/shell-scripts) and [actions2](https://sailsjs.com/documentation/concepts/actions-and-controllers#?actions-2)相同的规范.
 
-The core of the helper is the `fn` function, which contains the actual code that the helper will run.  The function takes two arguments: `inputs` (a dictionary of input values, or "argins") and `exits` (a dictionary of callback functions).  The job of `fn` is to utilize and process the argins, and then trigger one of the provided exits to return control back to whatever code called the helper.  Note that, as opposed to a typical Javascript function that uses `return` to provide output to the caller, helpers provide that result value by passing it in to `exits.success()`.
+##### 函数`fn`
 
-##### Inputs
+helper的核心是`fn`函数，它包含helper将运行的实际代码。 该函数有两个参数：`input`（a dictionary of input values或者 "argins"）和`exits`（a dictionary of callback functions）。 `fn`的工作是利用和处理argins，然后触发一个control back。 请注意，与使用`return`为调用者提供输出的典型Javascript函数相反，helpers通过control back传递给`exits.success()`来提供该结果值。
 
-A helper&rsquo;s declared _inputs_ are analogous to the parameters of a typical Javascript function: they define the values that the code has to work with.  However, unlike standard JavaScript function parameters, inputs are validated automatically.  If a helper is called using argins of the wrong type for their corresponding inputs, missing a value for a required input, it will trigger an error.  Thus, helpers are _self-validating_.
 
-Input for a helper are defined in the `inputs` dictionary.  Each input definition is composed of, at minimum, a `type` property.  Helper inputs support types like:
+##### 输入inputs
+
+在helper中声明的_inputs_类似于典型的Javascript函数的参数：它们定义了代码必须使用的值。 但是，与标准JavaScript函数参数不同，输入会自动验证。 如果使用错误类型的argins输入调用相应的助手，缺少所需输入的值时，将触发错误。 因此，助手是_self-validating_。
+
+inputs字典中定义了助手的输入。 每个输入定义至少由一个`type`属性组成。 助手inputs支持类型:
 
 * `string` - a string value
 * `number` - a number value (both integers and floats are valid)
 * `boolean` - the value `true` or `false`
 * `ref` - a Javascript variable reference.  This can be _any_ value, including dictionaries, arrays, functions, streams, and more.
 
-These are the same data types (and related semantics) that you might already be accustomed to from [defining model attributes](https://sailsjs.com/documentation/concepts/models-and-orm/attributes).
-So as you might expect, you can provide a default value for an input by setting its `defaultsTo` property.  Or make it required by setting `required: true`.  You can even use `allowNull` and almost any of the higher-level validation rules like `isEmail`.
+这里有一些[预定义模型属性](https://sailsjs.com/documentation/concepts/models-and-orm/attributes)的相同数据类型（和相关语义）。
+正如你所期望的那样，你可以通过设置它的`defaultsTo`属性来为输入提供一个默认值。 或者通过设置`required：true`来设置它。 你甚至可以使用`allowNull`和进阶验证规则，如`isEmail`。
 
-
-The arguments you pass in when calling a helper correspond with the order of keys in that helper's declared `inputs`.  Alternatively, if you'd rather pass in argins by name, use `.with()`:
+调用helper时传入的参数与该helper声明的“输入”中的键的顺序相对应。如果您希望按名称传递参数，请使用`.with（）`:
 
 ```javascript
 var greeting = await sails.helpers.formatWelcomeMessage.with({ name: 'Bubba' });
 ```
 
-##### Exits
+##### 退出Exits
 
-Exits describe all the different possible outcomes a helper can have, good or bad.  Every helper automatically supports the `error` and `success` exits.
-When calling a helper, if its `fn` triggers `success`, then it will return normally.  But if its `fn` triggers some exit _other than_ `success`, then it will throw an Error (unless [`.tolerate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate) was used.)
+Exits描述了helper可能具有的所有不同可能的结果，无论好坏。每个助手都自动支持`error`和`success`退出。
+当调用helper时，如果它的`fn`触发`success`，那么它将正常返回。 但是，如果它的`fn`触发其他退出，那么它会抛出一个错误（除非使用[`.tolerate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate)。）
 
-When necessary, you can also expose other custom exits (known as "exceptions"), allowing the userland code that calls your helper to handle specific, exceptional cases.
-This helps guarantee your code&rsquo;s transparency and maintainability by making it painless and easy to declare and negotiate errors.
+必要时，您还可以开放其他自定义退出（称为“exceptions”），调用助手的用户级代码处理特定的例外情况。
+这有助于确保您的代码的透明度和可维护性，因为它可以轻松的发布和沟通错误。
 
-> Exceptions (custom exits) for a helper are defined in the `exits` dictionary.  It is a good practice to provide all custom exceptions with an explicit `description` property.
+> 在`exits`字典中定义了助手的特殊情况（自定义退出）。可以使用显式的`description`属性提供所有自定义异常。
+
+设想一个名为“邀请新用户”的helper， 其中开放了一个自定义的`emailAddressInUse`出口。 如果提供的电子邮件已存在，助手的`fn`可能会触发此自定义退出，从而允许您的用户级代码处理此特定场景-而不会混淆您的结果值或诉诸额外的try/catch结构。
 
 
-Imagine a helper called &ldquo;Invite new user&rdquo; which exposes a custom `emailAddressInUse` exit.  The helper's `fn` might trigger this custom exit if the provided email already exists, allowing your userland code to handle this specific scenario-- without muddying up your result values or resorting to extra `try/catch` blocks.
-
-For example, if this helper was called from within an action that has its own "badRequest" exit:
+例如，如果这个helper调用它的自定义出口“badRequest”:
 
 ```javascript
 var newUserId = sails.helpers.inviteNewUser('bubba@hawtmail.com')
 .intercept('emailAddressInUse', 'badRequest');
 ```
 
-> The fancy-looking shorthand above is just a quicker way to write:
+> 上面看起来很花哨的简写只是一个更快的写法:
 >
 > ```javascript
 > .intercept('emailAddressInUse', (err)=>{
@@ -108,25 +109,25 @@ var newUserId = sails.helpers.inviteNewUser('bubba@hawtmail.com')
 > });
 > ```
 >
-> As for [.intercept()](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept)?  It's just another shortcut so you're not forced to write custom try/catch blocks and negotiate these errors by hand all the time.
+> 至于[.intercept()](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept)？
+这是一个捷径，您不必强制编写自定义的try/catch块并手动协商这些错误。
 
-Internally, your helper's `fn` is responsible for triggering one of its exits-- either by throwing a [special exit signal]() or by invoking an exit callback (e.g. `exits.success('foo')`).  If your helper sends back a result through the success exit (e.g. `'foo'`), then that will be the return value of the helper.
+在程序内部，助手的`fn`负责触发它的一个出口 - 或者通过抛出一个[特殊的退出信号]()或者通过调用一个退出回调函数（例如`exits.success('foo')`）。 如果你的帮手通过sucess退出（例如`'foo'`）并返回结果，那么这将是helper的返回值。
 
-> Note: For non-success exits, Sails will use the exit's predefined description to create an appropriate JavaScript Error instance automatically, if needed.
+> 注意：对于非成功退出，如果需要，Sails将使用退出的预定义描述,并自动创建适合的JavaScript错误实例。
 
-##### Synchronous helpers
+##### 同步助手
 
-By default, all helpers are considered _asynchronous_.  While this is a safe default assumption, it's not always true-- and when you know for certain that's the case, you can optimize performance by telling Sails that's the case using the `sync: true` property.
+默认情况下，所有助手都被视为异步(_asynchronous_)。 尽管这是默认假设很不错，但事实还可以更好 - 当您确定不使用异步，您可以通过告诉Sails使用`sync：true`属性来优化性能。
 
-If you know all of the code inside your helper's `fn` is definitely synchronous, you can set the top-level `sync` property to `true`, which allows userland code to [call the helper without `await`](https://sailsjs.com/documentation/concepts/helpers#?synchronous-usage).
-(You must also remember to change `fn: async function` to `fn: function`.)
+如果你知道你的助手的`fn`中的所有代码都是同步的，你可以设置顶级`sync`属性为`true`，这允许userland代码[不需要'等待'调用助手](https：//sailsjs.com/documentation/concepts/helpers#?synchronous-usage)。
+(您还必须记得将`fn：async function`更改为`fn：function`。)
 
-> Note: Calling an asynchronous helper without `await` _will not work_.
+> 注意：不使用“await”调用异步助手将不起作用。
 
 
-##### Accessing `req` in a helper
-
-If you&rsquo;re designing a helper that parses request headers, specifically for use from within actions, then you'll want to take advantage of pre-existing methods and/or properties of the [request object](https://sailsjs.com/documentation/reference/request-req).  The simplest way to allow the code in your action to pass along `req` to your helper is to define a `type: 'ref'` input:
+##### 在助手中访问`req`
+如果你正在设计一个帮助程序来分析request headers，特别是在actions使用，那么可以利用预制方法或[request object](https://sailsjs.com/documentation/reference/request-req)。 你的actions代码将`req`传递给你的helper的最简单的方法是定义一个`type：'ref'`输入:
 
 ```javascript
 inputs: {
@@ -141,49 +142,46 @@ inputs: {
 ```
 
 
-Then, to use your helper in your actions, you might write code like this:
+然后，为了在你的行为中使用你的助手，你可以编写这样的代码:
 
 ```javascript
 var headers = await sails.helpers.parseMyHeaders(req);
 ```
 
-### Generating a helper
+### 创建一个helper
 
-Sails provides a built-in generator that you can use to create a new helper automatically:
+Sails提供了一个内置的生成器，您可以使用它自动创建一个新的helper:
 
 ```bash
 sails generate helper foo-bar
 ```
+这个命令将创建一个文件`api/helpers/ foo-bar.js`，可以在你的代码中使用`sails.helpers.fooBar`访问它。 该文件将是一个没有输入且只有默认退出（`success`和`error`）的通用helper，它在执行时立即触发其“success”退出。
 
-This will create a file `api/helpers/foo-bar.js` that can be accessed in your code as `sails.helpers.fooBar`.  The file that is initially created will be a generic helper with no inputs and just the default exits (`success` and `error`), which immediately triggers its `success` exit when executed.
-
-### Calling a helper
-
-Whenever a Sails app loads, it finds all of the files in `api/helpers/`, compiles them into functions, and stores them in the `sails.helpers` dictionary using the camel-cased version of the filename.  Any helper can then be invoked from your code, simply by calling it with `await`, and providing some argin values:
+### 调用helper
+当Sails应用程序加载时，它会查找`api/helpers/`中的所有文件，将它们编译成函数，并使用驼峰文件名将它们存储在`sails.helpers`字典中。 然后可以从代码中调用，调用它只需使用`await`，并提供针对值:
 
 ```javascript
 var result = await sails.helpers.formatWelcomeMessage('Dolly');
 sails.log('Ok it worked!  The result is:', result);
 ```
 
-> This is roughly the same usage you might already be familiar with from [model methods](sailsjs.com/documentation/concepts/models-and-orm/models) like `.create()`.
+> 这可能与您已经熟悉的[model methods](sailsjs.com/documentation/concepts/models-and-orm/models)中的`.create()`一样。
 
-##### Synchronous usage
+##### 同步使用
 
-If a helper declares the `sync` property, you can also call it like this (without `await`):
+如果一个助手声明`sync`属性，你也可以这样调用它（没有`await`）:
 
 ```javascript
 var greeting = sails.helpers.formatWelcomeMessage('Timothy');
 ```
 
-But before you remove `await`, just make sure the helper is actually synchronous.  (Otherwise, without `await`, it'll never actually execute!)
+但在删除`await`之前，需确保助手实际是同步的。 （否则，如果没有“await”，它将永远不会执行！）
 
 
-### Handling exceptions
+### 处理异常
+对于更细微的错误处理（以及那些不是_quite_错误的例外情况），您可能会习惯于设置某种错误代码，然后嗅探它。 这种方法可以正常工作，但可能很费时并且难以追踪。
 
-For more granular error handling (and for those exceptional cases that aren't _quite_ errors, even) you may be used to setting some kind of error code, then sniffing it out.  This approach works fine, but it can be time consuming and hard to keep track of.
-
-Fortunately, Sails helpers take things a couple of steps further.  See the pages on [.tolerate()](), [.intercept()](), and [special exit signals]() for more information.
+幸运的是，Sails helper将这件事进一步推进了几步。 有关更多信息，请参阅[.tolerate()]()，[.intercept()]()和[special exit signals]()上的页面。
 
 
 <!--
@@ -191,13 +189,13 @@ For future reference, see https://github.com/balderdashy/sails-docs/commit/61f00
 for the original content of these docs.
 -->
 
-##### As much or as little as you need
+##### 或多或少需要
+虽然这个例子的用法有些夸张，但很容易看到像依赖notUnique这样的自定义出口，非常有用的场景。 尽管如此，你不想随时处理每个自定义退出。 理想情况下，如果您真的需要，只需要处理用户级代码中的自定义退出：无论是实现某种功能，还是仅仅为了改善用户体验或提供更好的内部错误消息。
 
-While this example usage is kind of trumped-up, it's easy to see a scenario where it's very helpful to rely on custom exits like `notUnique`.  Still, you don't want to have to handle _every_ custom exit _every_ time.  Ideally, you'd only have to mess with handling a custom exit in your userland code if you actually needed it: whether that's to implement a feature of some kind, or even just to improve the user experience or provide a better internal error message.
+幸运的是，Sails助手支持“自动退出转发”。 这意味着，用户级代码可以根据具体情况，选择几个或多少个自定义退出集成。 换句话说，当你调用一个helper时，如果你不需要，完全忽略它的自定义`notUnique`出口是可以的。 这样，您的代码尽可能简洁直观。 如果事情发生变化，您可以随时回来并勾选一些代码以便稍后处理自定义退出。
 
-Luckily, Sails helpers support "automatic exit forwarding".  That means userland code can choose to integrate with _as few or as many custom exits as you like_, on a case by case basis.  In other words, when you're calling a helper, it's OK to completely ignore its custom `notUnique` exit if you don't need it.  That way, your code remains as concise and intuitive as possible.  And if things change, you can always come back and hook some code up to handle the custom exit later.
 
-### Next steps
+### 下一步
 
 + [Explore a practical example](https://sailsjs.com/documentation/concepts/helpers/example-helper) of a helper in a Node.js/Sails app.
 + `sails-hook-organics` (which is bundled in the "Web App" template) comes with several free, open-source, and MIT-licensed helpers for many common use cases.  [Have a look!](https://npmjs.com/package/sails-hook-organics)
