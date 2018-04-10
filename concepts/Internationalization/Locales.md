@@ -1,12 +1,11 @@
-# Locales
+# 语言环境
 
-### Overview
+### 概述
+一个i18n钩子从项目的“locales”目录（默认为“config/locales”）中读取JSON格式的翻译文件。 每个文件都与您的Sails后端，需要支持的[locale](http://en.wikipedia.org/wiki/Locale)（通常是一种语言）相对应。
 
-The i18n hook reads JSON-formatted translation files from your project's "locales" directory (`config/locales` by default).  Each file corresponds with a [locale](http://en.wikipedia.org/wiki/Locale) (usually a language) that your Sails backend will support.
+这些文件使用的特定于语言环境的字符串（如JSON键值对），可包含在视图、控制器等中。文件的名称应与您支持的语言相匹配。 这允许基于request headers的自动语言检测。
 
-These files contain locale-specific strings (as JSON key-value pairs) that you can use in your views, controllers, etc.  The name of the file should match the language that you are supporting. This allows for automatic language detection based on request headers.
-
-Here is an example locale file (`config/locales/es.json`):
+这是一个示例区域设置文件 (`config/locales/es.json`):
 ```json
 {
     "Hello!": "Hola!",
@@ -54,7 +53,7 @@ To represent nested strings, use `.` in keys.  For example, here's some of the s
 ```
 
 
-### Detecting and/or overriding the desired locale for a request
+### 检测和/或覆盖请求的所需区域设置
 
 To determine the current locale used by the request, use [`req.getLocale()`](https://github.com/jeresig/i18n-node-2/tree/9c77e01a772bfa0b86fab8716619860098d90d6f#getlocale).
 
