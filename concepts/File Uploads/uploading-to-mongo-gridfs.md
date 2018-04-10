@@ -1,6 +1,6 @@
 # 上传到Mongo GridFS
 
-由于Mongo的GridFS文件系统特点，可以将文件上传到MongoDB。 使用Sails，你可以使用[MongoDB的GridFS]的Skipper适配器(https://github.com/willhuang85/skipper-gridfs)，使用很少的附加配置来完成此任务。
+由于Mongo的GridFS文件系统特点，可以将文件上传到MongoDB。 使用Sails，你可以使用Skipper适配器[MongoDB的GridFS](https://github.com/willhuang85/skipper-gridfs)，简单配置来完成此任务。
 
 安装:
 
