@@ -1,54 +1,52 @@
-# Waterline: SQL/noSQL Data Mapper (ORM/ODM)
+# Waterline: SQL/noSQL数据映射器 (ORM/ODM)
 
 
-Sails comes installed with a powerful [ORM/ODM](http://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) called [Waterline](https://github.com/balderdashy/waterline), a datastore-agnostic tool that dramatically simplifies interaction with one or more [databases](http://www.cs.umb.edu/cs630/hd1.pdf).  It provides an abstraction layer on top of the underlying database, allowing you to easily query and manipulate your data _without_ writing vendor-specific integration code.
+Sails安装了强大的[ORM / ODM](http://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) 名字叫做[Waterline](https://github.com/balderdashy/waterline), 一个数据存储不可知论的工具，可以显着简化与一个或多个[数据库](http://www.cs.umb.edu/cs630/hd1.pdf). 它在底层数据库之上提供抽象层，使您能够轻松查询和操作数据，而无需编写特定依赖的集成代码。
 
-### Database Agnosticism
+### 数据库不可知论
 
-In schemaful databases like [Postgres](http://www.postgresql.org/), [Oracle](https://www.oracle.com/database), and [MySQL](http://www.mysql.com), models are represented by tables.  In [MongoDB](http://www.mongodb.org), they're represented by Mongo "collections".  In [Redis](http://redis.io), they're represented using key/value pairs.  Each database has its own distinct query dialect, and in some cases even requires installing and compiling a specific native module to connect to the server.  This involves a fair amount of overhead, and garners an unsettling level of [vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in) to a specific database; e.g. if your app uses a bunch of SQL queries, it will be very hard to switch to Mongo later, or Redis, and vice versa.
+在关系化数据库像[Postgres](http://www.postgresql.org/), [Oracle](https://www.oracle.com/database), 和 [MySQL](http://www.mysql.com),模型代表表格. 在[MongoDB](http://www.mongodb.org)中, 他们代表Mongo的"collections". 在[Redis](http://redis.io)中, 它们使用键/值对来表示. 每个数据库都有自己独特的查询方言，在某些情况下，甚至需要安装和编译特定的本地模块才能连接到服务器。这涉及相当多的开销，并且将[依赖锁定]（https://en.wikipedia.org/wiki/Vendor_lock-in）到特定数据库; 例如如果你的应用使用了一堆SQL查询，那么以后很难切换到Mongo，或Redis，反之亦然。
 
-Waterline query syntax floats above all that, focusing on business logic like creating new records, fetching/searching existing records, updating records, or destroying records.  No matter what database you're contacting, the usage is _exactly the same_.  Furthermore, Waterline allows you to [`.populate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/populate) associations between models, _even if_ the data for each model lives in a different database.  That means you can switch your app's models from Mongo, to Postgres, to MySQL, to Redis, and back again - without changing any code.  For the times when you need low-level, database-specific functionality, Waterline provides a query interface that allows you to talk directly to your models' underlying database driver (see [.query()](https://sailsjs.com/documentation/reference/waterline-orm/models/query) and [.native()](https://sailsjs.com/documentation/reference/waterline-orm/models/native).)
-
-
-
-### Scenario
-
-Let's imagine you're building an e-commerce website, with an accompanying mobile app.  Users browse products by category or search for products by keyword, then they buy them.  That's it!  Some parts of your app are quite ordinary; you have an API-driven flow for logging in, signing up, order/payment processing, resetting passwords, etc. However, you know there are a few mundane features lurking in your roadmap that will likely become more involved.  Sure enough:
-
-##### Flexibility
-
-_You ask the business what database they would like to use:_
-
-> "Datab... what?  Let's not be hasty, wouldn't want to make the wrong choice.  I'll get ops/IT on it.  Go ahead and get started though."
-
-The traditional methodology of choosing one single database for a web application/API is actually prohibitive for many production use cases.  Oftentimes the application needs to maintain compatibility with one or more existing data sets, or it is necessary to use a few different types of databases for performance reasons.
-
-Since Sails uses `sails-disk` by default, you can start building your app with zero configuration, using a local temporary file as storage.  When you're ready to switch to the real thing (and when everyone knows what that even is), just change your app's [datastore configuration](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores).
+Waterline查询语法最重要的是着重于创建新记录，获取/搜索现有记录，更新记录或销毁记录等业务逻辑。无论您与哪个数据库联系，使用情况都完全相同。 此外，Waterline允许您在模型之间[`.populate（）`](https://sailsjs.com/documentation/reference/waterline-orm/queries/populate)关联，即使每个模型的数据存在于不同数据库。这意味着您可以将应用程序的模型从Mongo切换到Postgres，切换到MySQL，再切换到Redis，而无需更改任何代码。需要low-level数据库功能的时候，Waterline提供了一个查询界面，可让您直接与模型的底层数据库驱动程序通讯(请参阅[.query()](https://sailsjs.com/documentation/reference/waterline-orm/models/query)和 [.native()](https://sailsjs.com/documentation/reference/waterline-orm/models/native).)
 
 
+### 脚本
 
-##### Compatibility
+假设您正在建立一个电子商务网站，并附带一个移动应用程序。 用户按类别浏览产品或按关键字搜索产品，然后购买它们。如此，你的应用程序的某些部分很普通; 您有用于登录，注册，订单/付款处理，重置密码等的API驱动流程。但是，您知道潜藏在您的路线图中的一些常见功能可能会涉及更多。 果然:
 
-_The product owner/stakeholder walks up to you and says:_
+##### 灵活性
 
-> "Oh hey by the way, the products actually already live in our point of sale system. It's some ERP thing I guess, something like "DB2"?  Anyways, I'm sure you'll figure it out- sounds easy right?"
+_你问企业他们想使用什么数据库:_
 
-Many enterprise applications must integrate with an existing database.  If you're lucky, a one-time data migration may be all that's necessary, but more commonly, the existing dataset is still being modified by other applications.  In order to build your app, you might need to marry data from multiple legacy systems, or with a separate dataset stored elsewhere.  These datasets could live on 5 different servers scattered across the world! One colocated database server might house a SQL database with relational data, while another cloud server might hold a handful of Mongo or Redis collections.
+> “数据 ......什么？我们不要急，不想做出错误的选择，我先咨询一下IT部门，然后继续。”
 
-Sails/Waterline lets you hook up different models to different datastores; locally or anywhere on the internet.  You can build a User model that maps to a custom MySQL table in a legacy database (with weird crazy column names).  Same thing for a Product model that maps to a table in DB2, or an Order model that maps to a MongoDB collection.  Best of all, you can `.populate()` across these different datastores and adapters, so if you configure a model to live in a different database, your controller/model code doesn't need to change (note that you _will_ need to migrate any important production data manually)
+为Web应用程序/ API选择单一数据库的传统方法对于许多生产用例来说实际上是禁止的。 通常，应用程序需要与一个或多个现有数据集保持兼容，或者出于性能原因需要使用几种不同类型的数据库。
 
-##### Performance
+由于Sails默认使用`sails-disk`，所以您可以使用本地临时文件存储来构建零配置的应用程序。当你准备好切换到真实的东西时（当每个人都知道甚至是什么时候），只需改变你的应用程序的[datastore configuration](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores).
 
-_You're sitting in front of your laptop late at night, and you realize:_
-> "How can I do keyword search?  The product data doesn't have any keywords, and the business wants search results ranked based on n-gram word sequences.  Also I have no idea how this recommendation engine is going to work.  Also if I hear the words `big data` one more time tonight I'm quitting and going back to work at the coffee shop."
 
-So what about the "big data"?  Normally when you hear bloggers and analyst use that buzzword, you think of data mining and business intelligence.  You might imagine a process that pulls data from multiple sources, processes/indexes/analyzes it, then writes that extracted information somewhere else and either keeps the original data or throws it away.
+##### 兼容性
 
-However, there are some much more common challenges that lend themselves to the same sort of indexing/analysis needs; features like "driving-direction-closeness" search, or a recommendation engine for related products.  Fortunately, a number of databases simplify specific big-data use cases (for instance MongoDB provides geospatial indexing, and ElasticSearch provides excellent support for indexing data for full-text search).
+_产品所有者/利益相关者走向你并说:_
 
-Using databases in the way they're intended affords tremendous performance benefits, particularly when it comes to complex report queries, searching (which is really just customized sorting), and NLP/machine learning.  Certain databases are very good at answering traditional relational business queries, while others are better suited for map/reduce-style processing of data, with optimizations/trade-offs for blazing-fast read/writes.  This consideration is especially important as your app's user-base scales.
+> “哦，嘿，顺便说一句，这些产品实际上已经在我们的销售系统中存在了，可能是在ERP中，比如”DB2“，不管怎样，我相信你会发现它 - 听起来很简单吧？
 
-### Adapters
+许多企业应用程序必须与现有数据库集成。 如果幸运的话，来一次性数据迁移就可以了。但更常见的是，现有数据集仍在被其他应用程序修改。 为了构建您的应用程序，您可能需要结合来自多个旧系统的数据，或与其他地方存储的单独数据集结合使用。 这些数据集可以分布在世界各地的5个不同的服务器上！ 一个共享数据库服务器可能包含关系数据的SQL数据库，而另一个云服务器可能包含少数Mongo或Redis集合。
+
+Sails/Waterline可让您将不同的模型连接到不同的数据存储区; 本地或互联网上的任何地方。 您可以构建映射到旧数据库中的自定义MySQL表的用户模型（它使用奇怪的疯狂列名称）。 同样的事情还有，映射到DB2中的表的产品模型或映射到MongoDB集合的Order模型。 最重要的是，你可以在这些不同的数据存储区和适配器上使用`.populate()`，所以如果你配置一个模型来存放在不同的数据库中，你的控制器/模型代码不需要改变(注意，你需要手动迁移重要的产品数据）
+
+
+##### 性能
+
+_你在深夜坐在你的笔记本电脑前，你意识到:_
+> “我怎样才能做关键字搜索？产品数据没有任何关键字，企业希望根据n-gram单词序列排列搜索结果，我也不知道这个推荐引擎是如何工作的。 今晚我再听到“大数据”这句话，我正要离开，然后回到咖啡店工作。“
+
+那么“大数据”呢？ 通常当你听到博客和分析师使用这个流行语时，你会想到数据挖掘和商业智能。 您可以想象一个从多个来源获取数据，处理/索引/分析数据的流程，然后将提取的信息写入其他位置，并保留原始数据或将其丢弃。
+
+但是，还有一些比较常见的挑战，诸如“驾驶方向-亲密度”搜索的特征，或相关产品的推荐引擎。 幸运的是，许多数据库简化了特定的大数据使用情况（例如MongoDB提供了地理空间索引，ElasticSearch为全文搜索索引数据提供了极好的支持）。
+
+
+### 适配器
 
 Like most MVC frameworks, Sails supports [multiple databases](https://sailsjs.com/features).  That means the syntax to query and manipulate our data is always the same, whether we're using MongoDB, MySQL, or any other supported database.
 
@@ -57,7 +55,7 @@ Waterline builds on this flexibility with its concept of adapters.  An adapter i
 Custom Waterline adapters are actually [pretty simple to build](https://github.com/balderdashy/sails-generate-adapter), and can make for more maintainable integrations; anything from a proprietary enterprise account system, to a cache, to a traditional database.
 
 
-### Datastores
+### 数据存储
 
 A **datastore** represents a particular database configuration.  This configuration object includes an adapter to use, as well as information like the host, port, username, password, and so forth.  Datastores are defined in the Sails config [`config/datastores.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores).
 
@@ -75,7 +73,7 @@ A **datastore** represents a particular database configuration.  This configurat
 ```
 
 
-### Analogy
+### 比喻Analogy
 
 Imagine a file cabinet full of completed pen-and-ink forms. All of the forms have the same fields (e.g. "name", "birthdate", "maritalStatus"), but for each form, the _values_ written in the fields vary.  For example, one form might contain "Lara", "2000-03-16T21:16:15.127Z", "single", while another form contains "Larry", "1974-01-16T21:16:15.127Z", "married".
 
@@ -111,7 +109,7 @@ In your Sails app, a **model** is like one of the file cabinets.  It contains **
 
 
 
-### Notes
+### 注意
 + This documentation on models is not applicable if you are overriding the built-in ORM, [Waterline](https://github.com/balderdashy/waterline).  In that case, your models will follow whatever convention you set up, on top of whatever ORM library you're using (e.g. Mongoose.)
 
 
