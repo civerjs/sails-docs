@@ -1,6 +1,6 @@
-# An example helper
+# 一个helper的例子
 
-A common use of helpers is to encapsulate some repeated database queries.  For example, suppose our app had a `User` model which included a field `lastActiveAt` which tracked the time of their last login.  A common task in such an app might be to retrieve the list of most-recently-online users.  Rather than hard-coding this query into multiple locations, we could write a helper instead:
+helper的常见用法是封装一些重复的数据库查询。 例如，假设我们的应用程序有一个`User`模型，其中包含一个字段`lastActiveAt`，用于跟踪用户上次登录的时间。 这种程序的常见任务是检索最近在线用户的列表。 我们可以编写一个helper,而不是将这个查询硬编码到多个位置：
 
 ```javascript
 // api/helpers/get-recent-users.js
@@ -72,29 +72,29 @@ module.exports = {
 };
 ```
 
-### Usage
+### 用法
 
-To call this helper from app code using the default options (in an action, for example), we would use:
+从应用程序代码中调用此帮助程序使用默认选项（例如，在一个action中），我们将使用:
 
 ```javascript
 var users = await sails.helpers.getRecentUsers();
 ```
 
-To alter the criteria for the returned users, we could pass in some values:
+要改变返回用户的用法，我们可以传入一些值:
 
 ```javascript
 var users = await sails.helpers.getRecentUsers(50);
 ```
 
-Or, for example, to get the 10 most recent users who have logged in since St. Patrick's Day, 2017:
+或者，例如，获取自2017年圣帕特里克节以来已登录的10位最新用户:
 
 ```javascript
 await sails.helpers.getRecentUsers(10, (new Date('2017-03-17')).getTime());
 ```
 
-> Note: These values passed into a helper at runtime are sometimes called **argins**, or options, and they correspond with the key order of the helper's declared input definitions (e.g. `numUsers` and `activeSince`).
+> 注意：在运行时传递给helper的这些值被称为**argins**或options，它们与helper声明的inputs的键顺序（例如`numUsers`和`activeSince`）相对应。
 
-Again, chaining `.with()` in order to use named parameters:
+再次，链入`.with()`以使用命名参数:
 
 ```javascript
 await sails.helpers.getRecentUsers.with({
@@ -104,9 +104,9 @@ await sails.helpers.getRecentUsers.with({
 ```
 
 
-##### Exceptions
+##### 例外
 
-Finally, to handle the `noUsersFound` exit explicitly, rather than simply treating it like any other error, we can use [`.intercept()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept) or [`.tolerate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate):
+最后，为了明确地处理`noUsersFound`出口，而不是将它看作简单地其他错误，我们可以使用 [`.intercept()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept) 或者 [`.tolerate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate):
 
 ```javascript
 var users = await sails.helpers.getRecentUsers(10)
@@ -126,15 +126,14 @@ var users = await sails.helpers.getRecentUsers(10)
   return new Error('Inconceivably, no active users were found for that timeframe.');
 });
 ```
+使用助手的一个关键优势来自于，能够更新功能并涉及应用程序许多部分，这些都是通过在一个地方更改代码来实现的。 例如，通过将`numUsers`的默认值从`5`更改为`15`，我们更新使用helper的_any_地方返回的默认列表的大小。 另外，通过使用像`numUsers`和`activeSince`这样定义明确的输入，我们保证如果我们意外地使用了无效（即非数字）值，我们会收到有效的错误。
 
-A key advantage to using helpers comes from the ability to update functionality that touches many parts of an app, all by changing code in one place.  For example, by changing the default value of `numUsers` from `5` to `15`, we update the size of the default list returned in _any_ place that uses the helper.  Also, by using well-defined inputs like `numUsers` and `activeSince`, we guarantee we&rsquo;ll get helpful errors if we accidentally use an invalid (i.e. non-numeric) value.
 
+### 注意
 
-### Notes
+关于上面的示例`getRecentUsers()`helper的更多注意事项:
 
-A few more notes about the example `getRecentUsers()` helper above:
-
-> * Many of the fields such as `description` and `friendlyName` are not strictly required, but are immensely helpful in keeping the code maintainable, especially when sharing the helper across multiple apps.
-> * The `noUsersFound` exit may or may not be helpful, depending on your app.  If you always wanted to perform some specific action whenever no users were returned (for example, redirecting to a different page), the exit would be a good idea.  If on the other hand you simply wanted to tweak some text in a view based on whether or not users were returned, it might be better to just have the `success` exit and check the `length` of the returned array in your action or view code.
+> * 许多字段，例如`description`和`friendlyName`并不是必须的，但在保持代码可维护性方面非常有用，特别是跨多个应用程序共享helper时。
+> * noUsersFound退出可能有用，也可能没有用，具体取决于您的应用程序。 如果您希望一直在没有反馈的情况下执行某些特定操作（例如，重定向到不同的页面），exits将是一个好主意。 另一方面，如果您只是想根据是否返回来调整视图中的某些文本，更好的方法是使用`success`退出并检查您的action中返回数组的长度或查看代码。
 
 <docmeta name="displayName" value="Example helper">
