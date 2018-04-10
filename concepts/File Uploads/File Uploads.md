@@ -1,16 +1,15 @@
-# File uploads
+# 文件上传
 
-Uploading files in Sails is similar to how you would upload files for a vanilla Node.js or Express application.  It is, however, probably different than what you're used to if you're coming from a different server-side platform like PHP, .NET, Python, Ruby, or Java.  But fear not: the core team has gone to great lengths to make file uploads easier to accomplish, while still keeping them scalable and secure.
+在Sails中上传文件类似于为Node.js vanilla或Express应用程序上传文件。 但是，如果您使用不同的服务器端（如PHP，.NET，Python，Ruby或Java），那么与您的习惯可能不同。 但不要害怕：核心团队已经竭尽全力让文件上传变得更容易，同时保持其可扩展性和安全性。
 
-Sails comes with a powerful "body parser" called [Skipper](https://github.com/balderdashy/skipper) which makes it easy to implement streaming file uploads-- not only to the server's filesystem (i.e. hard disk), but also to Amazon S3, MongoDB's gridfs, or any of its other supported file adapters.
+Sails提供了一个名为[Skipper]”(https://github.com/balderdashy/skipper)的强大的“body parser，它可以很容易地实现streaming file uploads - 不仅服务器文件系统（如硬盘），也适用于Amazon S3，MongoDB的网格或其他支持的文件系统。
 
 
+### 上传一个文件
 
-### Uploading a file
+文件以_file parameters_的形式上传到HTTP Web服务器。 以同样的方式，您可以将表单POST发送带有“name”，“email”和“password”等文本参数的URL，您可以将文件作为文件参数发送，如“avatar”或“newSong”。
 
-Files are uploaded to HTTP web servers as _file parameters_.  In the same way you might send a form POST to a URL with text parameters like "name", "email", and "password", you send files as file parameters, like "avatar" or "newSong".
-
-Take this simple example:
+以这个简单的例子:
 
 ```javascript
 req.file('avatar').upload(function (err, uploadedFiles) {
@@ -18,7 +17,8 @@ req.file('avatar').upload(function (err, uploadedFiles) {
 });
 ```
 
-Files should be uploaded inside of an `action` in one of your controllers.  Here's a more in-depth example that demonstrates how you could allow users to upload an avatar image and associate it with their accounts.  It assumes you've already taken care of access control in a policy, and that you're storing the id of the logged-in user in `req.session.userId`.
+文件需要在某个控制器的`action`里面上传。 这是进阶的例子，演示了如何让用户上传头像图片，并与他的帐户关联。 假设您已经加入了权限检测，并已将登录用户的ID存储在`req.session.userId`中。
+
 
 ```javascript
 // api/controllers/UserController.js
@@ -106,12 +106,15 @@ avatar: function (req, res){
 
 
 
-#### Where do the files go?
-When using the default `receiver`, file uploads go to the `myApp/.tmp/uploads/` directory.  You can override this using the `dirname` option.  Note that you'll need to provide this option both when you call the `.upload()` function AND when you invoke the skipper-disk adapter (so that you are uploading to and downloading from the same place.)
+#### 这些文件在哪里？
+
+当使用默认的`receiver`时，文件上传将进入`myApp/.tmp/uploads/`目录。 你可以使用`dirname`选项覆盖设置。 请注意，在调用`.upload()`函数时以及在调用文件系统时，您都需要提供此选项（以便可以上传到同一位置并从同一位置下载）。
 
 
-#### Uploading to a custom folder
-In the above example we upload the file to .tmp/uploads. So how do we configure it with a custom folder, say ‘assets/images’. We can achieve this by adding options to upload function as shown below.
+#### 上传到自定义文件夹
+
+在上面的例子中，我们将文件上传到.tmp/uploads。 那么，我们如何配置一个自定义文件夹，比如'assets/images'。
+我们可以通过添加选项来实现上传功能，如下所示。
 
 ```javascript
 req.file('avatar').upload({
@@ -125,14 +128,16 @@ req.file('avatar').upload({
 });
 ```
 
-### Sending text parameters in the same form as a file upload
+### 文件上传同时发送文本字段
 
-As mentioned above, you can send text parameters like "name" and "email" to your Sails action along with your file upload field.  However, the text fields _must appear before any file fields_ in your form in order for them to be processed.  This is critical to Sails' ability to run your action code while files are uploading (rather than having to wait for them to finish). See the [Skipper docs](https://github.com/balderdashy/skipper#text-parameters) for more info.
+如上所述，您可以将文本字段（如“姓名”和“电子邮件”）与文件上传字段一起发送到Sails action。 但是，文本字段必须出现在文件字段_fields_之前才能处理它们。 这对Sails在文件上传时运行您的action代码（而不必等待它们完成）的性能至关重要。 有关更多信息，请参阅[Skipper文档](https://github.com/balderdashy/skipper#text-parameters)。
 
-### Example
 
-#### Generate an `api`
-First we need to generate a new `api` for serving/storing files.  Do this using the sails command line tool.
+### 示例
+
+#### 创建一个 `api`
+
+首先，我们需要为服务/存储文件生成一个新的`api`。请使用sails命令行工具执行此操作。
 
 ```sh
 $ sails generate api file
@@ -144,9 +149,9 @@ info: REST API generated @ http://localhost:1337/file
 info: and will be available the next time you run `sails lift`.
 ```
 
-#### Write Controller Actions
+#### 编写控制器操作
 
-Lets make an `index` action to initiate the file upload and an `upload` action to receive the file.
+我们做一个`index`动作来启动文件上传，和一个`upload`动作来接收文件。
 
 ```javascript
 
@@ -180,7 +185,7 @@ module.exports = {
 };
 ```
 
-## Read more
+## 阅读更多
 
 + [Skipper docs](https://github.com/balderdashy/skipper)
 + [Uploading to Amazon S3](https://sailsjs.com/documentation/concepts/file-uploads/uploading-to-s-3)
