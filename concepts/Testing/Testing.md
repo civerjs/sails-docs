@@ -1,8 +1,8 @@
-# Testing your code
+# 测试你的代码
 
-This section of the documentation runs through one way you can go about testing your Sails application.  There are countless test frameworks and assertion libraries for Sails and Node.js -- pick one that fits your needs.
+本文档的通过测试Sails应用程序的方式来运行。Sails和Node.js有无数的测试框架 - 选择一个适合您的。
 
-> There is no official strategy for testing in the Sails framework, and this page is a collaborative, community-driven guide that has not been thoroughly vetted by Sails core team members.  If you run across something confusing or incorrect, feel free to jump in and send a pull request.
+> 在Sails框架中没有官方的测试策略，这个页面是由社区驱动的合作指南，Sails核心团队成员并未对其进行全面审查。如果遇到困惑或不正确的情况，请随时发送请求。
 
 ### Preparation
 
