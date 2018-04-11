@@ -1,6 +1,6 @@
-# Records
+# 记录集
 
-A _record_ is what you get back from `.find()` or `.findOne()`.  Each record is a uniquely identifiable object that corresponds 1-to-1 with a physical database entry; e.g. a row in Oracle/MSSQL/PostgreSQL/MySQL, a document in MongoDB, or a hash in Redis.
+_记录_ 是你从`.find()`或`.findOne()`得到的。 每条记录都是唯一可识别的对象，与物理数据库条目一一对应; 例如 Oracle/MSSQL/ PostgreSQL/MySQL中的一行，MongoDB中的文档或Redis中的散列。
 
 ```js
 var records = await Order.find();
@@ -12,23 +12,24 @@ if (records.length > 0) {
 ```
 
 
-### JSON serialization
+### JSON序列化
 
-In Sails, records are just dictionaries (plain JavaScript objects), which means they can easily be represented as JSON. But you can also customize the way that records from a particular model are _stringified_ using the [`customToJSON` model setting](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?customtojson).
-
-
-### Populated values
-
-In addition to basic attribute data like email addresses, phone numbers, and birthdates, Waterline can dynamically store and retrieve linked sets of records using [associations](https://sailsjs.com/documentation/concepts/models-and-orm/associations).  When [`.populate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/populate) is called on a query, each of the resulting records will contain one or more populated values.  Each one of those populated values is a snapshot of the record (or array of records) linked to that particular association at the time of the query.
-
-The type of a populated value depends on what kind of association it is:
-
-+ `null`, or a plain JavaScript object,  _(if it corresponds to a "model" association)_ or
-+ an empty array, or an array of plain JavaScript objects _(if it corresponds to a "collection" association)_
+在Sails中，记录只是字典（普通的JavaScript对象），这意味着它们可以很容易地表示为JSON。 但您也可以使用[`customToJSON`模型设置]自定义记录来自特定模型的记录方式(https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?customtojson).
 
 
+### 填充值
 
-For example, assuming we're dealing with orders of adorable wolf puppies:
+除了电子邮件地址，电话号码和生日等基本属性数据外，Waterline还可以使用[associations](https://sailsjs.com/documentation/concepts/models-and-orm/associations)动态存储和检索链接的记录集。 当在查询上调用[`.populate()`](https://sailsjs.com/documentation/reference/waterline-orm/queries/populate)时，每个结果记录将包含一个或多个填充值。 这些填充值中的每一个都是在查询时链接到该特定关联的记录（或记录数组）的快照。
+
+
+填填充的类型取决于它关联什么类型:
+
++ `null`，或一个普通的JavaScript对象_（如果它对应于“models”关联）_or
++ 一个空数组或一组普通的JavaScript对象_（如果它对应于“collection”关联_
+
+
+
+例如，假设我们正在处理可爱的小狼的订单:
 
 ```js
 var orders = await Order.find()
@@ -52,9 +53,9 @@ console.log(orders[1].seller);
 // => null
 ```
 
-##### Expected types / values for association attributes
+##### 关联属性的预期 types/values
 
-The table below shows what values you can expect in records returned from a `.find()` or `.findOne()` call under different circumstances.  
+下表显示了在不同情况下从`.find（）`或`.findOne（）`调用返回的记录预期值。 
 
 | &nbsp; |  without a `.populate()` added for the association | with `.populate()`, but no associated records found | with `.populate()`, with associated records found
 |:--- |:--- | --- |:--- |
@@ -62,9 +63,10 @@ The table below shows what values you can expect in records returned from a `.fi
 | Plural association (e.g. `buyers`) |  `undefined` (the key will not be present) | `[]` (an empty array) | An array of POJOs representing child records
 
 
-##### Modifying populated values
+##### 修改填充值
 
-To modify the populated values of a particular record or set of records, call the [.addToCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/add-to-collection), [.removeFromCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/remove-from-collection), or [.replaceCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/replace-collection) model methods.
+要修改特定记录或记录集的填充值，请调用 [.addToCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/add-to-collection)，[.removeFromCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/remove-from-collection)或[.replaceCollection()](https://sailsjs.com/documentation/reference/waterline-orm/models/replace-collection)模型方法。
+
 
 
 
