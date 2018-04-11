@@ -1,18 +1,17 @@
-# View engines
+# 视图引擎
 
-The default view engine in Sails is [EJS](https://github.com/mde/ejs).
+Sails的默认视图引擎是[EJS](https://github.com/mde/ejs).
 
-##### Swapping out the view engine
+##### 更换视图引擎
 
-To use a different view engine, you should use npm to install it in your project, then in [`config/views.js`](https://sailsjs.com/documentation/anatomy/config/views.js) set `sails.config.views.extension` to your desired file extension and `sails.config.views.getRenderFn` to a function that returns your view engine's rendering function.
+要使用不同的视图引擎，您应该使用npm将其安装到您的项目中，然后在[`config/views.js`]中设置`sails.config.views.extension`到你想要的文件扩展名和`sails.config.views.getRenderFn`到一个返回你的视图引擎的渲染函数的函数。
 
-If your view engine is supported by [Consolidate](https://github.com/tj/consolidate.js/blob/master/Readme.md#api), you can use that in your `getRenderFn` to easily get access to the rendering function. Firstly, you'll need to use npm to install `consolidate` into your project, if it is not already present:
+如果您的视图引擎受[Consolidate]）支持，您可以在`getRenderFn`中使用它来轻松访问渲染功能。首先，你需要使用npm在项目中安装`consolidate`，如果不存在的话:
 
 ```bash
 npm install consolidate --save
 ```
-
-After the install has completed and you have installed your view engine package, you can then set the view configuration.  For example, to use [Swig](https://github.com/paularmstrong/swig) templates you would `npm install swig --save` and then add the following into [`config/views.js`](https://sailsjs.com/documentation/anatomy/config/views.js):
+安装完成后，您已经安装了您的视图引擎包，然后您可以设置视图配置。 例如，要使用[Swig]模板，您需要`npm install swig --save`，然后将以下内容添加到[`config / views.js`]:
 
 ```javascript
 'extension': 'swig',
@@ -24,7 +23,7 @@ After the install has completed and you have installed your view engine package,
 }
 ```
 
-The `getRenderFn` allows you to configure your view engine before plugging it into Sails:
+`getRenderFn`允许您在将其插入Sails之前配置您的视图引擎:
 
 ```javascript
 'extension': 'swig',
