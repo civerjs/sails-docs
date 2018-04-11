@@ -1,27 +1,29 @@
-# Understanding sessions in Sails
+# 了解Sails中的session
 
-For our purposes **sessions** are synonymous with a few components that together allow you to store information about a user agent between requests.
+就我们的目的而言，**session**与少数几个组件同义，它们允许您在请求间存储有关user agent的信息。
 
-> A **user agent** is the software (e.g. browser or native application) that represents you on a device (e.g. a browser tab on your computer, a smartphone application, or your refrigerator).  It is associated one-to-one with a cookie or access token.
+> **user agent** 代表设备（例如计算机上的浏览器选项卡，智能手机应用程序）上所使用的软件（例如，浏览器或本机应用程序）。它与cookie或访问令牌一对一关联。
 
-Sessions can be very useful because the request/response cycle is **stateless**. The request/response cycle is considered stateless because neither the client nor the server inherently stores any information between different requests about a particular request.  Therefore the lifecycle of a request/response ends when a response is made to the requesting user agent (e.g. `res.send()`).
+session可能非常有用，因为请求/响应周期是**stateless**。请求/响应周期被认为是无状态的，因为客户端和服务器本身都不会在关于特定请求的不同请求之间存储任何信息。因此，当对user agent（例如`res.send()`）做出响应时，请求/响应的生命周期结束。
 
-Note, we’re going to discuss sessions in the context of a browser user agent. While you can use sessions in Sails for whatever you like, it is generally a best practice to use it purely for storing the state of user agent authentication. Authentication is a process that allows a user agent to prove that they have a certain identity.  For example, in order to access some protected functionality, I might need to prove that my browser tab actually corresponds with a particular user record in a database.  If I provide you with a unique name and a password, you can look up the name and compare my password with a stored (hopefully [encrypted](http://node-machine.org/machinepack-passwords/encrypt-password)) password.  If there's a match, I'm authenticated. But how do you store that "authenticated-ness" between requests? That's where sessions come in.
+请注意，我们将在浏览器user agent的上下文中讨论session。 尽管您可以在Sails中使用session进行任何您喜欢的操作，但纯粹用于存储用户代理身份验证的状态通常是最佳做法。认证是一个过程，允许用户代理证明他们有一定的身份。 例如，为了访问某些受保护的功能，我可能需要证明我的浏览器选项卡实际上与数据库中的特定用户记录相对应。 如果我为您提供了一个唯一的名称和密码，您可以查找名称并将其与存储的密码进行比较。 密码。如果有匹配，会通过验证。但是，如何在请求之间存储“认证”？ 这就是session存在的意义。
 
-### What sessions are made of
-There are three main components to the implementation of sessions in Sails:
-1. the **session store** where information is retained
-2. the middleware that manages the session
-3. a cookie that is sent along with every request and stores a session id (by default, `sails.sid`)
 
-The **session store** can either be in memory (e.g. the default Sails session store) or in a database (e.g. Sails has built-in support for using Redis for this purpose).  Sails builds on top of Connect middleware to manage the session; which includes using a **cookie** to store a session id (`sid`) on theuser agent.
+### session由什么构成
+在Sails中实现session有三个主要组件:
+1. **session store**保留信息
+2. 管理session的中间件
+3. 一个与请求一起发送并存储会话ID的cookie（默认情况下为`sails.sid`）
 
-### A day in the life of a *request*, a *response*, and a *session*
-When a `request` is sent to Sails, the request header is parsed by the session middleware.
+**session store**可以存储在内存中（例如默认的Sails session存储区）或数据库中（例如Sails为此目的已经内置了对使用Redis的支持）。 Sails构建在Connect中间件的基础上来管理会话; 其中包括使用**cookie**在user agent上存储会话标识（`sid`）。
 
-##### Scenario 1: The request header has no *cookie property*
 
-If the header does not contain a cookie property, a `sid` is created in the session and a default session dictionary is added to `req` (e.g. `req.session`).  At this point you can make changes to the session property (usually in a controller/action).  For example, let's look at the following *login* action.
+### *request*,*response*,*session*的周期
+当一个`request`发送给Sails时，请求头由session中间件解析。
+
+##### 场景1：请求标头没有*cookie属性*
+
+如果头部不包含cookie属性，则在会话中创建一个“sid”，并将默认sesssion字典添加到“req”（例如`req.session`）。此时，您可以更改sesssion属性（通常在控制器/action中）。例如，让我们看看下面的*登录*操作。
 
 ```javascript
 module.exports = {
@@ -40,36 +42,40 @@ module.exports = {
 }
 ```
 
-Here we added a `userId` property to `req.session`.
+在这里，我们为`req.session`添加了一个`userId`属性。
 
-> **Note:** The property will not be stored in the *session store* nor available to other requests until the response is sent.
+> **注意：**该属性将不会存储在*session store*中，并且在发送响应之前也不可用于其他请求。
 
-Once the response is sent, any new requests will have access to `req.session.userId`. Since we didn't have a cookie *property* in the request header a cookie will be established for us.
+一旦发送了响应，任何新的请求都将有权访问`req.session.userId`。 由于我们在请求头中没有cookie*属性*，因此我们将为其建立一个cookie。
 
-##### Scenario 2: The request header has a cookie *property* with a `Sails.sid`
+##### 场景2：请求头部具有一个cookie*属性*和一个`Sails.sid`
 
-Now when the user agent makes the next request, the `Sails.sid` stored on the cookie is checked for authenticity and if it matches an existing `sid` in the session store, the contents of the session store is added as a property on the `req` dictionary (e.g. `req.session`).  We can access properties on `req.session` (e.g. `req.session.userId`) or set properties on it (e.g. `req.session.userId == someValue`).  The values in the session store might change but generally the `Sails.sid` and `sid` do not change.
-
-### When does the `Sails.sid` change?
-During development, the Sails session store is *in memory*.  Therefore, when you close the Sails server, the current session store moves on to session heaven (e.g. the session store disappears).  When Sails is restarted, although a user agent request contains a `Sails.sid` in the cookie, the `sid` is no longer in the session store.  Therefore, a new `sid` will be generated and replaced in the cookie.  The `Sails.sid` will also change if the user agent cookie expires or is removed.
-
->The lifespan of a Sails cookie can be changed from its default setting (e.g. never expires) to a new setting by accessing the `cookie.maxAge` property in `projectName/config/session.js`.
+当user agent发出下一个请求时，会检查存储在cookie上的`Sails.sid`的真实性，并且如果它与session stroe中现有的`sid`匹配，session stroe的内容将作为属性加入`req`字典（例如`req.session`）。 我们可以在`req.session`（例如`req.session.userId`）上访问属性或者在其上设置属性（例如`req.session.userId == someValue`）。 session stroe中的值可能会更改，但通常`Sails.sid`和`sid`不会更改。
 
 
-### Using *Redis* as the session store
+### 什么时候`Sails.sid`改变了？
+在开发过程中，Sails会话存储(session store)*在内存*中。 因此，当您关闭Sails服务器时，当前session store会去西天（消失..）。 当Sails重新启动时，尽管user agent请求在Cookie中包含“Sails.sid”，但sid不再存在于session store中。 因此，一个新的`sid`将被生成并在cookie中被替换。如果用户代理cookie过期或被删除，`Sails.sid`也会改变。
 
-Redis is a key-value database package that can be used as a session store that is separate from the Sails instance.  This configuration for sessions has two benefits.  The first is that the session store will remain viable between Sails restarts.  The second is that if you have multiple Sails instances behind a load balancer, all of the instances can point to a single consolidated session store.
 
-#### Enabling Redis session store in development
+>通过修改`projectName/config/session.js`中的`cookie.maxAge`属性，可以将Sails Cookie的生命周期从其默认设置（例如永不过期）更改为新设置。
 
-To enable Redis as your session store in development, first make sure you have a local Redis instance running on your machine (`redis-server`). Then, lift your app with `sails lift --redis`.
 
-This is just a shortcut for `sails lift --session.adapter=@sailshq/connect-redis --sockets.adapter=@sailshq/socket.io-redis`. These packages are included as dependencies of new Sails apps by default, but if you're working with an upgraded app you'll need to `npm install @sailshq/connect-redis` and `npm install @sailshq/socket.io-redis`.
+### 使用* Redis *作为会话存储
 
-> Note: This built-in configuration uses your local Redis instance. For advanced session configuration options, see [Reference > Configuration > sails.config.session](https://sailsjs.com/documentation/reference/configuration/sails-config-session).
+Redis是一个键/值数据库，可用作与Sails实例分开的session store。 session的这种配置有两个好处。 首先是session store将在Sails重启之间保持可用。第二是如果负载均衡后面有多个Sails实例，则所有实例都可以指向一个统一的session store。
 
-#### Nerdy details of how the session cookie is created
-The value for the cookie is created by first hashing the `sid` with a configurable *secret* which is just a long string.
+
+#### 开发中启用Redis会话存储(session store)
+
+要在开发中启用Redis作为session store，首先确保您的计算机上运行了本地Redis实例（`redis-server`）。 然后，用`sails lift --redis`升级你的应用程序。
+
+这只是`sails lift --session.adapter=@sailshq/connect-redis --sockets.adapter = @sailshq /socket.io-redis`的快捷方式。 这些软件包默认包含在新Sails应用程序的依赖项中，但是如果您使用的是升级版本，则需要"npm install @sailshq / connect-redis"和"npm install @sailshq/socket.io-redis"。
+
+> 注意：此内置配置使用您的本地Redis实例。 有关高级会话配置选项，请参阅 [Reference > Configuration > sails.config.session](https://sailsjs.com/documentation/reference/configuration/sails-config-session).
+
+#### session和cookie是如何创建的
+
+这个cookie的值是通过首先用一个可配置的*secret*来加密sid来创建的，它只是一个很长的字符串。
 
 > You can change the session `secret` property in `projectName/config/session.js`.
 
@@ -77,13 +83,13 @@ The Sails `sid` (e.g. `Sails.sid`) then becomes a combination of the plain `sid`
 
 **What does this prevent?** It prevents a user from guessing the `sid` as well as prevents a evil doer from spoofing a user into making an authetication request with a `sid` that the evil doer knows.  This could allow the evil doer to use the `sid` to do bad things while the user is authenticated via the session.
 
-### Disabling sessions
+### 禁用sessions
 
 Even if your Sails app is designed to be accessed by non-browser clients, such as toasters, you are strongly encouraged to use sessions for authentication.  While it can sometimes be complex to understand, the built-in session mechanism in Sails (session store + HTTP-only cookies) is a tried and true solution that is generally [less brittle, easier to use, and lower-risk than rolling something yourself](http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/).
 
 That said, sessions may not always be an option (for example, if you must [integrate with a different authentication scheme](https://github.com/sails101/jwt-login) like JWT).  In these cases, you can disable sessions on an app-wide or per-request basis.
 
-##### Disabling sessions for your entire app
+##### 禁用整个应用的sessions
 
 To entirely turn off session support for your app, add the following to your `.sailsrc` file:
 
@@ -95,7 +101,7 @@ To entirely turn off session support for your app, add the following to your `.s
 
 This disables the core Sails session hook.  You can also accomplish this by setting the `sails_hooks__session` environment variable to `false`.
 
-##### Disabling sessions for certain requests
+##### 禁用某些请求的sessions
 
 To turn off session support on a per-route (or per-request) basis, use the [`sails.config.session.isSessionDisabled` setting](https://sailsjs.com/documentation/reference/configuration/sails-config-session#?properties).  By default, Sails enables session support for all requests except those that [look like](https://sailsjs.com/documentation/reference/application/advanced-usage/sails-looks-like-asset-rx) they're pointed at static assets like images, stylesheets, etc.
 
