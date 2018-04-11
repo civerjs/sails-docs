@@ -1,16 +1,17 @@
-# Sending realtime messages from the server to one or more clients
+# 将实时消息从服务器发送到一个或多个客户端
 
-### Overview
+### 概述
 
-Sails exposes two APIs for communicating with connected socket clients: the higher-level [resourceful pubsub API](https://sailsjs.com/documentation/reference/web-sockets/resourceful-pub-sub), and the lower-level [sails.sockets API](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets).
+Sails公开了两个用于与连接的socket客户端通信的API：高级的[resourceful pubsub API](https://sailsjs.com/documentation/reference/web-sockets/resourceful-pub-sub)和底层的[sails.sockets API](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets)。
 
-### Resourceful PubSub
 
-The Resourceful PubSub (Published/Subscribe) API provides a high-level way to subscribe sockets to Sails model classes and instances.  It is entirely possible to create a rich realtime experience (for example, a chat app) using just this API.  Sails blueprints use Resourceful PubSub to automatically send out notifications about new model instances and changes to existing instances, but you can use them in your custom controller actions as well.
+### 丰富的PubSub
 
-##### Example
+Resourceful PubSub（发布/订阅）API提供了一种高级的方式来订阅sockets模型类和实例的socket。 仅使用此API完全有可能创建丰富的实时体验（例如，聊天应用程序）。Sails蓝图使用Resourceful PubSub自动发送有关新模型实例的通知以及对现有实例的更改，但您也可以在自定义控制器action中使用它们。
 
-Create a new User model instance and notify all interested clients
+##### 示例
+
+创建一个新的用户模型实例并通知所有感兴趣的客户
 
 ```javascript
 // Create the new user
@@ -29,17 +30,19 @@ User.create({
 
 ### `sails.sockets`
 
-The `sails.sockets` API allows for lower-level communication directly with sockets, using methods like [`sails.sockets.join()`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-join) (subscribe a socket to all messages sent to a particular "room"), [`sails.sockets.leave()`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-leave) (unsubscribe a socket from a room), and [`sails.sockets.broadcast()`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast) (broadcast a message to all subscribers in one or more rooms).
+`sails.sockets`API允许使用诸如[`sails.sockets.join（）`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-join)之类的方法直接与socket进行底层通信(订阅所有发送到特定“房间”的消息的socket），[`sails.sockets.leave()`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-leave)（取消订阅来自房间的套接字）和[`sails.sockets.broadcast()`](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast)（向一个或多个房间中的所有用户广播消息）。
 
-##### Example
 
-Add a socket to the room "funSockets"
+##### 示例
+
+给房间添加一个socket “funSockets”
 
 ```javascript
 sails.sockets.join(someSocket, "funSockets");
 ```
-
-Broadcast a "hello" message to the "funSockets" room.  This message will be received by all client sockets that have (1) been added to the "funSockets" room on the server with `sails.sockets.join()` and (2) added a listener for the "hello" event on the client with [`socket.on('hello', ...)`](https://sailsjs.com/documentation/reference/web-sockets/socket-client/io-socket-on).
+向“funSockets”房间广播“hello”消息。 
+（1）通过sails.sockets.join()连接到服务器上的“funSockets”空间中的所有客户端socket都会收到此消息
+（2）为服务器上的“hello”事件添加了一个侦听器，客户端使用[`socket.on('hello', ...)`](https://sailsjs.com/documentation/reference/web-sockets/socket-client/io-socket-on)。
 
 ```javascript
 sails.sockets.broadcast("funSockets", "hello", "Hello to all my fun sockets!");
