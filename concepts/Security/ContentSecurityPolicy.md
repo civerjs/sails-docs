@@ -1,4 +1,4 @@
-# Content security policy
+# 内容安全策略
 
 [Content Security Policy (CSP)](https://www.owasp.org/index.php/Clickjacking) is a [W3C specification](https://w3c.github.io/webappsec/specs/content-security-policy) for instructing the client browser as to which location and/or which type of resources are allowed to be loaded.  This spec uses "directives" to define loading behaviors for target resource types. Directives can be specified using HTTP response headers or HTML `<meta>` tags.
 
