@@ -1,8 +1,9 @@
-# Tips and tricks for programmatic usage
+# 编程方式启动使用的技巧和窍门
 
-When loading a Sails app programmatically, you will usually want to turn off certain hooks that are not being actively used, both for reasons of optimization and to ensure minimal interference between the Sails app and the Node script enclosing it.  To turn off a hook, set it to `false` in a `hooks` dictionary that you send as part of the first argument to `.load()` or `.lift()`.
+以编程方式加载Sails应用程序时，通常需要关闭某些未被有效使用的钩子，都是出于优化原因，并确保Sails应用程序和包含它的Node脚本之间的干扰最小。 要关闭一个钩子，把它作为`.load（）`或`.lift（）`的第一个参数的一部分发送到`hooks`字典中的`false`中。
 
-Additionally, you will often want to turn off Sails [globals](https://sailsjs.com/documentation/concepts/globals), _especially when loading more than one Sails app simultaneously_.  Since all Node apps in the same process share the same globals, starting more than one Sails app with globals turned on is a surefire way to end up with collisions between models, controllers and other app-wide entities.
+此外，您需要关闭Sails[globals](https://sailsjs.com/documentation/concepts/globals)，尤其是在同时加载多个Sails应用时。 由于同一进程中的所有Node应用程序共享相同的全局变量。
+
 
 
 ```javascript
@@ -17,6 +18,6 @@ mySailsApp.load({
 })
 ```
 
-Finally, note that while you can use the Sails constructor to create and start as many Sails apps programmtically as you like, each app can only be started once.  Once you call `.lower()` on an app, it cannot be started again.
+最后，请注意，虽然您可以使用Sails构造函数按程序创建和启动尽可能多的Sails应用程序，但每个应用程序只能启动一次。 一旦你在应用上调用`.lower()`，它就不能再次启动。
 
 <docmeta name="displayName" value="Tips and tricks">
