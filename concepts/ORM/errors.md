@@ -1,8 +1,9 @@
-# Errors
+# 报错Errors
 
-When a call to any model method or helper fails, Sails throws a [JavaScript Error instance](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) whose properties can be useful in diagnosing what went wrong.
+当对任何模型方法或帮助器的调用失败时，Sails抛出一个[JavaScript错误实例](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)，有助于诊断出错的地方。
 
-Waterline normalizes these Error instances, classifying them with consistent `err.name` values and, when applicable, `err.code`:
+
+Waterline将这些错误实例标准化，用一致的“err.name”值对它们进行分类，并且在适用的情况下使用“err.code”:
 
 ```js
 try {
@@ -17,9 +18,10 @@ try {
 
 ### Negotiating errors
 
-Catchall error handling, while better than nothing, often just isn't enough. (There's a big difference between "that is not a valid username" and "we aren't able to create new users at all right now".)  In order to negotiate the different kinds of errors appropriately, you'll need to be able to examine them in a granular way.
+错误处理往往是不够的。 （“这不是一个有效的用户名”和“我们无法立即创建新用户”之间存在很大差异）。为了适当地协商各种错误，您需要能够以更深入的方式对它们进行检查。
 
-Fortunately, Sails provides some syntactic sugar for doing this out of the box, without resorting to try…catch: [.intercept()](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept) and [.tolerate()](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate).
+幸运的是，Sails提供了一些开箱即用的语法糖，无需诉诸try ... catch：[.intercept()](https://sailsjs.com/documentation/reference/waterline-orm/queries/intercept)和[.tolerate()](https://sailsjs.com/documentation/reference/waterline-orm/queries/tolerate).
+
 
 ```javascript
 await Something.create({…})
@@ -39,24 +41,24 @@ await Something.create({…})
 | stack          | ((string))    | <em>See [.stack](https://nodejs.org/dist/latest-v7.x/docs/api/errors.html#errors_error_stack).<em>     |
 | _code_         | ((string?))   | A narrower classification of the error that is sometimes included.<br/><br/>e.g. `'E_UNIQUE'`       |
 
-When using code that interacts with Waterline (usually through model methods) there are a few different kinds of error you may encounter.
+当使用与Waterline交互的代码时（通常通过模型方法），可能会遇到几种不同类型的错误。
 
 
-### Usage errors
+### 使用errors
 
-When an error has `name: 'UsageError'`, this indicates that a Waterline method was used incorrectly, or executed with invalid options (for example, attempting to create a new record that would violate one of your model's [high-level validation rules](https://sailsjs.com/documentation/concepts/models-and-orm/validations#?validation-rules).)
+当一个error有`name：UsageError'`时，这表明Waterline方法被错误地使用，或者被用无效的选项执行（例如，试图创建一个违反模型的[高级验证规则之一]
 
-This sort of error can come from any model method.
+这种错误可能来自任何模型方法。
 
 ```
 err.name === 'UsageError'
 ```
 
-### Adapter errors
+### 适配器errors
 
-Adapter errors usually indicate a problem in the underlying adapter, and not in the request itself. This can happen when a database goes offline, when there is a permission issue, because of some database-specific edge case, or (more rarely) a bug in the adapter. This kind of error will have `name: 'AdapterError'`.
+适配器错误通常表示底层适配器有问题，而不是请求本身。 当数据库脱机，出现权限问题，某些特定于数据库的溢出案例，或者适配器错误时，可能会发生这种情况。这种错误将具有`name：'AdapterError'`。
 
-This sort of error can come from any model method.
+这种错误可能来自任何模型方法。
 
 ```
 err.name === 'AdapterError'
@@ -65,21 +67,22 @@ err.name === 'AdapterError'
 
 ##### E_UNIQUE
 
-A uniqueness error occurs when a value that _should_ be unique matches that of another record in the database. While this is considered an adapter error, it has its own `code` to differentiate it from a normal adapter error: `code: 'E_UNIQUE'`.
+当唯一值与数据库中另一条记录的值冲突时，会发生唯一性错误。虽然这被认为是一个适配器错误，但它有自己的`code`以区别于正常的适配器错误: `code: 'E_UNIQUE'`.
 
-This sort of error can only come from the `.create()`, `.update()`, `.addToCollection()`, and `.replaceCollection()` model methods.
+这种错误只能来自于`.create()`, `.update()`, `.addToCollection()`, 和 `.replaceCollection()`.
 
 ```
 err.code === 'E_UNIQUE'
 ```
 
-### Examples
+### 例子
 
-The exact strategy you use to do this in your Sails app depends on whether you're using `await`, promises or callbacks.
+在Sails应用中使用方法取决于您是使用“await”，promises还是callbacks。
 
-##### Negotiating errors with `await`
 
-To handle the different errors that may occur when attempting to create a new user from within an action:
+##### 通过`await`协商errors
+
+处理尝试在action中创建新用户时可能发生的不同错误:
 
 ```javascript
 await User.create({ emailAddress: inputs.emailAddress })
@@ -96,13 +99,13 @@ await User.create({ emailAddress: inputs.emailAddress })
 return exits.success();
 ```
 
-##### Negotiating errors with callbacks or promise chaining
+##### 用callbacks或promises链来协商错误
 
-If you're not able to use `await` because you're using Node.js <= v7.9, then prepare yourself: error handling works a bit differently when [using callbacks or promise chaining](https://github.com/mikermcneil/parley/tree/49c06ee9ed32d9c55c24e8a0e767666a6b60b7e8#flow-control) instead of `await`.
+如果因为使用Node.js <= v7.9而无法使用`await`，则准备好：错误处理在使用callbacks或[promises时有点不同](https://github.com/mikermcneil/parley/tree/49c06ee9ed32d9c55c24e8a0e767666a6b60b7e8#flow-control) instead of `await`.
 
-> Please use `await` if at all possible!  It is much safer for your app, your code will be cleaner, and you will be happier.
+> 如果可能，请使用“await”！ 对你的应用程序来说更安全，你的代码会更干净，而且你会更快乐。
 
-For example, if you're using promise chaining, here's how you might handle the different errors that could occur when attempting to create a new user:
+例如，如果您使用的是promises，那么尝试创建新用户时可能发生的不同错误:
 
 ```javascript
 User.create({
@@ -125,7 +128,7 @@ User.create({
 });
 ```
 
-Here's the same example, but written with traditional Node.js callbacks instead of promise chaining:
+这里是同样的例子，但是用传统的Node.js回调代替promise编写:
 
 ```javascript
 User.create({
@@ -144,7 +147,7 @@ User.create({
 });
 ```
 
-> But beware [uncaught exceptions](https://github.com/mikermcneil/parley/tree/49c06ee9ed32d9c55c24e8a0e767666a6b60b7e8#handling-uncaught-exceptions)!
+> 但要小心[未捕获的例外](https://github.com/mikermcneil/parley/tree/49c06ee9ed32d9c55c24e8a0e767666a6b60b7e8#handling-uncaught-exceptions)!
 
 
 <docmeta name="displayName" value="Errors">
