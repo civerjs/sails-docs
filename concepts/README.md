@@ -2,8 +2,9 @@
 
 本节包含编译为HTML的.md文件，并最终为该链接提供内容 https://sailsjs.com/documentation/concepts。
 
-### Notes
-> - This README file **is not compiled to HTML** for the website.  It is just here to explain what you're looking at.
-> - Depending on what branch of `sails-docs` you are currently viewing, the domain may vary.  Documentation pages in this section may actually be for a past version of Sails (e.g. the `0.11` branch compiles to http://0.11.sailsjs.com) or for an upcoming release (e.g. the branch for the upcoming release of Sails compiles to the `next.` subdomain of sailsjs.com).  See the top-level README file in the `sails-docs` repo for information about working with the markdown files in this repo, and to understand the branching/versioning strategy.
+### 注意
+> - 此自述文件**未被编译为HTML**网站。它只是在这里解释你在看什么。
+> - 根据您当前正在查看的“sails-docs”的分支，域可能会有所不同。 本节中的文档页面可能实际上是针对过去版本的Sails或即将发布的版本（例如即将发布的Sails版本的sailsjs.com的`next.`子域）。 请参阅`sails-docs`库中的顶级README文件，以获取有关信息，并了解分支/版本控制策略。
+
 
 <docmeta name="notShownOnWebsite" value="true">
