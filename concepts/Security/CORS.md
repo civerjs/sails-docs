@@ -5,9 +5,9 @@ Every Sails app comes ready to handle AJAX requests from a web page on the same 
 originating from other domains?
 -->
 
-[CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) is a mechanism that allows browser scripts on pages served from other domains (e.g. myothersite.com) to talk to your server (e.g. api.mysite.com).  Like [JSONP](https://en.wikipedia.org/wiki/JSONP), the goal of CORS is to circumvent the [same-origin policy](http://en.wikipedia.org/wiki/Same-origin_policy); allowing your Sails server to successfully respond to requests from client-side JavaScript code running on a page hosted from some other domain.  But unlike JSONP, it works with more than just GET requests.  And it allows you to whitelist particular origins (`staging.yoursite.com` or `yourothersite.net`) and prevent requests from others (`evil.com`).
+[CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing)是一种机制，允许来自其他域（例如myothersite.com）的页面上的浏览器脚本与您的服务器（例如api.mysite.com）通信。 像[JSONP](https://en.wikipedia.org/wiki/JSONP)一样，CORS的目标是绕过[同源策略](http://en.wikipedia.org/wiki/Same-origin_policy); 允许您的Sails服务器成功响应来自其他域页面客户端JavaScript代码的请求。 但与JSONP不同的是，它不仅适用于GET请求。它允许你将特定的来源列入白名单（`staging.yoursite.com`或`yourothersite.net`）并阻止其他人的请求（`evil.com`）。
 
-Sails can be configured to allow cross-origin requests from a list of domains you specify, or from every domain.  This can be done on a per-route basis, or globally for every route in your app.
+可以将Sails配置为允许来指定域列表或来自某个域的跨域请求。 这可以在某个路由的基础上完成，也可以针对应用中的每个路由全局完成。
 
 ### 启用CORS
 
