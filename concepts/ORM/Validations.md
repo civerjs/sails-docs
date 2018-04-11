@@ -1,8 +1,9 @@
-# Validations
+# 验证
 
-Sails bundles support for automatic validations of your models' attributes. Any time a record is updated, or a new record is created, the data for each attribute will be checked against all of your predefined validation rules. This provides a convenient failsafe to ensure that invalid entries don't make their way into your app's database(s).
+Sails bundle支持自动验证模型的属性。任何时候更新记录或创建新记录时，都会根据所有预定义验证规则来进行监测。 这提供了一个故障保护，以确保无效条目不会进入您数据库。
 
-Except for `unique` (which is implemented as a database-level constraint; [see "Unique"](https://sailsjs.com/documentation/concepts/models-and-orm/validations#?unique)), all validations below are implemented in JavaScript and run in the same Node.js server process as Sails.  Also keep in mind that, no matter what validations are used, an attribute must _always_ specify one of the built in data types (`string`, `number`, `json`, etc).
+除“唯一(unique)”（数据库级约束执行; [请参阅“unique”](https://sailsjs.com/documentation/concepts/models-and-orm/validations#?unique)）外的所有验证。下面的代码是在JavaScript中实现的，并且在与Sails相同的Node.js服务器进程中运行。 还要记住，无论使用哪种验证，属性都必须指定一种内置数据类型（`string`，`number`，`json`等）。
+
 
 ```javascript
 // User
@@ -17,11 +18,11 @@ module.exports = {
 };
 ```
 
-### Built-in Data Types
+### 内置数据类型
 
-In Sails/Waterline, model attributes always have some kind of data type guarantee.  This is above and beyond any physical-layer constraints which might exist in your underlying database-- it's more about providing a way for developers to maintain reasonable assumptions about the data that goes in or comes out of a particular model.
+在Sails / Waterline中，模型属性总是具有某种数据类型。这为开发人员提供一种方法，以便对特定模型中出现或出来的数据保持合理的假设。
 
-This data type is used for logical validation and coercion of results and criteria.  Here is a list of the data types supported by Sails and Waterline:
+该数据类型用于逻辑验证和结果和标准的强制。 以下是Sails和Waterline支持的数据类型列表:
 
 | Data Type        | Usage                         | Description                                                  |
 |:----------------:|:----------------------------- |:------------------------------------------------------------ |
@@ -31,29 +32,31 @@ This data type is used for logical validation and coercion of results and criter
 | ((json))         | `type: 'json'`                | Any JSON-serializable value, including numbers, booleans, strings, arrays, dictionaries (plain JavaScript objects), and `null`.
 | ((ref))          | `type: 'ref'`                 | Any JavaScript value except `undefined`. (Should only be used when taking advantage of adapter-specific behavior.)    |
 
-Sails' ORM (Waterline) and its adapters perform loose validation to ensure that the values provided in criteria dictionaries and as values to `.create()` or `.update()` match the expected data type.
+Sails的ORM（Waterline）及其适配器执行宽松验证，以确保字典中提供的值以及`.create()`或`.update()`的值与预期的数据类型相匹配。
 
-**NOTE:** In adapters that don't support the ((json)) type natively, the adapter must support it in other ways. For example in MySQL the data being written to a ((json)) attribute gets `JSON.stringify()` called on it and then is stored in a column with a type set to `text`. Each time the record is returned the data has `JSON.parse()` called on it. This is something to be aware of for performance and for compatibility with other applications or existing data in the database. The official postgresql and mongodb adapters can read and write ((json)) data natively.
-
-
-##### Null and empty string
-
-The `string`, `number` and `boolean` data types do _not_ accept `null` as a value when creating or updating records.  In order to allow setting a `null` value you can toggle the `allowNull` flag on the attribute. The `allowNull` flag is only valid on these data types however. It is _not_ valid on attributes with types `json` or `ref`, any associations, or any primary key attributes.
-
-Since empty string ("") is a string, it is normally supported by `type: 'string'` attributes.  There are a couple of exceptions though:  primary keys (because primary keys never support empty string) and any attribute which has `required: true`.
+**注意：**在本身不支持（json）类型的适配器中，适配器必须以其他方式支持它。 例如，在MySQL中，写入（json）属性的数据获得调用的JSON.stringify()，然后存储在类型设置为text的列中。 每次返回记录时，数据都会调用JSON.parse()。注意性能和与其他应用程序或数据库中现有数据的兼容性。 官方的postgresql和mongodb适配器可以本地读取和写入（json）数据。
 
 
-##### Required
 
-If an attribute is `required: true`, then a value must always be specified for it when calling `.create()`.  It also prevents explicitly trying to create (or update) this value as `null` or empty string (""),
+##### Null和空字符串
 
-### Validation Rules
+当创建或更新记录时，`string`，`number`和`boolean`数据类型不会接受`null`作为值。 为了允许设置'null'值，您可以在属性上切换'allowNull`标志。 'allowNull`标志只对这些数据类型有效。 对于类型为“json”或“ref”的属性，任何关联或任何主键属性，它都是无效的。
 
-_None_ of the following validation impose any _additional_ restrictions against `null`.  That is, if `null` would be allowed normally, then enabling the `isEmail` validation rule will not cause `null` to be rejected as invalid.
+由于空字符串（“”）是一个字符串，它通常由`type：'string'`属性支持。 例外：主键（因为主键从不支持空字符串）和任何具有`required：true`的属性。
 
-Similarly, _most_ of the following validation rules don't impose any additional restrictions against empty string ("").  There are a few exceptions (`isNotEmptyString`, and non-string-related rules like `isBoolean`, `isNumber`, `max`, and `min`), but otherwise, for any attribute where empty string ("") would normally be allowed, adding a validation rule will not cause it to be rejected.
 
-In the table below, the "Compatible Attribute Type(s)" column shows what data type(s) (i.e. for the attribute definition's `type` property) are appropriate for each validation rule.  In many cases, a validation rule can be used with more than one type.  Note that coincidentally, the table below takes a shortcut:  If compatible with ((string)), ((number)), or ((boolean)), then the validation rule is also compatible with ((json)) and ((ref)), even if it doesn't explicitly say so.
+##### 必填
+
+如果一个属性是`required：true`，调用`.create()`时必须指定一个值。它还可以防止创建（或更新）该值为'null'或空字符串（“”），
+
+### 验证规则
+
+验证无法对`null`进行 _额外_ 限制。也就是说，如果是`null`将被允许，那么启用`isEmail`验证规则将不会导致`null`无效。
+
+同样，以下验证规则中的大部分都不会对空字符串（“”）施加任何其他限制。 有一些例外（`isNotEmptyString`，以及像`isBoolean`，`isNumber`，`max`和`min`这样的非字符串相关的规则），否则，空字符串（“”） 通常被允许，添加验证规则不会导致它被拒绝。
+
+在下表中，显示哪些数据类型（即属性定义的`type`属性）适的验证规则。 在很多情况下，验证规则可以用于多种类型。 请注意，下面的表格采用了一个快捷方式：如果兼容（字符串），（数字）或（布尔）。
+
 
 
 | Name of Rule      | What It Checks For                                                                                                  | Notes On Usage                                         | Compatible Attribute Type(s) |
@@ -81,9 +84,9 @@ In the table below, the "Compatible Attribute Type(s)" column shows what data ty
 | regex             | A string that matches the configured regular expression. | `regex: /^[a-z0-9]$/i` | ((string)) |
 
 
-##### Example: Optional email address
+##### 示例：可选电子邮件地址
 
-For example, imagine you have an attribute defined as follows:
+例如，假设您有一个如下定义的属性:
 
 ```javascript
 workEmail: {
@@ -92,16 +95,17 @@ workEmail: {
 }
 ```
 
-Then when you call `.create()` _or_ `.update()`, this value can be set to any valid email address (like "santa@clause.com") OR as empty string ("").  However, you wouldn't be able to set it to `null`, because that would violate the type safety restriction imposed by `type: 'string'`.
-
-> To make this attribute accept `null` (for example, if you are working with a pre-existing database), change it to `type: 'json'`.  Normally you'd also want to add `isString: true`-- but since, in this example, we already enforce `isEmail: true`, there's no need to do so.
->
-> A more advanced feature to keep in mind is that, depending on your database, you can also choose to take advantage of [`columnType`](https://sailsjs.com/documentation/concepts/models-and-orm/attributes#?columntype) to inform Sails / Waterline which column type to define during auto-migrations (if relevant).
+然后当你调用`.create()`或者`.update()`，这个值可以设置为任何有效的电子邮件地址（如“santa@clause.com”）或者空字符串（“”）。 但是，您将无法将其设置为“null”，因为这会违反`type：'string'`强加的类型安全限制。
 
 
-##### Example: Required star rating
+> 要想使它接受'null'（例如，如果你正在使用已有数据库），把它改为`type：'json'`。 你也可以添加`isString：true`--但由于在这个例子中，我们已经强制执行`isEmail：true`，所以不需要这样做。
+> 更高级的是，根据数据库的不同，还可以选择利用(https://sailsjs.com/documentation/concepts/models-and-orm/attributes#?columntype)通知Sails/Waterline在自动迁移期间定义哪种列类型。
 
-If we wanted to indicate that an attribute supports certain numbers, like a star rating, we might do something like the following:
+
+
+##### 例子: 评价星级所需
+
+如果我们想表明一个属性支持某些数字，比如星级，我们可能会做类似以下的事情:
 
 ```javascript
 starRating: {
@@ -113,16 +117,16 @@ starRating: {
 ```
 
 
-##### Example: Optional star rating
+##### 例子:可选星级
 
-If we wanted to make our star rating optional, the easiest thing to do is just to remove the `required: true` flag.  If omitted, the starRating will default to zero.
+如果我们想让我们的星级评分为可选，最简单的方法就是删除`required：true`标志。 如果省略，starRating将默认为零。
 
 
-##### Example: Optional star rating (w/ `null`)
+##### 示例：可选星级 (w/ `null`)
 
-But what if the star rating can't _always_ be a number?  For example, we might have a legacy database that we need to integrate with, where star ratings already in the database could be a number or the special `null` literal.  For that scenario, we need a way to define this attribute so that it can support certain numbers _or_ `null`.
+但是，如果星级不能成为一个数字呢？ 例如，我们可能需要一个我们需要整合的遗留数据库，其中数据库中已有的星级可能是一个数字或特殊的'null'字面值。 对于这种情况，我们需要一种方法来定义这个属性，以便它可以支持某些数字或空值。
 
-To accomplish this, just use `allowNull`:
+要做到这一点，只需使用 `allowNull`:
 
 ```javascript
 starRating: {
@@ -133,7 +137,7 @@ starRating: {
 }
 ```
 
-> Sails and Waterline attributes support `allowNull` for convenience.  But another viable solution is to change `starRating` from `type: 'number'` to `type: 'json'`.  Just realize that, since the `json` type allows other data like booleans, arrays, etc., and since we might want to explicitly protect against that, we would also probably want to add the `isNumber: true` validation rule:
+> 为方便起见，Sails和Waterline属性支持`allowNull`。 但另一个解决方案是将`starRating`从`type：'number`更改为`type：json`。 由于`json`类型允许其他数据，如布尔值，数组等。由于我们可能防止这种情况，所以要添加`isNumber：true`验证规则:
 >
 >
 > ```javascript
@@ -147,11 +151,11 @@ starRating: {
 
 
 
-### Unique
+### 唯一值Unique
 
-`unique` is different from all of the validation rules listed above.  In fact, it isn't really a validation at all: it is a **database-level constraint**.  More on that in a second.
+`unique`与上面列出的所有验证规则不同。 事实上，它不是一个验证：它是一个**数据库级约束**。 更多关于这一点。
 
-If an attribute declares itself `unique: true`, then Sails ensures no two records will be allowed with the same value.  The canonical example is an `emailAddress` attribute on a `User` model:
+如果一个属性声明自己是`unique：true`，那么Sails确保不会有两个记录被允许具有相同的值。例子：`User`模型上的`emailAddress`属性:
 
 ```javascript
 // api/models/User.js
@@ -168,26 +172,30 @@ module.exports = {
 };
 ```
 
-##### Why is `unique` different from other validations?
+##### 为什么“unique”与其他验证不同？
 
-Imagine you have 1,000,000 user records in your database.  If `unique` was implemented like other validations, every time a new user signed up for your app, Sails would need to search through _one million_ existing records to ensure that no one else was already using the email address provided by the new user.  Not only would that be slow, but by the time we finished searching through all those records, someone else could have signed up!
+想象一下，您的数据库中有1,000,000条用户记录。 如果“unique”与其他验证一样实施，则每当新用户注册您的应用程序时，Sails都需要搜索现有的一千万条记录，以确保没有其他人重复使用。这不仅会很慢，而且在完成这些记录的搜索之后，其他人可能已经注册了！
 
-Fortunately, this type of uniqueness check is perhaps the most universal feature of _any_ database.  To take advantage of that, Sails relies on the [database adapter](https://sailsjs.com/documentation/concepts/models-and-orm#?adapters) to implement support for `unique`-- specifically, by adding a **uniqueness constraint** to the relevant field/column/attribute in the database itself during [auto-migration](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?migrate).  That is, while your app is set to `migrate:'alter'`, Sails will automatically generate tables/collections in the underlying database with uniqueness constraints built right in.  Once you switch to `migrate:'safe'`, updating your database constraints is up to you.
-
-##### What about indexes?
-
-When you start using your production database, it is always a good idea to set up indexes to boost your database's performance.  The exact process and best practices for setting up indexes varies between databases, and is out of the scope of the documentation here.  That said if you've never done this before, don't worry-- it's [easier than you might think](http://stackoverflow.com/a/1130/486547).
-
-Just like everything else related to your production schema, once you set your app to use `migrate: 'safe'`, Sails leaves database indexes entirely up to you.
-
-> Note that this means you should be sure to update your indexes alongside your uniqueness constraints when performing [manual migrations](https://github.com/BlueHotDog/sails-migrations).
+幸运的是，这种唯一性检查是_any_数据库的最普遍特征。为了利用它，Sails依靠[database adapter](https://sailsjs.com/documentation/concepts/models-and-orm#?adapters)来实现对“unique”的支持 - 具体来说，通过添加一个 **唯一性约束** [自动迁移]期间数据库本身中的相关字段/列/属性(https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?migrate)。也就是说，当您的应用程序设置为`migrate：alter'`时，Sails将自动生成基础数据库中的表/集合，并且内置唯一性约束。
 
 
-### When to use validations
+##### 怎么使用索引?
 
-Validations can be a huge time-saver, preventing you from writing many hundreds of lines of repetitive code.  But keep in mind that model validations are run for _every create or update_ in your application.  Before using a validation rule in one of your attribute definitions, make sure you are OK with it being applied _every time_ your application calls `.create()` or `.update()` to specify a new value for that attribute.  If that is _not_ the case, write code that validates the incoming values inline in your controller; or call out to a custom function in one of your [services](https://sailsjs.com/documentation/concepts/services), or a [model class method](https://sailsjs.com/documentation/concepts/models-and-orm/models#?model-methods-aka-static-or-class-methods).
+当你开始使用你的产品数据库时，设置索引来提高数据库的性能总是一个好主意。设置索引的具体过程和最佳实践因数据库而异，超出了本文档的范围。 这就是说，如果你以前从未这样做过，不要担心 - 这比你想象的要容易得多，
 
-For example, let's say that your Sails app allows users to sign up for an account by either (A) entering an email address and password and then confirming that email address or (B) signing up with LinkedIn.  Now let's say your `User` model has one attribute called `linkedInEmail` and another attribute called `manuallyEnteredEmail`.  Even though _one_ of those email address attributes is required, _which one_ is required depends on how a user signed up.  So in that case, your `User` model cannot use the `required: true` validation-- instead you'll need to validate that one email or the other was provided and is valid by manually checking these values before the relevant `.create()` and `.update()` calls in your code, e.g.:
+就像其他，一旦您将应用设置为使用'migrate：'safe''，Sails将完全由您自己决定数据库索引。
+
+> 请注意，这意味着在执行[手动迁移](https://github.com/BlueHotDog/sails-migrations)时，您应确保更新您的索引以及唯一性约束。.
+
+
+### 何时使用验证
+
+验证可以节省时间，防止您编写数百行重复代码。 但请记住，验证在针对每个create或update运行。在您的某个属性定义中使用验证规则之前，请确保您可以在应用程序调用`.create（）`或`.update（）`保存新值时应用它。如果不是这种情况，那么编写一个action来验证控制器内嵌的传入值; 或者在您的[服务](https://sailsjs.com/documentation/concepts/services)或[模型类方法]之一中调用自定义函数(https://sailsjs.com/documentation/concepts/models-and-orm/models#?model-methods-aka-static-or-class-methods)。
+
+例如，假设您的Sails应用允许用户通过
+（A）输入电子邮件地址和密码，然后确认该电子邮件地址或
+（B）调用LinkedIn登录验证，注册一个帐户。
+现在我们假设你的`User`模型有一个名为`linkedInEmail`的属性和另一个名为`manuallyEnteredEmail`的属性。取决于用户所选注册的方式。 因此，在这种情况下，您的`User`模型不能使用`required：true`验证 - 相反，您需要通过在相关的`.create`之前手动验证电子邮件或另一个电子邮件，例如:
 
 ```javascript
 if ( !_.isString( req.param('email') ) ) {
@@ -195,37 +203,36 @@ if ( !_.isString( req.param('email') ) ) {
 }
 ```
 
-To take this one step further, now let's say your application accepts payments.  During the sign up flow, if a user signs up with a paid plan, he or she must also provide an email address for billing purposes (`billingEmail`).  If a user signs up with a free account, he or she skips that step.  On the account settings page, users on a paid plan do see a "Billing Email" form field where they can customize their billing address.  This is different from users on the free plan, who see a call to action which links to the "Upgrade Plan" page.
+为了更进一步，现在让我们假设您的应用程序接受付款。在注册流程中，如果用户注册了付费计划，他或她也必须提供一个用于计费的电子邮件地址（`billingEmail`）。如果用户使用免费注册，则跳过该步骤。 在帐户设置页面上，付费计划的用户确实可以看到一个“帐单电子邮件”表单字段，他们可以在其中自定义帐单地址。 这与免费计划中的用户有所不同，他们看到链接到“Upgrade Plan”页面的声明。
 
-Even with these requirements, which seem quite specific, there are unanswered questions:
+即使这些要求看起来非常具体，但还有一些尚未解决的问题:
 
-- Do we update the billing email automatically when the other email address from which it was defaulted changes?
-- What if the billing email had been changed at least once?
-- What happens to the billing email after a user downgrades to the free plan? If a user upgrades to a paid plan again, do we infer his or her billing email address anew or use the old one?
-- What happens to the billing email when an existing user connects his or her LinkedIn account and a new `linkedInEmail` is saved?
-- What happens to the billing email if a monthly invoice email cannot be delivered?
-- What happens to the billing email if a member of your support team logs into the admin interface and changes it manually?
-- What happens to the billing email if a POST request is received on the callback URL we provided to the LinkedIn API to notify our app that the user changed her email address on http://linkedin.com, and so a new `linkedInEmail` is saved?
-- What happens to the billing email when an existing user disconnects her LinkedIn account?
-- Are two user accounts in the database allowed to have the same billing email?  What about the email from LinkedIn?  Or the one they entered manually?
+- 当其他默认的电子邮件地址发生变化时，我们是否会自动更新帐单邮件？
+- 如果结算电子邮件已被更改，会怎么样？
+- 用户降级到免费计划后，结算电邮会发生什么变化？如果用户再次升级到付费计划，我们是否推测他的账单电子邮件地址或使用旧的？
+- 当现有用户连接他或她的LinkedIn帐户并保存新的`linkedInEmail`时，结算电子邮件会发生什么？
+- 如果无法发送每月发票，那么结算电子邮件会发生什么情况？
+- 如果您的团队成员登录到管理界面并手动更改，那么结算电子邮件会发生什么变化？
+- 如果在我们提供给LinkedIn API的回调URL上收到POST请求，以便通知我们的应用用户在http://linkedin.com上更改了她的电子邮件地址，那么结算电子邮件会发生什么情况，因此新的`linkedInEmail`得获批吗？
+- 当现有用户断开其LinkedIn账户时，账单邮件会发生什么变化？
+- 数据库中的两个用户帐户是否允许使用相同的结算电子邮件？ LinkedIn的电子邮件怎么样？ 或者他们手动输入的那个？
 
-Depending on the answers to questions like these, we might end up keeping the `required` validation on `billingEmail`, adding new attributes (like `hasBillingEmailBeenChangedManually`), or even changing whether or not to use a `unique` constraint.
+根据这些问题的答案，我们最终可能会对`billingEmail`进行`required`验证，添加新的属性（`hasBillingEmailBeenChangedManually`），甚至改变是否使用`unique`约束。
 
-### Best Practices
+### 最佳实践
 
-Finally, here are a few tips:
+最后，这里有一些提示:
 
-+ Your initial decision about whether or not to use validations for a particular attribute should depend on your app's requirements and how you are calling `.update()` and `.create()`. Don't be afraid to forgo built-in validation support and check values by hand in your controllers or in a helper function.  Oftentimes this is the cleanest and most maintainable approach.
-+ There's nothing wrong with adding or removing validations from your models as your app evolves. But once you go to production, there is one **very important exception**: `unique`.  During development, when your app is configured to use [`migrate: 'alter'`](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?migrate), you can add or remove `unique` validations at will.  However, if you are using `migrate: safe` (e.g. with your production database), you will want to update constraints/indices in your database, as well as [migrate your data by hand](https://github.com/BlueHotDog/sails-migrations).
-+ It is a very good idea to spend the time to fully understand your application's user interface _first_ before setting up complex validations on your model attributes.
++ 决定是否对某个属性使用验证，应该取决于应用程序的要求，以及您如何调用`.update（）`和`.create（）`。 不要害怕放弃内置验证支持，并在控制器或辅助功能中手动检查值。
++ 随着应用程序的发展，从模型中添加或删除验证没有任何问题。 但是一旦你投入生产，有一个**非常重要的例外**：`unique`。 在开发过程中，当您的应用配置为使用[`migrate：'alter'`](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?migrate)时，您可以添加或 随意删除`unique`验证。 但是，如果您正在使用`migrate：safe`（例如使用产品数据库），则需要更新数据库中的约束/索引，以及[手动迁移数据](https://github.com/BlueHotDog/sails-migrations)。
 
-> As much as possible, it is a good idea to obtain or flesh out your own wireframes of your app's user interface _before_ you spend any serious amount of time implementing _any_ backend code.  Of course, this isn't always possible- and that's what the [blueprint API](https://sailsjs.com/documentation/concepts/blueprints) is for.  Applications built with a UI-centric, or "front-end first" philosophy are easier to maintain, tend to have fewer bugs and, since they are built with full knowledge of the user interface from the get-go, they often have more elegant APIs.
-
+> 尽可能多地充实自己的应用程序前端设计，在您花费大量时间实现_any_后端代码之前。 当然，这并不总是可行的 - 这就是[blueprint API](https://sailsjs.com/documentation/concepts/blueprints)的用途。 以UI为中心或“前端第一”理念构建的应用程序更容易维护，缺陷更少，而且由于它们是在完全了解用户界面的基础上构建而成的，因此它们通常会更加优雅。
 
 
-### Custom Validation Rules
 
-You can define your own custom validation rules by specifying a `custom` function in your attributes.
+### 自定义验证规则
+
+您可以通过在属性中指定一个“自定义”函数来定义自己的自定义验证规则。
 
 ```javascript
 // api/models/User.js
@@ -268,13 +275,13 @@ module.exports = {
 }
 ```
 
-Custom validation functions receive the incoming value being validated as their first argument, and are expected to return `true` if it is valid, `false` otherwise.
+自定义验证函数接收被验证的传入值作为它们的第一个参数，并且如果有效则返回“true”，否则返回“false”。
 
 
 
-##### Custom Validation Messages
+##### 自定义验证消息
 
-Out of the box, Sails.js does not support custom validation messages.  Instead your code should look at validation errors in the callback from your `create()` or `update()` calls and take the appropriate action; whether that's sending a particular error code in your JSON response or rendering the appropriate message in an HTML error page.
+Sails.js不支持自定义验证消息。相反，你的代码应该在你的`create()`或`update()`的回调中查看验证错误并采取适当的操作; 无论是在您的JSON响应中发送特定的错误代码，还是在HTML错误页面中呈现。
 
 
 <docmeta name="displayName" value="Validations">
