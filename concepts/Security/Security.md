@@ -1,15 +1,15 @@
-# Security
+# 安全
 
-### Overview
+### 概述
 
-Sails and Express provide built-in, easily configurable protection against most known types of web-application-level attacks.
+Sails和Express为大多数已知Web级攻击提供了内置的，易于配置的保护。
 
-> **Note**: If you believe you have found a security vulnerability in Sails, please refer to our [security policy](https://github.com/balderdashy/sails-docs/blob/master/security/SAILS-SECURITY-POLICY.md) for instructions for reporting it.
+> **注意**: 如果您认为您在Sails中发现安全漏洞，请参阅我们的[安全策略](https://github.com/balderdashy/sails-docs/blob/master/security/SAILS-SECURITY-POLICY.md)报告说明。
 
 
-### Security topics
+###安全主题
 
-Learn about several different types of attacks that Node.js/Sails helps prevent out of the box, and how to enable and configure security settings in your app:
+了解Node.js/Sails 可开箱即用的防止不同类型攻击的方法，以及如何在您的应用中启用和配置安全设置:
 
 + [CORS](https://sailsjs.com/documentation/concepts/security/cors)
 + [DDOS](https://sailsjs.com/documentation/concepts/security/ddos)
