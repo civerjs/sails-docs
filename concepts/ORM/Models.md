@@ -1,10 +1,10 @@
-# Models
+# 模型
 
-A model represents a set of structured data, called records.  Models usually correspond to a table/collection in a database, attributes correspond to columns/fields, and records correspond to rows/documents.
+模型表示一组结构化数据，称为记录。模型通常对应于数据库中的表/集合，属性对应于列/字段，记录对应于行/文档。
 
-### Defining models
+### 定义模型
 
-By convention, models are defined by creating a file in a Sails app's `api/models/` folder:
+按照惯例，模型是通过在Sails应用程序的`api/models/`文件夹中创建一个文件来定义的:
 
 ```javascript
 // api/models/Product.js
@@ -18,7 +18,7 @@ module.exports = {
 };
 ```
 
-For a complete walkthrough of available options when setting up a model definition, see [Model Settings](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings), [Attributes](https://sailsjs.com/documentation/concepts/models-and-orm/attributes), and [Associations](https://sailsjs.com/documentation/concepts/models-and-orm/associations).
+有关设置模型定义时可用选项的完整操作，请参阅 [Model Settings](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings), [Attributes](https://sailsjs.com/documentation/concepts/models-and-orm/attributes), and [Associations](https://sailsjs.com/documentation/concepts/models-and-orm/associations).
 
 <!--
 commented-out content at: https://gist.github.com/rachaelshaw/1d7a989f6685f11134de3a5c47b2ebb8#1
@@ -29,37 +29,39 @@ commented-out content at: https://gist.github.com/rachaelshaw/1d7a989f6685f11134
 
 
 
-### Using models
+### 使用模型
 
-Once a Sails app is running, its models may be accessed from within controller actions, helpers, tests, and just about anywhere else you normally write backend code.  This lets your code call model methods to communicate with your database (or even with multiple databases).
+一旦Sails应用程序正在运行，它的模型可以从控制器action、helpers、tests以及后端代码的任何地方访问。 这使代码可以调用模型方法与您的数据库（甚至是多个数据库）进行通信。
 
-There are many built-in methods available on models, the most important of which are the model methods like [.find()](https://sailsjs.com/documentation/reference/waterline/models/find) and [.create()](https://sailsjs.com/documentation/reference/waterline/models/create).  You can find detailed usage documentation for methods like these in [Reference > Waterline (ORM) > Models](https://sailsjs.com/documentation/reference/waterline-orm/models).
-
-
-### Query methods
-
-Every model in Sails has a set of methods exposed on it to allow you to interact with the database in a normalized fashion. This is the primary way of interacting with your app's data.
-
-Since they usually have to send a query to the database and wait for a response, most model methods are **asynchronous**.  That is, they don't come back with an answer right away.  Like other asynchronous logic in JavaScript (`setTimeout()` for example), that means we need some other way of determining when they've finished executing, whether they were successful, and if not, what kind of error (or other exceptional circumstance) occurred.
-
-In Node.js, Sails, and JavaScript in general, the recommended way to handle this is by using [`async/await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await).
-
-For more information about working with queries, see [Reference > Waterline (ORM) > Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries).
-
-### Resourceful pubsub methods
-
-Sails also provides a few other "resourceful pubsub" (or "RPS") methods, specifically designed for performing simple realtime operations using dynamic rooms.  For more information about those methods, see [Reference > WebSockets > Resourceful PubSub](https://sailsjs.com/documentation/reference/web-sockets/resourceful-pub-sub).
+模型中有许多内置方法，其中最重要的是模型方法，如[.find()](https://sailsjs.com/documentation/reference/waterline/models/find)和 [.create()](https://sailsjs.com/documentation/reference/waterline/models/create)。 您可以在[参考>Waterline（ORM>Models](https://sailsjs.com/documentation/reference/waterline-orm/models)中找到这些方法的详细使用文档。
 
 
-### Custom model methods
 
-In addition to the built-in functionality provided by Sails, you can also define your own custom model methods.  Custom model methods are most useful for extrapolating controller code that relates to a particular model; i.e. this allows you to pull code out of your controllers and into reusuable functions that can be called from anywhere (i.e. don't depend on `req` or `res`.)
+### 查询方法
 
-> This feature takes advantage of the fact that models ignore unrecognized settings, so you do need to be careful about inadvertently overriding built-in methods (don't define methods named "create", etc.)
->
-> If you're at all unsure, write a [helper](https://sailsjs.com/documentation/concepts/helpers) instead.
+Sails中的每个模型都有一组暴露的方法，允许您以规范化的方式与数据库进行交互。这是与应用数据交互的主要方式。
 
-Custom model methods can be synchronous or asynchronous functions, but more often than not, they're _asynchronous_.  By convention, asynchronous model methods should be `async` functions, which accept a dictionary of `options` as their argument.
+由于他们必须向数据库发送查询并等待响应，因此大多数模型方法都是**异步**的。 也就是说，他们不会马上返回结果。像其他JavaScript中的异步逻辑（例如`setTimeout()`）一样，这意味着我们需要一些其他方式来确定它们何时执行完毕，它们是否成功，如果不成功，是什么样的错误（或其他异常情况 ） 发生。
+
+
+在Node.js，Sails和JavaScript中，推荐的方法是使用[`async/await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await).
+
+有关处理查询的更多信息，请参阅 [Reference > Waterline (ORM) > Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries).
+
+### 丰富的pubsub方法
+
+Sails还提供了一些其他的“丰富的pubsub”（或“RPS”）方法，专门用于使用动态执行简单的实时操作。 有关这些方法的更多信息，请参阅[Reference > WebSockets > Resourceful PubSub](https://sailsjs.com/documentation/reference/web-sockets/resourceful-pub-sub).
+
+
+### 自定义模型方法
+
+除了Sails提供的内置方法外，您还可以定义自己的模型方法。 自定义模型方法对于控制器代码原型设计是非常有用的; 即这允许你从你的控制器中抽成代码，并将它们变成可以从任何地方调用的可重用函数（即，不依赖于`req`或`res`）。
+
+
+> 模型无法自动识别自定义模型，因此您必须小心使用，以免无意中重写内置方法（不要定义名为“create”的方法等）
+> 如果你不确定用法，可以写一个[helper](https://sailsjs.com/documentation/concepts/helpers) instead.
+
+自定义模型方法可以是同步或异步函数，但更多的时候，它们是_异步的_。 按照惯例，异步模型方法应该是`async`函数，它接受一个`options`字典作为它们的参数。
 
 For example:
 
@@ -79,21 +81,22 @@ findWithSameNameAsPerson: async function (opts) {
 	return await Monkey.find({ name: person.name });
 }
 ```
-> Notice we didn't `try/catch` any of the code within that function, that's because we intend to leave that responsibility to whoever calls our function (e.g. an action).
+> 请注意，该函数内没有任何`try/catch`的代码，这是留给谁来调用它的函数（例如一个动作）。
 
-Then you can do:
+接下来可以:
 
 ```js
 var monkeys = await Monkey.findWithSameNameAsPerson(37);
 ```
 
-> For more tips, read about the incident involving [Timothy the Monkey]().
+> 有关更多提示，请阅读有关涉及的事件 [Timothy the Monkey]().
 
-##### What about instance methods?
+##### 实例方法呢？
 
-As of Sails v1.0, instance methods have been removed from Sails and Waterline.  While instance methods like `.save()` and `.destroy()` were sometimes convenient in app code, in Node.js at least, many users found that they led to unintended consequences and design pitfalls.
+从Sails v1.0开始，实例方法已从Sails和Waterline中移除。 尽管像.save()和.destroy()这样的实例方法在应用代码中有时很方便，但至少在Node.js中，许多用户发现它们导致了意想不到的后果和设计缺陷。
 
-For example, consider an app that manages wedding records.  It might seem like a good idea to write an instance method on the Person model to update the `spouse` attribute on both individuals in the database.  This would allow you to write controller code like:
+
+例如，管理婚礼记录的应用程序。在Person模型上编写一个实例方法来更新数据库中两个个体的`spouse`属性似乎是个好主意。 您编写类似的控制器代码:
 
 ```js
 personA.marry(personB, function (err) {
@@ -102,9 +105,9 @@ personA.marry(personB, function (err) {
 })
 ```
 
-Which looks great...until it comes time to implement a slightly different action with roughly the same logic, but where the only available data is the id of "personA" (not the entire record.)  In that case, you're stuck rewriting your instance method as a static method anyway!
+这看起来不错，直到实现一个稍微不同的动作，相同的逻辑，但唯一可用的数据是“personA”（而不是整个记录）的ID。在这种情况下，你卡住了。无论如何，重写实例方法是一种静态方法！
 
-A better strategy is to write a custom (static) model method from the get-go.  This makes your function more reusable/versatile, since it will be accessible whether or not you have an actual record instance on hand.  You might refactor the code from the previous example to look like:
+更好的策略是从一开始就编写一个自定义（静态）模型方法。 这使得你的函数更具可重用性/多功能性，因为无论你是否有实际的记录实例，它都可以被访问。 你可能会重构前面例子中的代码:
 
 ```js
 Person.marry(personA.id, personB.id, function (err) {
@@ -113,11 +116,12 @@ Person.marry(personA.id, personB.id, function (err) {
 })
 ```
 
-### Case Sensitivity
+### 区分大小写
 
-Queries in Sails 1.0 are no longer forced to be case *insensitive* regardless of how the database processes the query. This leads to much improved query performance and better index utilization. Most databases are case *sensitive* by default but in the rare cases where they aren't and you would like to change that behavior you must modify the database to do so.
+无论数据库如何处理查询，Sails 1.0中的查询不再被强制为不区分大小写。 这会大大提高查询性能并提高索引利用率。 大多数数据库在默认情况下都是大小写敏感的，极少数情况下不是这样，如果您想要更改该行为，必须修改数据库才能执行此操作。
 
-For example by default MySQL will use a database collation that is case *insensitive* which is different from sails-disk so you may experience different results from development to production. In order to fix this you can set the tables in your MySQL database to a case *sensitive* collation such as `utf8_bin`.
+例如，默认情况下，MySQL将使用大小写不敏感的数据库归类，这与sails-disk不同，因此您可能会遇到从开发到生产的不同结果。 为了解决这个问题，你可以将你的MySQL数据库中的表设置为一个大小写敏感的排序规则，比如`utf8_bin`。
+
 
 
 <!--
