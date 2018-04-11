@@ -1,8 +1,8 @@
-# Access Control and Permissions
+# 访问控制和权限
 
-Policies in Sails are designed for controlling binary ("yes or no") access to particular actions.  They work great for checking whether a user is logged in, or for other simple "yes or no" checks, like whether the logged in user is a "super admin".
+Sails中的策略旨在控制二进制（"yes or no"）访问特定操作。 它们非常适合检查用户是否登录，或者用于其他简单的"yes or no"检查，例如登录用户是否为“超级管理员”。
 
-To see an example of access control in action, alongside login, authentication, and password recovery, generate the starter web app:
+要查看访问控制实例以及登录，身份验证和密码恢复，请初始化网站应用程序:
 
 ```bash
 sails new foo
@@ -10,11 +10,12 @@ sails new foo
 # Then choose "Web App"
 ```
 
-### Dynamic permissions
+### 动态权限
 
-For more complex permission schemes, where a requesting user agent's access rights depend on _who they are_ and _what they're trying to do_, you'll want to involve the database.  While you can use policies to accomplish this, it's usually more straightforward and maintainable to use a [helper](https://sailsjs.com/documentation/concepts/helpers).
+对于更复杂的权限方案，用户访问权限取决于他们是否正在尝试执行什么，您将需要涉及数据库。 虽然您可以使用策略来实现此目的，但通常使用[helper](https://sailsjs.com/documentation/concepts/helpers)更直接且更易于维护，
 
-For example, you might create `api/helpers/check-permissions.js`:
+
+例如，你可能会创建`api/helpers/check-permissions.js`:
 
 ```javascript
 module.exports = {
@@ -67,7 +68,7 @@ module.exports = {
 ```
 
 
-Then in your action, for example `api/controllers/demote-org-admin.js`:
+然后在你的action中，例如 `api/controllers/demote-org-admin.js`:
 
 ```javascript
 //…
@@ -85,9 +86,9 @@ return exits.success();
 ```
 
 
-> ### Note
-> Remember that, while we used `checkPermissions.with(…,…)` here, we could have
-> also used `.with()` and switched to named parameters:
+> ### 注意
+> 请记住，虽然我们在这里使用了`checkPermissions.with（...，...）`，但我们可以
+> 也使用`.with()`并切换到命名参数:
 >
 > ```js
 > await checkPermissions.with({
