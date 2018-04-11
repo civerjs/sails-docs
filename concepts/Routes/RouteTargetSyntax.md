@@ -1,53 +1,52 @@
-# Custom routes
+# 自定义路由
 
-### Overview
+### 概述
 
-Sails allows you to explicitly route URLs in several different ways in your **config/routes.js** file.  Every route configuration consists of an **address** and a **target**, for example:
+Sails允许您在**config / routes.js**文件中以几种不同的方式配置路由URL。每个路由配置都由一个**地址**和一个**目标**组成:
 
 ```js
 'GET /foo/bar': 'UserController.subscribe'
 ^^^address^^^  ^^^^^^^^^^target^^^^^^^^^^
 ```
 
-### Route Address
+### 路由地址
 
-The route address indicates what URL should be matched in order to apply the handler and options defined by the target.  A route consists of an optional verb and a mandatory path:
+路由地址指它所匹配到的URL。路线由谓词和路径组成:
 
 ```js
 'POST  /foo/bar'
 ^verb^ ^^path^^
 ```
 
-If no verb is specified, the route will match any CRUD method (**GET**, **PUT**, **POST**, **DELETE** or **PATCH**).  If `ALL` is specified as the verb, the route will match _any_ method.
+如果没有指定谓词，则路由将匹配任何CRUD方法（**GET**，**PUT**，**POST**，**DELETE**或**PATCH**）。 如果将`ALL`指定为谓词，则路由将匹配所有方法。
 
-Note the initial `/` in the path--all paths should start with one in order to work properly.
+注意路径中的初始`/` - 为了正常工作，所有路径都以它开头。
 
 
-### Wildcards and dynamic parameters
+### 通配符和动态参数
 
-In addition to specifying a static path like **foo/bar**, you can use `*` as a wildcard:
+除了指定像**foo/bar**这样的静态路径外，还可以使用`*`作为通配符:
 
 ```js
 '/*'
 ```
 
-will match all paths, where as:
+将匹配所有从 **/user/foo** 开始的路径:
 
 ```js
 '/user/foo/*'
 ```
 
-will match all paths that *start* with **/user/foo**.
 
-> **Note:** When using a route with a wildcard, such as `'/*'`, be aware that this will also match requests to static assets (i.e. `/js/dependencies/sails.io.js`) and override them. To prevent this, consider using the `skipAssets` option [described below](https://sailsjs.com/documentation/concepts/routes/custom-routes#?route-target-options).
+> **注意:** 当使用带有通配符的路由时，例如`/ *`，请注意这也会将请求与静态asset（即`/js/dependencies/sails.io.js`）匹配并覆盖它们。 为了防止这种情况，可以考虑使用`skipAssets`选项[如下所述](https://sailsjs.com/documentation/concepts/routes/custom-routes#?route-target-options).
 
-You can capture the parts of the address that are matched by wildcards into named parameters by using the `:paramName` wildcard syntax instead of the `*`:
+您可以使用`：paramName`通配符语法而不是`*`将通配符匹配的地址部分捕获到命名参数中:
 
 ```js
 '/user/foo/bar/:name'
 ```
 
-Will match _almost_ the same URLs as:
+将匹配几乎相同的URL:
 
 ```js
 '/user/foo/bar/*'
@@ -57,7 +56,7 @@ but will provide the value of the dynamic portions of the route URL to the route
 
 > Note that the wildcard (`*`) syntax matches slashes, where the URL pattern variable (`:`) syntax does not.  So in the example above, given the route address `GET /user/foo/bar/*`, incoming requests with URLs like `/user/foo/bar/baz/bing/bong/bang` would match (whereas if you used the `:name` syntax, the same URL would not match.)
 
-### Regular expressions in addresses
+### 地址中的正则表达式
 
 In addition to the wildcard address syntax, you may also use Regular Expressions to define the URLs that a route should match.  The syntax for defining an address with a regular expression is:
 
@@ -71,17 +70,17 @@ Will match `/123/abc/def`, running the action in **api/controllers/message/my-ac
 
 Note the double-backslash in `\\d` and `\\w`; this escaping is necessary for the regular expression to work correctly!
 
-##### About route ordering
+##### 关于路由排序
 
 While you are free to add items to your **config/routes.js** file in any order, be aware that Sails will internally sort your routes by _inclusiveness_, a measure of how many potential requests an address can handle.  In general, routes with addresses containing no dynamic components will be matched first, followed by routes with dynamic parameters, followed by those with wildcards.  This prevents routes from blocking each other (for example, a `/*` route, if left at the top of the list, would respond to all requests and no other routes would ever be matched).
 
 If you have any [regular expression addresses](https://sailsjs.com/documentation/concepts/routes/custom-routes#?regular-expressions-in-addresses), they will be left in the order you specify.  For example, if your **config/routes.js** file contains a `GET /foo/bar` route followed by a `GET r|^/foo/\\d+$|` route, the second route will always be sorted to appear immediately after `GET /foo/bar`.  This is due to the extreme difficulty of determining the inclusiveness of a regular expression route.  Take care when specifying these routes that you order them so that they won't match more requests than intended.
 
-### Route Target
+### 路由目标
 
 The address portion of a custom route specifies which URLs the route should match.  The *target* portion specifies what Sails should do after the match is made.  A target can take one of several different forms.  In some cases you may want to chain multiple targets to a single address by placing them in an array, but in most cases each address will have only one target.  The different types of targets are discussed below, followed by a discussion of the various options that can be applied to them.
 
-##### Controller / action target syntax
+##### 控制器/动作目标语法
 
 This syntax binds a route to an action in a [controller file](https://sailsjs.com/documentation/concepts/actions-and-controllers#?controllers).  The following four routes are equivalent:
 
@@ -96,7 +95,7 @@ Each one maps `GET /foo/go` to the `myGoAction` action of the controller in **ap
 
 The controller and action names in this syntax are case-insensitive.
 
-##### Standalone action target syntax
+##### 独立action目标语法
 
 This syntax binds an address to a [standalone Sails action](https://sailsjs.com/documentation/concepts/actions-and-controllers#?standalone-actions).  Simply specify the path of the action (relative to `api/controllers`):
 
@@ -109,7 +108,7 @@ This syntax binds an address to a [standalone Sails action](https://sailsjs.com/
 'GET /bar/go': 'foo/go-action' // Binds to the same action as above, using shorthand notation
 ```
 
-##### Routing to blueprint actions
+##### 路由到蓝图行动
 
 The [blueprint API](https://sailsjs.com/documentation/reference/blueprint-api) adds several actions for each of your models, all of which are available for routing.  For example, if you have a model defined in `api/models/User.js`, you&rsquo;ll automatically be able to do:
 
@@ -123,7 +122,7 @@ or
 
 If you have a custom action in `api/controllers/user/find.js` or `api/controllers/UserController.js`, that action will be run instead of the default blueprint `find`.  For a full list of the actions provided for your models, see the [blueprint API reference](https://sailsjs.com/documentation/reference/blueprint-api).
 
-##### View target syntax
+##### 视图目标语法
 
 Another common target is one that binds a route to a [view](https://sailsjs.com/documentation/concepts/Views).  This is particularly useful for binding static views to a custom URL, and it's how the default homepage for new projects is set up out of the box.
 
@@ -139,7 +138,7 @@ This tells Sails to handle `GET` requests to `/team` by serving the view templat
 
 
 
-##### Redirect target syntax
+##### 跳转目标语法
 You can have one address redirect to another--either within your Sails app, or on another server entirely--you can do so just by specifying the redirect URL as a string:
 
 ```js
@@ -151,7 +150,7 @@ Be careful to avoid redirect loops when redirecting within your Sails app!
 
 Note that when redirecting, the HTTP method of the original request (and any extra headers / parameters) will likely be lost, and the request will be transformed to a simple **GET** request.  In the above example, a **POST** request to **/alias** will result in a **GET** request to **/some/other/route**.  This is somewhat browser-dependent behavior, but it is recommended that you don't expect request methods and other data to survive a redirect.
 
-##### Response target syntax
+##### 响应目标语法
 You can map an address directly to a default or custom [response](https://sailsjs.com/documentation/concepts/extending-sails/custom-responses) using this syntax:
 
 ```js
@@ -160,7 +159,7 @@ You can map an address directly to a default or custom [response](https://sailsj
 
 Simply specify the name of the response file in your **api/responses** folder, without the **.js** extension.  The response name in this syntax is case-sensitive.  If you attempt to bind a route to a non-existent response, Sails will output an error and ignore the route.
 
-##### Policy target syntax
+##### 策略目标语法
 
 In most cases, you will want to apply [policies](https://sailsjs.com/documentation/concepts/policies) to your controller actions using the [**config/policies.js**](https://sailsjs.com/documentation/reference/configuration/sails-config-policies) config file.  However, there are some times when you will want to apply a policy directly to a custom route: particularly when you are using the [view](https://sailsjs.com/documentation/concepts/routes/custom-routes#?view-target-syntax) target syntax.  The policy target syntax is:
 
@@ -179,7 +178,7 @@ However, you will always want to chain the policy to at least one other type of 
 
 This will apply the **my-policy** policy to the route and, if it passes, continue by displaying the **views/dashboard.ejs** view.
 
-##### Function target syntax
+##### 功能目标语法
 
 For quick-and-dirty jobs (useful for quick tests), you can assign a route directly to a function:
 ```js
@@ -212,7 +211,7 @@ You can also use a dictionary with an `fn` key to assign a function.  This allow
 
 > Best practice is to use the function syntax only for temporary routes, since it goes against the structural conventions that make Sails useful!  (Plus, the less cluttered your routes.js file, the better.)
 
-### Route target options
+### 路由目标选项
 
 In addition to the options discussed in the various route target syntaxes above, any other property you add to a route target object will be passed through to the route handler in the `req.options` object.  There are several reserved properties that can be used to affect the behavior of the route handlers.  These are listed in the table below.
 
