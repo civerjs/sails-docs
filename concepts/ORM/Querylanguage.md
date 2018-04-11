@@ -1,14 +1,14 @@
-# Waterline query language
+# Waterline查询语言
 
-The syntax supported by Sails' model methods is called Waterline Query Language.  Waterline knows how to interpret this syntax to retrieve or mutate records from any supported database.  Under the covers, Waterline uses the database adapter(s) installed in your project to translates this language into native queries, and then to send those queries to the appropriate database.  This means that you can use the same query with MySQL as you do with Redis, or MongoDb. And it allows you to change your database with minimal (if any) changes to your application code.
+Sails的模型方法支持的语法称为Waterline查询语言。 Waterline知道如何解释这种语法，并从任何支持的数据库中检索或转译记录。Waterline使用安装在项目中的数据库适配器将该语言翻译为本地查询，然后将这些查询发送到适当的数据库。 这意味着您可以像使用Redis或MongoDb一样对MySQL使用相同的查询。 它允许你用最少的更改来更换你的数据库。
 
 
-### Query Language Basics
 
-The criteria objects are formed using one of four types of object keys. These are the top level
-keys used in a query object. It is loosely based on the criteria used in MongoDB with a few slight variations.
+### 查询语言基础
 
-Queries can be built using either a `where` key to specify attributes, which will allow you to also use query options such as `limit` and `skip` or, if `where` is excluded, the entire object will be treated as a `where` criteria.
+标准对象使用四种类型的对象键之一形成。这些是最高级别的查询对象中使用的键。 它基于MongoDB中使用的标准进行简单的改动。
+查询可以使用`where`键来指定属性，这将允许您也使用查询选项，例如`limit`和`skip`，或者如果不带有`where`，整个对象还会被视为标准`where`。
+
 
 ```javascript
 
@@ -26,9 +26,9 @@ var thirdPageOfRecentPeopleNamedMary = await Model.find({
 });
 ```
 
-#### Key Pairs
+#### Key对
 
-A key pair can be used to search records for values matching exactly what is specified. This is the base of a criteria object where the key represents an attribute on a model and the value is a strict equality check of the records for matching values.
+一个Key对可用于搜索记录中与指定内容完全匹配的值。这是一个标准对象的基础，其中键表示模型上的属性，并且该值是匹配值的记录的严格相等检查。
 
 ```javascript
 var peopleNamedLyra = await Model.find({
@@ -36,7 +36,7 @@ var peopleNamedLyra = await Model.find({
 });
 ```
 
-They can be used together to search multiple attributes.
+它们可以一起使用来搜索多个属性.
 
 ```javascript
 var waltersFromNewMexico = await Model.find({
@@ -45,9 +45,10 @@ var waltersFromNewMexico = await Model.find({
 });
 ```
 
-#### Complex Constaints
+#### 复杂约束
 
-Complex constraints also have model attributes for keys but they also use any of the supported criteria modifiers to perform queries where a strict equality check wouldn't work.
+复杂约束还具有键的模型属性，但它们使用条件修饰符来执行严格相等性检查。
+
 
 ```javascript
 var peoplePossiblyNamedLyra = await Model.find({
@@ -57,11 +58,11 @@ var peoplePossiblyNamedLyra = await Model.find({
 })
 ```
 
-#### In Modifier
+#### 在调节器中
 
-Provide an array to find records whose value for this attribute exactly matches _any_ of the specified search terms.
+提供一个数组来查找，其属性值与指定搜索项_任何_完全匹配的记录。
 
-> This is more or less equivalent to "IN" queries in SQL, and the `$in` operator in MongoDB.
+> 这或多或少等同于SQL中的“IN”查询和MongoDB中的“$in”运算符。
 
 ```javascript
 var waltersAndSkylers = await Model.find({
@@ -69,11 +70,12 @@ var waltersAndSkylers = await Model.find({
 });
 ```
 
-#### Not-In Modifier
+#### 不在调节器中
 
-Provide an array wrapped in a dictionary under a `!` key (like `{ '!': [...] }`) to find records whose value for this attribute _ARE NOT_ exact matches for any of the specified search terms.
+使用`！`键（如`{'！'：[...]}`）提供包装在字典中的数组，以查找其属性_是 NOT_与任何指定搜索项完全匹配的记录。
 
-> This is more or less equivalent to "NOT IN" queries in SQL, and the `$nin` operator in MongoDB.
+
+> 这或多或少等同于SQL中的“NOT IN”查询和MongoDB中的“$nin”运算符。
 
 ```javascript
 var everyoneExceptWaltersAndSkylers = await Model.find({
@@ -81,9 +83,9 @@ var everyoneExceptWaltersAndSkylers = await Model.find({
 });
 ```
 
-#### Or Predicate
+#### Or语法
 
-Use the `or` modifier to match _any_ of the nested rulesets you specify as an array of query pairs.  For records to match an `or` query, they must match at least one of the specified query modifiers in the `or` array.
+使用`or`修饰符来作为查询。 对于匹配`or`查询的记录，它们必须至少匹配`or`数组中的一个。
 
 ```javascript
 var waltersAndTeachers = await Model.find({
@@ -94,9 +96,9 @@ var waltersAndTeachers = await Model.find({
 });
 ```
 
-### Criteria Modifiers
+### 标准修饰符
 
-The following modifiers are available to use when building queries.
+构建查询时可使用以下修饰符。
 
 * `'<'`
 * `'<='`
@@ -109,11 +111,11 @@ The following modifiers are available to use when building queries.
 * `'startsWith'`
 * `'endsWith'`
 
-> Note that the availability and behavior of the criteria modifiers when matching against attributes with [JSON attributes](https://sailsjs.com/documentation/concepts/models-and-orm/validations#?builtin-data-types) may vary according to the database adapter you&rsquo;re using.  For instance, while `sails-postgresql` will map your JSON attributes to the <a href="https://www.postgresql.org/docs/9.4/static/datatype-json.html" target="_blank">JSON column type</a>, you&rsquo;ll need to [send a native query](https://sailsjs.com/documentation/reference/waterline-orm/datastores/send-native-query) in order to query those attributes directly.  On the other hand, `sails-mongo` supports queries against JSON-type attributes, but you should be aware that if a field contains an array, the query criteria will be run against every _item_ in the array, rather than the array itself (this is based on the behavior of MongoDB itself).
+> 请注意，与[JSON属性](https://sailsjs.com/documentation/concepts/models-and-orm/validations#?builtin-data-types)的属性进行匹配时，条件修饰符的可用性和行为可能会有所不同。 例如，虽然`sails-postgresql`会将您的JSON属性映射到JSON 列类型，您需要[发送本地查询](https://sailsjs.com/documentation/reference/waterline-orm/datastores/send-native-query)以便直接查询这些属性。 另一方面，`sails-mongo`支持针对JSON类型属性的查询，但是您应该知道，如果一个字段包含一个数组，则将针对数组中的每个_item_运行查询条件，而不是数组本身（ 这是基于MongoDB本身的行为）。
 
 #### '<'
 
-Searches for records where the value is less than the value specified.
+搜索值小于指定值的记录。
 
 ```usage
 Model.find({ age: { '<': 30 }})
@@ -121,7 +123,7 @@ Model.find({ age: { '<': 30 }})
 
 #### '<='
 
-Searches for records where the value is less or equal to the value specified.
+搜索值小于等于指定值的记录。
 
 ```usage
 Model.find({ age: { '<=': 20 }})
@@ -129,7 +131,7 @@ Model.find({ age: { '<=': 20 }})
 
 #### '>'
 
-Searches for records where the value is more than the value specified.
+搜索值大于指定值的记录。
 
 ```usage
 Model.find({ age: { '>': 18 }})
@@ -137,7 +139,7 @@ Model.find({ age: { '>': 18 }})
 
 #### '>='
 
-Searches for records where the value is more or equal to the value specified.
+搜索值大于等于指定值的记录。
 
 ```usage
 Model.find({ age: { '>=': 21 }})
@@ -145,7 +147,7 @@ Model.find({ age: { '>=': 21 }})
 
 #### '!='
 
-Searches for records where the value is not equal to the value specified.
+搜索值不等于指定值的记录。
 
 ```usage
 Model.find({
@@ -155,7 +157,7 @@ Model.find({
 
 #### in
 
-Searches for records where the value is in the list of values.
+搜索包含记录。
 
 ```usage
 Model.find({
@@ -165,7 +167,7 @@ Model.find({
 
 #### nin
 
-Searches for records where the value is NOT in the list of values.
+搜索不包含记录。
 
 ```usage
 Model.find({
@@ -175,7 +177,7 @@ Model.find({
 
 #### contains
 
-Searches for records where the value for this attribute _contains_ the given string.
+搜索此属性的值包含给定字符串的记录。
 
 ```usage
 var musicCourses = await Course.find({
@@ -187,7 +189,7 @@ _For performance reasons, case-sensitivity of `contains` depends on the database
 
 #### startsWith
 
-Searches for records where the value for this attribute _starts with_ the given string.
+搜索此属性的值_开始位置_给定字符串的记录。
 
 ```usage
 var coursesAboutAmerica = await Course.find({
@@ -199,7 +201,7 @@ _For performance reasons, case-sensitivity of `startsWith` depends on the databa
 
 #### endsWith
 
-Searches for records where the value for this attribute _ends with_ the given string.
+搜索此属性的值_结束位置_给定字符串的记录。
 
 ```usage
 var historyCourses = await Course.find({
@@ -210,10 +212,10 @@ var historyCourses = await Course.find({
 _For performance reasons, case-sensitivity of `endsWith` depends on the database adapter._
 
 
-### Query Options
+### 查询选项
 
-Query options allow you refine the results that are returned from a query. The current options
-available are:
+查询选项允许您优化查询返回的结果。 目前的选项
+可用的:
 
 * `limit`
 * `skip`
@@ -221,7 +223,7 @@ available are:
 
 #### Limit
 
-Limits the number of results returned from a query.
+限制查询返回的结果数量。
 
 ```usage
 Model.find({ where: { name: 'foo' }, limit: 20 })
@@ -231,7 +233,7 @@ Model.find({ where: { name: 'foo' }, limit: 20 })
 
 #### Skip
 
-Returns all the results excluding the number of items to skip.
+返回除跳过项目数量外的所有结果。
 
 ```usage
 Model.find({ where: { name: 'foo' }, skip: 10 });
@@ -239,7 +241,7 @@ Model.find({ where: { name: 'foo' }, skip: 10 });
 
 ##### Pagination
 
-`skip` and `limit` can be used together to build up a pagination system.
+可以同时使用“skip”和“limit”来构建分页系统。
 
 ```usage
 Model.find({ where: { name: 'foo' }, limit: 10, skip: 10 });
@@ -247,17 +249,16 @@ Model.find({ where: { name: 'foo' }, limit: 10, skip: 10 });
 
 > **Waterline**
 >
-> You can find out more about the Waterline API below:
+> 您可以在下面找到更多关于Waterline API的信息:
 > * [Sails.js Documentation](https://sailsjs.com/documentation/reference/waterline-orm/queries)
 > * [Waterline README](https://github.com/balderdashy/waterline/blob/master/README.md)
 > * [Waterline Reference Docs](https://sailsjs.com/documentation/reference/waterline-orm)
 > * [Waterline Github Repository](https://github.com/balderdashy/waterline)
 
 
-#### Sort
+#### 排序
 
-Results can be sorted by attribute name. Simply specify an attribute name for natural (ascending)
-sort, or specify an `ASC` or `DESC` flag for ascending or descending orders respectively.
+结果可以按属性名称排序。 只需指定自然属性名称（升序）排序或分别为升序或降序指定“ASC”或“DESC”标志。
 
 ```usage
 // Sort by name in ascending order
