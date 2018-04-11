@@ -1,4 +1,4 @@
-# Clickjacking
+# 点击劫持
 
 
 [Clickjacking](https://www.owasp.org/index.php/Clickjacking) (aka "UI redress attacks") are where an attacker manages to trick your users into triggering "unintended" UI events (e.g. DOM events.)
