@@ -1,27 +1,28 @@
-# Locals
+# 本地变量
 
-The variables accessible in a particular view are called `locals`.  Locals represent server-side data that is _accessible_ to your view-- locals are not actually _included_ in the compiled HTML unless you explicitly reference them using special syntax provided by your view engine.
+在特定视图中可访问的变量称为“本地”。代表你的视图可以访问的服务器端数据 - 除非你使用的视图引擎提供的特殊语法明确引用，否则本地变量实际上并不包含在编译的HTML中。
+
 
 ```ejs
 <div>Logged in as <a><%= name %></a>.</div>
 ```
 
-### Using locals in your views
+### 在你的视图中使用变量
 
-The notation for accessing locals varies between view engines.  In EJS, you use special template markup (e.g. `<%= someValue %>`) to include locals in your views.
+视图引擎之间访问变量的符号各不相同。 在EJS中，您使用特殊模板标记（例如`<％=someValue％>`）在视图中包含变量。
 
-There are three kinds of template tags in EJS:
+EJS中有三种模板标签:
 + `<%= someValue %>`
-  + HTML-escapes the `someValue` local, and then includes it as a string.
+  + HTML转义`someValue`变量，然后将其包含为一个字符串。
 + `<%- someRawHTML %>`
   + Includes the `someRawHTML` local verbatim, without escaping it.
-  + Be careful!  This tag can make you vulnerable to XSS attacks if you don't know what you're doing.
+  + 小心！ 如果您不知道自己在做什么，该标签可能会使您容易受到XSS攻击。
 + `<% if (!loggedIn) { %>  <a>Logout</a>  <% } %>`
-  + Runs the JavaScript inside the `<% ... %>` when the view is compiled.
-  + Useful for conditionals (`if`/`else`), and looping over data (`for`/`each`).
+  + 编译视图时，在`<％...％>`内运行JavaScript。
+  + 用于条件（`if` /`else`）和循环数据（`for` /`each`）。
 
 
-Here's an example of a view (`views/backOffice/profile.ejs`) using two locals, `user` and `corndogs`:
+这是一个使用两个变量（user和corndogs）的视图（`views/backOffice/profile.ejs`）的例子:
 
 ```ejs
 <div>
@@ -35,9 +36,9 @@ Here's an example of a view (`views/backOffice/profile.ejs`) using two locals, `
 </div>
 ```
 
-> You might have noticed another local, `_`.  By default, Sails passes down a few locals to your views automatically, including lodash (`_`).
+> 您可能已经注意到另一个变量“_”。 默认情况下，Sails会自动传递几个变量到你的视图，包括lodash（`_`）。
 
-If the data you wanted to pass down to this view was completely static, you don't necessarily need a controller- you could just hard-code the view and its locals in your `config/routes.js` file, i.e:
+如果你想传递给这个视图的数据是完全静态的，你不需要一个控制器 - 你可以在你的`config/routes.js`文件中编码视图代码，即:
 
 ```javascript
   // ...
@@ -57,10 +58,9 @@ If the data you wanted to pass down to this view was completely static, you don'
   },
   // ...
 ```
+另一方面，在更可能的情况下，这些数据是动态的，我们需要使用控制器action从我们的模型中加载它，然后使用[res.view()](https： //sailsjs.com/documentation/reference/response-res/res-view)方法。
 
-On the other hand, in the more likely scenario that this data is dynamic, we'd need to use a controller action to load it from our models, then pass it to the view using the [res.view()](https://sailsjs.com/documentation/reference/response-res/res-view) method.
-
-Assuming we hooked up our route to one of our controller's actions (and our models were set up), we might send down our view like this:
+假设我们将路由连接到控制器的一个action(模型已经建立），可以像这样发送请求:
 
 ```javascript
 // in api/controllers/UserController.js...
@@ -75,19 +75,19 @@ Assuming we hooked up our route to one of our controller's actions (and our mode
   // ...
 ```
 
-### Escaping untrusted data using `exposeLocalsToBrowser`
+### 使用`exposeLocalsToBrowser`转义不受信任的数据
 
-It is often desirable to &ldquo;bootstrap&rdquo; data onto a page so that it&rsquo;s available via Javascript as soon as the page loads, instead of having to fetch the data in a separate AJAX or socket request.  Sites like [Twitter and GitHub](https://blog.twitter.com/2012/improving-performance-on-twittercom) rely heavily on this approach in order to optimize page load times and provide an improved user experience.
+通常需要将“引导” 数据加载到页面上，以便在页面加载时通过Javascript调用，而不必在单独的AJAX或socket请求中获取数据。 像[Twitter and GitHub](https://blog.twitter.com/2012/improving-performance-on-twittercom)）这样的网站在很大程度上依赖于此方法，以便优化网页加载时间并改善用户体验。
 
-In the past, a common way of solving this problem was with hidden form fields, or by hand-rolling code that injects server-side locals directly into a client-side script tag.  However, these techniques can present a challenge when some of the data you want to bootstrap is from an _untrusted_ source, meaning that it might contain HTML tags and Javascript code meant to compromise your app with an <a href="https://en.wikipedia.org/wiki/Cross-site_scripting" target="_blank">XSS attack</a>.  To help prevent such issues, Sails provides a built-in view partial called `exposeLocalsToBrowser` that you can use to securely inject data from your view locals for access from client-side JavaScript.
+过去，解决这个问题的常见方式是隐藏表单字段，或者通过手动刷新将服务器端变量注入到客户端脚本标记中。 但是，当数据来自_非信任_来源时，它可能包含HTML标记和Javascript代码，这些代码出现<a href =“https：// en .wikipedia.org / wiki / Cross-site_scripting“target =”_ blank“> XSS攻击</a>漏洞。 为了避免这些问题，Sails提供了一个名为`exposeLocalsToBrowser`的内置视图，您可以使用它来从您的视图变量中安全地注入数据，以便从客户端JavaScript访问。
 
-To use `exposeLocalsToBrowser`, simply call it from within your view using the _non-escaping syntax_ for your template language.  For example, using the default EJS view engine, you would do:
+要使用`exposeLocalsToBrowser`，只需使用模板语言的_non-escaping syntax_从视图内调用它。 例如，使用默认的EJS视图引擎，这样做:
 
 ```ejs
 <%- exposeLocalsToBrowser() %>
 ```
 
-By default, this exposes _all_ of your view locals as the `window.SAILS_LOCALS` global variable.  For example, if your action code contained:
+默认情况下，这会将您的视图局部变量全部暴露为`window.SAILS_LOCALS`全局变量。例如，如果您的操作代码包含:
 
 ```javascript
 res.view('myView', {
@@ -100,9 +100,9 @@ res.view('myView', {
 });
 ```
 
-then using `exposeLocalsToBrowser` as shown above would cause the locals to be safely bootstrapped in such a way that `window.SAILS_LOCALS.someArray` would contain the array `[1, 'boot', true]`, and  `window.SAILS_LOCALS.someXSS` would contain the _string_ `<script>alert("all your credit cards is belongs to us");</script>`, without causing that code to actually be executed on the page.
+那么如上所示使用`exposeLocalsToBrowser`会使变量安全地引导，使得`window.SAILS_LOCALS.someArray`包含数组'`1，'boot'，true]`和`window.SAILS_LOCALS。 someXSS`将包含字符串`<script>提醒（“您的所有信用卡属于我们”）; </ script>`，而不会导致该代码实际在页面上执行。
 
-The `exposeLocalsToBrowser` function has a single `options` parameter that can be used to configure what data is outputted, and how.  The `options` parameter is a dictionary that can contain the following properties:
+`exposeLocalsToBrowser`函数有一个`options`参数，可以用来配置输出什么数据。 `options`参数是一个包含以下属性的字典:
 
 |&nbsp;   |     Property        | Type                                         | Default| Details                            |
 |---|:--------------------|----------------------------------------------|:-----------------------------------|-----|
