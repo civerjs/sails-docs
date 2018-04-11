@@ -1,27 +1,29 @@
-# Policies
-### Overview
+# 策略Policies
+### 概述
 
-Policies in Sails are versatile tools for authorization and access control-- they let you execute some logic _before_ an action is run, to determine whether or not to continue processing the request.  The most common use-case for policies is to restrict certain actions to _logged-in users only_.
+Sails中的策略是用于授权和访问控制的多功能工具，它们让您在运行操作前执行一些逻辑，以确定是否继续处理请求。 策略最常见的用例是将某些操作限制为仅限于用户登录。
 
-> NOTE: policies apply **only** to controllers and actions, not to views.  If you define a route in your [routes.js config file](https://sailsjs.com/documentation/reference/configuration/sails-config-routes) that points directly to a view, no policies will be applied to it.  To make sure policies are applied, you can instead define an action which displays your view, and point your route to that action. &nbsp;
+> 注意：策略仅应用于控制器和操作，而不应用于视图。 如果您在[routes.js配置文件](https://sailsjs.com/documentation/reference/configuration/sails-config-routes)中定义了直接指向视图的路由，则不会应用策略。为了确保应用策略，您可以定义显示视图的action，并将您的路由指向该action。
 
-### When to use policies
 
-It's best to avoid implementing numerous or complex policies in your app.  Instead, when implementing features like granular, role-based permissions, rely on your [actions](https://sailsjs.com/documentation/concepts/actions-and-controllers) to reject unwanted access.  Your actions should also be responsible for any necessary personalization of the view locals and JSON response data you send in the response.
+### 何时使用策略
 
-For example, if you need to implement user-level or role-based permissions in your application, the most straightforward approach is to take care of the relevant checks at the top of your controller action-- either inline, or by calling out to a helper.  Following this best practice will significantly enhance the maintainability of your code.
+最好避免在您的应用中实施大量或复杂的策略。在实现基于角色的权限等功能时，请依靠您的[action](https://sailsjs.com/documentation/concepts/actions-and-controllers)来拒绝不需要的访问。并提供相应的本地视图或者JSON响应数据。
 
-### Protecting Actions and Controllers with Policies
+例如，如果您需要实现用户级别或角色权限，最直接的方法是在控制器操作开始处理相关检测 - 内置或通过call helper 遵循此做法将显着提高代码的可维护性。
 
-Sails has a built in ACL (access control list) located in `config/policies.js`.  This file is used to map policies to your actions and controllers.
 
-This file is  *declarative*, meaning it describes *what* the permissions for your app should look like, not *how* they should work.  This makes it easier for new developers to jump in and understand what's going on, plus it makes your app more flexible as your requirements inevitably change over time.
+### 使用策略守护action和控制器
 
-The `config/policies.js` file is a dictionary whose properties and values differ depending on whether you are applying policies to [controllers](https://sailsjs.com/documentation/concepts/actions-and-controllers#?controllers) or [standalone actions](https://sailsjs.com/documentation/concepts/actions-and-controllers#?standalone-actions).
+Sails有一个内置的ACL（访问控制列表），位于`config/policies.js`中。 该文件用于将策略映射到您的action和控制器。
 
-##### Applying policies to a controller
+这个文件是*一个描述*，它描述了*你的应用程序的权限应该是什么样子而不是*他们应该如何工作。 这使得新开发人员可以更轻松地了解正在发生的事情，并且可以让您的程序更加灵活，因为需求随着时间的推移发生变化。
 
-To apply policies to a controller, use the controller name as the name of a property in the  `config/policies.js` dictionary, and set its value to a dictionary mapping actions in that controller to policies that should be applied to them.  Use `*` to represent &ldquo;all unmapped actions&rdquo;.  A policy's _name_ is the same as its filename, minus the file extension.
+`config/policies.js`文件是一个字典，其属性和值根据您是否将策略应用于[controllers](https://sailsjs.com/documentation/concepts/actions-and-controllers#?controllers)或[独立操作](https://sailsjs.com/documentation/concepts/actions-and-controllers#?standalone-actions)而有所不同。
+
+##### 将策略应用于控制器
+
+要将策略应用于控制器，请使用控制器名称作为`config/policies.js`字典中属性的名称，并将其值设置为映射到该控制器中action的字典。 使用`*`来表示“所有未映射的动作”。 策略的_名称_与其文件名相同，减去文件扩展名。
 
 ```js
 module.exports.policies = {
@@ -40,9 +42,9 @@ module.exports.policies = {
 };
 ```
 
-##### Applying policies to standalone actions
+##### 将策略应用于独立操作
 
-To apply policies to one or more standalone actions, use the action path (relative to `api/controllers`) as a property name in the `config/policies.js` dictionary, and set the value to the policy or policies that should apply to those actions.  By using a wildcard `*` at the end of the action path, you can apply policies to all actions that begin with that path.  Here's the same set of policies as above, rewritten to apply to standalone actions:
+要将策略应用于一个或多个独立操作，请在`config/policies.js`字典中使用操作路径（相对于`api/controllers`）作为属性名称，并将该值设置为该应用的策略的action。通过在操作路径末尾使用通配符"/*",可以将策略应用于以该路径开头的所有action。这是与上面相同的一组策略，重写为适用于独立操作:
 
 ```js
 module.exports.policies = {
@@ -52,21 +54,21 @@ module.exports.policies = {
 }
 ```
 
-> Note that this example differs slightly from that of the controller-based policies, in that the `isLoggedIn` policy will apply to all actions in the `api/controllers/user` folder _and subfolders_ (except for `user/delete` and `user/login`, as is explained in the next section).
+> 请注意，此示例与基于控制器的策略略有不同，因为`isLoggedIn`策略将应用于`api/controllers/user`文件夹中的所有action_(或子文件夹`api/controllers/user`) _除`delete`和`login`外_ ，如下一节所述）。
 
-##### Policy ordering and precedence
+##### 策略排序和优先顺序
 
-It is important to note that policies do _not_ &ldquo;cascade&rdquo;.  In the examples above, the `isLoggedIn` policy will be applied to all actions in the `UserController.js` file (or standalone actions living under `api/controllers/user` ) _except for `delete` and `login`_.  If you wish to apply multiple policies to an action, list the policies in an array, for example:
+值得注意的是，策略不会“cascade”。在上面的示例中，`isLoggedIn`策略将应用于`UserController.js`文件中的所有操作（或者在`api / controllers/user`下的独立操作），`delete`和`login`除外。 例如，如果您希望将多个策略应用于某个操作，请列出数组中的策略:
 
 ```javascript
 'getEncryptedData': ['isLoggedIn', 'isInValidRegion']
 ```
 
-##### Using policies with blueprint actions
+##### 对蓝图操作使用策略
 
-Sails' built-in [blueprint API](https://sailsjs.com/documentation/concepts/blueprints) is implemented using regular Sails actions.  The only difference is that blueprint actions are implicit.
+Sails的内置[blueprint API](https://sailsjs.com/documentation/concepts/blueprints)是使用常规Sails操作实现的。 唯一的区别是蓝图行动是隐含的。
 
-To apply your policies to blueprint actions, set up your policy mappings just like we did in the example above, but pointed at the name of the relevant implicit [blueprint action](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions) in your controller (or as a standalone action).  For example:
+要将您的策略应用于蓝图行动，请设置您的策略映射，就像我们在上面的示例中所做的一样，但指出了在您的控制器的相关隐式[蓝图action](https://sailsjs.com/documentation/concepts/blueprints/blueprint-actions)的名称（或一个独立action）。例如:
 ```js
 module.exports.policies = {
   UserController: {
@@ -82,9 +84,9 @@ module.exports.policies = {
 };
 ```
 
-##### Global policies
+##### 全局策略
 
-You can apply a policy to _all_ actions that are not otherwise explicitly mapped by using the `*` property.  For example:
+您可以将策略应用于通过使用`*`属性未明确映射的_全部_动作。 例如:
 
 ```js
 module.exports.policies = {
@@ -92,19 +94,20 @@ module.exports.policies = {
   'user/login': true
 };
 ```
-This would apply the `isLoggedIn` policy to every action except the `login` action in `api/controllers/user/login.js` (or in `api/controllers/UserController.js`).
+除了`api /controllers/user/login.js`（或`api/controllers/UserController.js`中的`login`动作），这会将`isLoggedIn`策略应用于每个动作。
 
-### Built-in policies
-Sails provides two built-in policies that can be applied globally, or to a specific controller or action.
-  + `true`: public access  (allows anyone to get to the mapped controller/action)
-  + `false`: **NO** access (allows **no-one** to access the mapped controller/action)
+### 内置策略
+Sails提供了两个内置的策略，可以应用于全局或特定的控制器或操作。
+  + `true`: public access  (允许任何人访问映射的控制器/操作)
+  + `false`: **NO** access (不允许允许访问映射的控制器/动作)
 
  `'*': true` is the default policy for all controllers and actions.  In production, it's good practice to set this to `false` to prevent access to any logic you might have inadvertently exposed.
 
 
-### Writing Your First Policy
+### 编写你的第一个策略
 
-Here is a simple `isLoggedIn` policy to prevent access for unauthenticated users. It checks the session for a `userId` property, and if it doesn&rsquo;t find one, sends the default [`forbidden` response](https://sailsjs.com/documentation/concepts/extending-sails/custom-responses/default-responses#?resforbidden). (For many apps, this will likely be the only policy needed.) The following example assumes that, in the controller actions for authenticating a user, you set `req.session.userId` to a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value.
+这是一个简单的`isLoggedIn`策略，用于防止未经身份验证的用户访问。 它检查会话是否有`userId`属性，如果它找不到，则发送默认的[`forbidden`响应](https://sailsjs.com/documentation/concepts/extending-sails/custom-responses/default-responses#?resforbidden)。 （对于许多应用程序，这是必须需要的策略。）以下示例假定，在用于验证用户的控制器action中，您将`req.session.userId`的值设置为[truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy)。
+
 
 ```javascript
 // policies/isLoggedIn.js
