@@ -48,16 +48,16 @@ _你在深夜坐在你的笔记本电脑前，你意识到:_
 
 ### 适配器
 
-Like most MVC frameworks, Sails supports [multiple databases](https://sailsjs.com/features).  That means the syntax to query and manipulate our data is always the same, whether we're using MongoDB, MySQL, or any other supported database.
+像大多数MVC框架一样，Sails支持[多个数据库](https://sailsjs.com/features). 这意味着无论我们使用的是MongoDB，MySQL还是其他支持的数据库，查询和操作数据的语法都是相同的。
 
-Waterline builds on this flexibility with its concept of adapters.  An adapter is a bit of code that maps methods like `find()` and `create()` to a lower-level syntax like `SELECT * FROM` and `INSERT INTO`.  The Sails core team maintains open-source adapters for a handful of the [most popular databases](https://sailsjs.com/features), and a wealth of [community adapters](https://github.com/balderdashy/sails-docs/blob/0.9/Database-Support.md) are also available.
+Waterline构建在灵活的适配器之上。 适配器是将将`find()`和`create()`方法映射到`SELECT * FROM`和`INSERT INTO`等更低级语法的代码。 Sails核心团队为部分[流行数据库](https://sailsjs.com/features)和大量[community adapters](https://github.com/balderdashy/sails-docs/blob/0.9/Database-Support.md)维护开源适配器。
 
-Custom Waterline adapters are actually [pretty simple to build](https://github.com/balderdashy/sails-generate-adapter), and can make for more maintainable integrations; anything from a proprietary enterprise account system, to a cache, to a traditional database.
+自定义Waterline适配器实际上[相当简单](https://github.com/balderdashy/sails-generate-adapter)，并且更容易维护和集成; 从专有企业系统到高速缓存，再到传统数据库。
 
 
 ### 数据存储
 
-A **datastore** represents a particular database configuration.  This configuration object includes an adapter to use, as well as information like the host, port, username, password, and so forth.  Datastores are defined in the Sails config [`config/datastores.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores).
+**数据存储**表示特定的数据库配置。 此配置对象包含要使用的适配器以及主机，端口，用户名，密码等信息。 数据存储在Sails配置[`config / datastores.js`](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores)中定义.
 
 ```javascript
 // in config/datastores.js
@@ -75,15 +75,15 @@ A **datastore** represents a particular database configuration.  This configurat
 
 ### 比喻Analogy
 
-Imagine a file cabinet full of completed pen-and-ink forms. All of the forms have the same fields (e.g. "name", "birthdate", "maritalStatus"), but for each form, the _values_ written in the fields vary.  For example, one form might contain "Lara", "2000-03-16T21:16:15.127Z", "single", while another form contains "Larry", "1974-01-16T21:16:15.127Z", "married".
+想象一个文件柜里装满各种表单形式。 所有表格都具有相同的字段（例如“姓名”，“出生日期”，“婚姻状态”），但是对于每种表格，字段中写入的_values_都不相同。 例如，一个表单可能包含“Lara”，“2000-03-16T21：16：15.127Z”，“single”，而另一个表单包含“Larry”，“1974-01-16T21：16：15.127Z”，“ 已婚”。
 
-Now imagine you're running a hotdog business.  If you were _very_ organized, you might set up your file cabinets as follows:
+现在想象你正在经营热狗业务。 如果你善于管理，你可以按如下步骤设置你的文件柜:
 
-+ **Employee** (contains your employee records)
++ **雇员** (contains your employee records)
   + `fullName`
   + `hourlyWage`
   + `phoneNumber`
-+ **Location** (contains a record for each location you operate)
++ **位置** (contains a record for each location you operate)
   + `streetAddress`
   + `city`
   + `state`
@@ -92,11 +92,11 @@ Now imagine you're running a hotdog business.  If you were _very_ organized, you
     + a list of all the purchases made at this location
   + `manager`
     + the employee who manages this location
-+ **Purchase** (contains a record for each purchase made by one of your customers)
++ **采购** (contains a record for each purchase made by one of your customers)
   + `madeAtLocation`
   + `productsPurchased`
   + `createdAt`
-+ **Product** (contains a record for each of your various product offerings)
++ **产品** (contains a record for each of your various product offerings)
   + `nameOnMenu`
   + `price`
   + `numCalories`
@@ -104,13 +104,11 @@ Now imagine you're running a hotdog business.  If you were _very_ organized, you
   + `availableAt`
     + a list of the locations where this product offering is available.
 
-
-In your Sails app, a **model** is like one of the file cabinets.  It contains **records**, which are like the forms.  `Attributes` are like the fields in each form.
-
+在您的Sails应用程序中，**模型**就像其中一个文件柜。 它包含**records**，它们就像表格一样。 `Attributes`就像每个表单中的字段一样。
 
 
 ### 注意
-+ This documentation on models is not applicable if you are overriding the built-in ORM, [Waterline](https://github.com/balderdashy/waterline).  In that case, your models will follow whatever convention you set up, on top of whatever ORM library you're using (e.g. Mongoose.)
++ 如果您覆盖内置的ORM，[Waterline](https://github.com/balderdashy/waterline)，则此模型文档不再适用。 这种情况下，除了您使用其他ORM库之外，模型将遵循您设置的约定（例如，Mongoose）。
 
 
 
