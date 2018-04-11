@@ -1,39 +1,39 @@
-# Lifecycle callbacks
+# 生命周期回调
 
-### Overview
+### 概述
 
-Lifecycle callbacks are functions that are automagically called before or after certain _model_ actions. For example, we sometimes use lifecycle callbacks to automatically hash a password before creating or updating an `Account` model.
+生命周期回调(lifecycle)是在某些_模型_操作之前或之后自动调用的函数。 例如，我们有时使用lifecycle在创建或更新“Account”模型之前自动加密密码。
 
-Sails exposes a handful of lifecycle callbacks by default.
+Sails在默认情况下暴露了一些lifecycle。
 
-No lifecycle callbacks are run on bulk inserts of data using `createEach`.
+使用`createEach`批量插入的数据不使用lifecycle。
 
 
-##### Callbacks on `create`
+##### 在`create`后调用
 
-The `afterCreate` lifecycle callback will only be run on queries that have the `fetch` meta flag set to `true`. For more information on using the `meta` flags see [Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
+`afterCreate` 生命周期回调(lifecycle)只会在`fetch` meta标志设置为`true`的查询中运行。 有关使用`meta`标志的更多信息，请参见[Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
 
   - beforeCreate: fn(recordToInsert, cb)
   - afterCreate: fn(newlyInsertedRecord, cb)
 
-##### Callbacks on `update`
+##### `update`后调用
 
-The `afterUpdate` lifecycle callback will only be run on queries that have the `fetch` meta flag set to `true`. For more information on using the `meta` flags see [Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
+`afterUpdate` 生命周期回调(lifecycle)只会在`fetch` meta标志设置为`true`的查询中运行。 有关使用`meta`标志的更多信息，请参见 [Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
 
   - beforeUpdate: fn(valuesToUpdate, cb)
   - afterUpdate: fn(updatedRecord, cb)
 
-##### Callbacks on `destroy`
+##### `destroy`后调用
 
-The `afterDestroy` lifecycle callback will only be run on queries that have the `fetch` meta flag set to `true`. For more information on using the `meta` flags see [Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
+`afterDestroy` 生命周期回调(lifecycle)只会在`fetch` meta标志设置为`true`的查询中运行。 有关使用`meta`标志的更多信息，请参见[Waterline Queries](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
 
   - beforeDestroy: fn(criteria, cb)
   - afterDestroy: fn(destroyedRecord, cb)
 
 
-### Example
+### 例子
 
-If you want to hash a password before saving in the database, you might use the `beforeCreate` lifecycle callback.
+如果要在保存到数据库之前对密码进行加密处理，可以使用`beforeCreate`生命周期回调。
 
 ```javascript
 var bcrypt = require('bcrypt');
