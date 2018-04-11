@@ -1,12 +1,13 @@
-# Using Sails programmatically
+# 以编程方式创建Sails应用程序
 
-### Overview
+### 概述
 
-The majority of the time, you will interact with Sails through its [command-line interface](https://sailsjs.com/documentation/reference/command-line-interface), starting servers with [`sails lift`](https://sailsjs.com/documentation/reference/command-line-interface/sails-lift).  However, Sails apps can also be started and manipulated from within other Node apps, using the [programmatic interface](https://sailsjs.com/documentation/reference/application).  One of the main uses for this interface is to run Sails apps inside of automated test suites.
+大多数情况下，您将通过[命令行界面](https://sailsjs.com/documentation/reference/command-line-interface)与Sails进行交互，使用[`sails lift`](https://sailsjs.com/documentation/reference/command-line-interface/sails-lift)启动服务器。但是，Sails应用程序也可以使用[编程接口](https://sailsjs.com/documentation/reference/application)从其他Node程序中启动和操作。此接口的主要用途之一是在自动测试中运行Sails应用程序。
 
-### Creating a Sails app programmatically
 
-To create a new Sails app from within a Node.js script, use the Sails _constructor_.  You can use the same constructor to create as many distinct Sails apps as you like:
+### 以编程方式创建Sails应用程序
+
+要在Node.js脚本中创建新的Sails应用程序，请使用Sails构造函数。 您可以使用相同的构造函数来创建任意多个不同的Sails应用程序:
 
 ```javascript
 var Sails = require('sails').constructor;
@@ -14,24 +15,24 @@ var mySailsApp = new Sails();
 var myOtherSailsApp = new Sails();
 ```
 
-### Configuring, starting and stopping Sails apps programmatically
+### 以编程方式配置，启动和停止Sails应用程序
 
-Once you have a reference to a new Sails app, you can use [`.load()`](https://sailsjs.com/documentation/reference/application/sails-load) or [`.lift()`](https://sailsjs.com/documentation/reference/application/sails-lift) to start it.  Both methods take two arguments: a dictionary of configuration options, and a callback function that will be run after the Sails app starts.
+一旦你有了一个新的Sails应用程序的引用，你可以使用[`.load()`](https://sailsjs.com/documentation/reference/application/sails-load)或[`.lift()`] (https://sailsjs.com/documentation/reference/application/sails-lift)来启动它。 两种方法都有两个参数：一个选项配置字典和一个将在Sails应用程序启动后运行的回调函数。
 
-> When Sails is started programmatically, it will still use the `api`, `config` and other folders underneath the current working directory to load controllers, models, and configuration options.  One notable exception is that `.sailsrc` files will _not_ be loaded when starting apps this way.
+> 当以编程方式启动Sails时，它仍将使用当前工作目录下的`api`，`config`和其他文件夹来加载控制器，模型和配置选项。 一个值得注意的例外是，以这种方式启动应用程序时，不会加载`.sailsrc`文件。
 
-> Any configuration options sent as arguments to `.load()` or `.lift()` will take precedence over options loaded from anywhere else.
+> 任何作为参数发送到`.load()`或`.lift()`的配置选项将优先于从其他地方加载的选项。
 
-> Configuration options set via environment variables will _not_ automatically be applied to Sails app started programmatically, with the exception of `NODE_ENV` and `PORT`.
+> 通过环境变量设置的配置选项将不会自动应用于以编程方式启动的Sails应用程序，但“NODE_ENV”和“PORT”除外。
 
-> To load configuration options from `.sailsrc` files and environment variables, use the `rc` module that Sails makes available via `require('sails/accessible/rc')`.
+> 要从`.sailsrc`文件和环境变量加载配置选项，可以使用sails通过`require（'sails / accessible / rc'）`提供的`rc`模块。
 
 The difference between `.load()` and `.lift()` is that `.lift()` takes the additional steps of (1) running the app's [bootstrap](https://sailsjs.com/documentation/reference/configuration/sails-config-bootstrap), if any, and (2) starting an HTTP server on the port configured via `sails.config.port` (1337 by default).  This allows you to make HTTP requests to the lifted app.  To make requests to an app started with `.load()`, you can use the [`.request()`](https://sailsjs.com/documentation/reference/application/sails-request) method of the loaded app.
 
 
 ##### .lift()
 
-Starting an app with `.lift()` on port 1338 and sending a POST request via HTTP:
+在端口1338上使用`.lift（）`启动应用程序并通过HTTP发送POST请求:
 
 ```javascript
 var request = require('request');
@@ -76,7 +77,7 @@ mySailsApp.lift({
 });//</lift sails app>
 ```
 
-Starting an app with `.lift()` using the current environment and .sailsrc settings:
+使用当前环境和.sailsrc设置使用`.lift（）`启动应用程序:
 
 ```javascript
 var Sails = require('sails').constructor;
@@ -91,7 +92,7 @@ mySailsApp.lift(rc('sails'), function(err) {
 
 ##### .load()
 
-Here's an alternative to the previous example:  Starting a Sails app with `.load()` and sending what is _semantically_ the same POST request-- but this time, under the covers we'll use a virtual request instead of HTTP:
+下面是前一个例子的一个替代方法：使用`.load（）`启动一个Sails应用程序并发送同样的POST请求 - 但是这次，我们将使用虚拟请求代替HTTP:
 
 ```javascript
 mySailsApp.load({
@@ -133,7 +134,7 @@ mySailsApp.load({
 
 ##### .lower()
 
-To stop an app programmatically, use `.lower()`:
+要以编程方式停止应用程序，请使用`.lower()`:
 
 ```javascript
 mySailsApp.lower(function(err) {
@@ -148,7 +149,7 @@ mySailsApp.lower(function(err) {
 });
 ```
 
-##### Using `moduleDefinitions` to add actions, models and more
+##### 使用`moduleDefinitions`来添加actions，模型等等
 
 > **Warning:**  Declarative loading of modules with the `moduleDefinitions` setting is **currently experimental**, and may undergo breaking changes _even between major version releases_.  Before using this setting, be sure your project's Sails dependency is pinned to an exact version (i.e. no `^`).
 
@@ -164,8 +165,8 @@ The following Sails modules can be added programmatically:
  Policies | `policies.moduleDefinitions` | A dictionary mapping policy names (e.g. `isAdmin`) to policy functions.
 
 
-### Reference
+### 参考
 
-The full reference for Sails' programmatic interface is available in [**Reference > Application**](https://sailsjs.com/documentation/reference/application).
+Sails程序界面的完整参考文献可在 [**Reference > Application**](https://sailsjs.com/documentation/reference/application).
 
 <docmeta name="displayName" value="Programmatic usage">
