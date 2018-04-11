@@ -1,21 +1,21 @@
-# Layouts
+# 布局layouts
 
-When building an app with many different pages, it can be helpful to extrapolate markup shared by several HTML files into a layout.  This [reduces the total amount of code](http://en.wikipedia.org/wiki/Don't_repeat_yourself) in your project and helps you avoid making the same changes in multiple files down the road.
+在构建多页面的应用程序时，将多个HTML文件共享的标记放置到layouts会有帮助。这会[减少项目中的代码总量](http://en.wikipedia.org/wiki/Don't_repeat_yourself)，并避免在多个文件中进行相同的更改。
 
-In Sails and Express, layouts are implemented by the view engines themselves.  For instance, `jade` has its own layout system, with its own syntax.
+在Sails和Express中，layout由视图引擎自己实现。例如，`jade`有它自己的layout系统，有自己的语法。
 
-For convenience, Sails bundles special support for layouts **when using the default view engine, EJS**. If you'd like to use layouts with a different view engine, check out [that view engine's documentation](https://sailsjs.com/documentation/concepts/concepts/views/view-engines) to find the appropriate syntax.
+为方便起见，当使用默认视图引擎EJS时，**Sails捆绑了对layout**的特殊支持。 如果您想使用具有不同视图引擎的layout，请查看[该视图引擎的文档](https://sailsjs.com/documentation/concepts/concepts/views/view-engine)以查找适当的语法。
 
 
-### Creating Layouts
+### 创建布局
 
-Sails layouts are special `.ejs` files in your app's `views/` folder you can use to "wrap" or "sandwich" other views. Layouts usually contain the preamble (e.g. `<!DOCTYPE html><html><head>....</head><body>`) and conclusion (`</body></html>`).  Then the original view file is included using `<%- body %>`.  Layouts are never used without a view- that would be like serving someone a bread sandwich.
+Sails layout是应用的`views/`文件夹中的`.ejs`文件，您可以用它来“包含”或“植入”其他视图。 layout通常包含前导码（例如`<！DOCTYPE html> <html> <head> .... </ head> <body>`）和结尾（`</ body> </ html>`）。然后使用`<％- body ％>`包含原始视图文件。 布局绝不会在没有视图的情况下使用。
 
-Layout support for your app can be configured or disabled in [`config/views.js`](https://sailsjs.com/documentation/anatomy/config/views.js), and can be overridden for a particular route or action by setting a special [local](https://sailsjs.com/documentation/concepts/views/locals) called `layout`. By default, Sails will compile all views using the layout located at `views/layouts/layout.ejs`.
+您可以在[`config / views.js`](https://sailsjs.com/documentation/anatomy/config/views.js)配置或禁用布局支持，并且可通过设置一个名为`layout`的特殊[local](https://sailsjs.com/documentation/concepts/views/locals)覆盖特定路由或操作。默认情况下，Sails将使用位于`views/layouts/layout.ejs`的布局来编译所有视图。
 
-To specify what layout a view uses, see the example below. There is more information in the docs at [routes](https://sailsjs.com/documentation/concepts/routes).
+要指定视图使用的layout，请参见下面的示例[routes](https://sailsjs.com/documentation/concepts/routes).
 
-The example route below will use the view located at `./views/users/privacy.ejs` within the layout located at `./views/users.ejs`
+下面的示例路由使用位于`./views/users.ejs`的布局内的`./views/users/privacy.ejs`视图。
 
 ```javascript
 'get /privacy': {
@@ -26,7 +26,7 @@ The example route below will use the view located at `./views/users/privacy.ejs`
   },
 ```
 
-The example controller action below will use the view located at `./views/users/privacy.ejs` within the layout located at `./views/users.ejs`
+下面的示例控制器action将使用位于`./views/users.ejs`的布局内的位于`./views/users/privacy.ejs`的视图。
 
 ```javascript
 privacy: function (req, res) {
@@ -34,9 +34,9 @@ privacy: function (req, res) {
 }
 ```
 
-### Notes
+### 注意
 
-> #### Why do layouts only work for EJS?
+> #### 为什么布局只适用于EJS？
 > A couple of years ago, built-in support for layouts/partials was deprecated in Express. Instead, developers were expected to rely on the view engines themselves to implement this features. (See https://github.com/balderdashy/sails/issues/494 for more info on that.)
 >
 > Sails supports the legacy `layouts` feature for convenience, backwards compatibility with Express 2.x and Sails 0.8.x apps, and in particular, familiarity for new community members coming from other MVC frameworks. As a result, layouts have only been tested with the default view engine (ejs).
