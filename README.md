@@ -20,7 +20,7 @@ Sails当前稳定版本的官方文档位于这里[master branch]（github.com/b
 
 <!-- As we get closer to releasing a newer version of Sails, we ask that all pull requests be made to the `1.0` branch, since that content will soon replace the 0.12 docs on the main website. The only exception is if you are documenting something that isn't relevant for Sails v1. -->
 
-要编辑与最新的Sails稳定版（即[NPM]（npmjs.org/package/sails）上的版本）的文档，您可以编辑本分支 请参阅sails-docs pull request）。 Sails核心团队将把它合并到最新的Sails稳定版本的相应分支中，大约一周时间将其部署到sailsjs.com。
+要编辑与最新的Sails稳定版（即[NPM](npmjs.org/package/sails)上的版本）的文档，您可以编辑本分支 请参阅sails-docs pull request）。 Sails核心团队将把它合并到最新的Sails稳定版本的相应分支中，大约一周时间将其部署到sailsjs.com。
 
 <!-- That depends on what kind of edit you are making.  Most often, you'll be making an edit that is relevant for the latest stable version of Sails (i.e. the version on [NPM](npmjs.org/package/sails)) and so you'll want to edit the `master` branch of _this_ repo (what you see in the sails-docs repo by default).  The docs team merges master into the appropriate branch for the latest stable release of Sails, and then deploys that to sailsjs.com about once per week.
 
@@ -37,7 +37,7 @@ Sails当前稳定版本的官方文档位于这里[master branch]（github.com/b
 
 #### 这些文档如何编译并推送到网站？
 
-我们使用`doc-templater`模块将.md文件转换为网站的html。 您可以在 [doc-templater repo]（https://github.com/uncletammy/doc-templater） 中了解更多。
+我们使用`doc-templater`模块将.md文件转换为网站的html。 您可以在 [doc-templater repo](https://github.com/uncletammy/doc-templater)中了解更多。
 
 每个.md文件在网站上都有自己的页面（即所有的参考，概念和解析文件），并且应该包含一个特殊的<docmeta name =“displayName”>“标签，其中带有`value`属性，用于指定当前页。 这会影响文档页面在搜索引擎结果中的显示方式，并且还会在sailsjs.com上的导航菜单中作为显示名称。 例如：
 
