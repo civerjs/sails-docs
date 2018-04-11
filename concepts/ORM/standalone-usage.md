@@ -1,35 +1,35 @@
-# Standalone Waterline usage
+# 独立Waterline用法
 
-In addition to built-in usage with the Sails framework, Waterline can be used as a standalone module.
+除了Sails框架的内置使用外，Waterline还可以用作独立模块。
 
 > **Warning:** This section of the documentation is for fairly advanced Node.js users.  If you aren't planning to use Waterline outside of your Sails app (e.g. to build your own framework), you might want to skip this page and head back to [Models and ORM](https://sailsjs.com/documentation/concepts/models-and-orm) instead.
 
-### Installation
+### 安装
 
-Waterline is available via NPM.
+Waterline可通过NPM获得。
 
 ```sh
 $ npm install --save waterline
 ```
-Waterline ships without any adapters, so you will need to install these separately. For example:
+Waterline没有任何适配器，因此您需要单独安装这些适配器。 例如:
 
 ```sh
 $ npm install --save sails-mysql
 $ npm install --save-dev sails-disk
 ```
 
-You can install any number of adapters into your application.
+您可以将任意数量的适配器安装到您的应用程序中。
 
-The `sails-disk` adapter is a common choice for development and testing.
+`sails-disk`适配器是开发和测试的常用选择。
 
 > If you are new to Node, hop on over to [Getting Started](https://sailsjs.com/get-started) to learn about installing Node on your preferred platform.
 
 
-### Getting Started
+### 入门
 
-To get started with Waterline as a standalone module, we need two ingredients - adapters and model definitions.
+要开始使用Waterline作为独立模块，我们需要两种成分 - 适配器和模型定义。
 
-The simplest adapter to use is the `sails-disk` adapter, so let's install it and Waterline in an empty directory.
+最简单的适配器是`sails-disk`适配器，所以让我们将它和Waterline安装到一个空目录中。
 
 ```sh
 mkdir my-tool
