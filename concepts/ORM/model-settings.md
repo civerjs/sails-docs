@@ -1,47 +1,47 @@
-# Model settings
+# 模型设置
 
-In Sails, the top-level properties of model definitions are called **model settings**.  This includes everything from [attribute definitions](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?attributes), to the [database settings](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?datastore) the model will use, as well as a few other options.
+在Sails中，模型定义的顶级属性称为**模型设置**。 这包括模型将使用的[属性定义](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?attributes)到[数据库设置](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings#?datastore)，以及一些其他选项。
 
-The majority of this page is devoted to a complete tour of the model settings supported by Sails.  But before we begin, let's look at how to actually apply these settings in a Sails app.
-
-
-### Overview
-
-Model settings allow you to customize the behavior of the models in your Sails app.  They can be specified on a per-model basis by setting top-level properties in a [model definition](https://sailsjs.com/documentation/concepts/models-and-orm/models), or as app-wide defaults in [`sails.config.models`](https://sailsjs.com/documentation/reference/configuration/sails-config-models).
-
-##### Changing default model settings
-
-To modify the [default model settings](https://sailsjs.com/documentation/reference/configuration/sails-config-models) shared by all of the models in your app, edit [`config/models.js`](https://sailsjs.com/documentation/anatomy/my-app/config/models-js).
-
-For example, when you generate a new app, Sails automatically includes three different default attributes in your `config/models.js` file:  `id`, `createdAt`, and `updatedAt`.  Let's say that, for all of your models, you wanted to use a slightly different, customized `id` attribute. To do so, you could just override `attributes: {  id: {...}  }` in your `config/models.js` definition.
+本页面的大部分内容专门介绍Sails支持的模型设置。但在开始之前，让我们看看如何在Sails中实际应用这些设置。
 
 
-##### Overriding settings for a particular model
+### 概述
 
-To further customize these settings for a particular model, you can specify them as top-level properties in that model's definition file (e.g. `api/models/User.js`).  This will override default model settings with the same name.
+模型设置允许您在Sails中自定义模型的行为。可以通过在[模型定义](https://sailsjs.com/documentation/concepts/models-and-orm/models)中设置顶级属性，或者默认值在[`sails.config.models`](https://sailsjs.com/documentation/reference/configuration/sails-config-models)中。
 
-For example, if you add `fetchRecordsOnUpdate: true` to one of your model definitions (`api/models/UploadedFile.js`), then that model will now return the records that were updated.  But the rest of your models will be unaffected; they will still use the default setting (which is `fetchRecordsOnUpdate: false`, unless you've changed it).
+##### 更改默认模型设置
 
+要修改应用中所有模型共享的[默认模型设置](https://sailsjs.com/documentation/reference/configuration/sails-config-models)，请编辑[`config/models.js`](https://sailsjs.com/documentation/anatomy/my-app/config/models-js)。
 
-##### Choosing an approach
-
-In your day to day development, the model setting you'll interact with most often is `attributes`. Attributes are used in almost every model definition, _and_ some default attributes are included in `config/models.js`.  But for future reference, here are a few additional tips:
-
-+ If you are specifying a `tableName`, you should always do so on a per-model basis.  (An app-wide table name wouldn't make sense!)
-+ There is no reason to specify an app-wide datastore since you already have one out of the box (named "default").  But you still might want to override `datastore` for a particular model; for example, if your default datastore is PostgreSQL, but you have an `CachedBloodworkReport` model that you want to live in Redis.
-+ For the sake of clarity, it is best to only specify `migrate` and `schema` settings as app-wide defaults; never on a per-model basis.
+例如，当您生成一个新的应用程序时，Sails会在`config/models.js`文件中自动包含三个不同的默认属性：`id`，`createdAt`和`updatedAt`。 比方说，对于所有的模型，你都想使用一个稍微不同的自定义`id`属性。 要做到这一点，你可以在`config / models.js`定义中覆盖`attributes：{id：{...}}`。
 
 
-Now that you know what model settings are in general, and how to configure them, let's run through and have a look at each one.
+##### 覆盖特定模型的设置
+
+要进一步为特定模型自定义这些设置，可以指定为该模型定义文件中的顶级属性（例如，`api/models/ User.js`）。 这将覆盖具有相同名称的默认模型设置。
+
+例如，如果您为某个模型定义（`api/models/UploadedFile.js`）添加`fetchRecordsOnUpdate：true`，那么该模型现在将返回已更新的记录。 但其他模型将不受影响; 他们仍然会使用默认设置（除非你已经改变了`fetchRecordsOnUpdate：false`）。
+
+
+##### 选择一种方法
+
+在日常开发过程中，您最常与之交互的模型设置是“属性”。 几乎每个模型定义中都使用了属性，它的一些默认属性包含在`config/models.js`中。 为了将来参考，这里有一些额外的提示:
+
++ 如果你指定一个`tableName`，你应该总是以模型为基础。（应用程序的表名是没有用的！）
++ 别去指定应用程序范围的datastore，因为您已经有一个开箱即用的（名为“default”）。 但你可能想要覆盖特定模型的`datastore`; 例如，如果您的默认数据存储是PostgreSQL，但是您有一个想要在Redis中存在的`CachedBloodworkReport`模型。
++ 为了清楚起见，最好仅将`migrate`和`schema`设置指定为应用程序范围的默认值; 从不以每个模型为基础。
+
+
+现在你已经知道一般的模型设置，以及如何配置它们，让我们来看看。
 
 --------------------
 
 
 
 
-### attributes
+### 属性
 
-The set of attribute definitions for a model.
+模型的一组属性定义。
 
 ```
 attributes: { /* ... */ }
@@ -51,7 +51,8 @@ attributes: { /* ... */ }
 | -------------- |:------------------------|:--------------|
 | ((dictionary)) | _See below._            | `{}`          |
 
-Most of the time, you'll define attributes in your individual model definitions (in `api/models/`).  But you can also specify **default attributes** in `config/models.js`.  This allows you to define a set of global attributes in one place, and then rely on Sails to make them available to all of your models implicitly, without repeating yourself.  Default attributes can also be overridden on a per-model basis by defining a replacement attribute with the same name in the relevant model definition.
+大多数情况下，您将在各个模型定义中定义属性（`api/models/`）。但是你也可以在`config/models.js`中指定**默认属性**。 这使您可以在一个地方定义一组全局属性，然后依靠Sails使其隐含在所有模型中，而无需重复。在相关模型定义中定义同名属性，也可以基于每个模型覆盖默认属性。
+
 
 ```js
 attributes: {
@@ -61,11 +62,11 @@ attributes: {
 }
 ```
 
-For a complete introduction to model attributes, including how to define and use them in your Sails app, see [Concepts > ORM > Attributes](https://sailsjs.com/documentation/concepts/orm/attributes).
+有关模型属性的完整介绍（包括如何在Sails应用程序中定义和使用它们），请参阅[Concepts > ORM > Attributes](https://sailsjs.com/documentation/concepts/orm/attributes).
 
 ### customToJSON
 
-A function that allows you to customize the way a model's records are serialized to JSON.
+使用一个函数，将自定义模型记录序列化为JSON的方式。
 
 ```
 customToJSON: function() { /*...*/ }
@@ -75,9 +76,9 @@ customToJSON: function() { /*...*/ }
 | ------------ |:------------------------|:--------------|
 | ((function)) | _See below._            | _n/a_         |
 
-Adding the `customToJSON` setting to a model changes the way that the model&rsquo;s records are _stringified_.  In other words, it allows you to inject custom logic that runs any time one of these records are passed into `JSON.stringify()`.  This is most commonly used to implement a failsafe, making sure sensitive data like user passwords aren't accidentally included in a response (since [`res.send()`](https://sailsjs.com/documentation/reference/response-res/res-send) and actions2 may stringify data before sending).
+将`customToJSON`设置添加到模型会改变模型记录的方式。换句话说，它允许您插入自定义逻辑，这些逻辑将这些记录传递到`JSON.stringify()`中。这用于实现故障安全，确保敏感数据（如用户密码）不会意外地包含在响应中(使 [`res.send()`](https://sailsjs.com/documentation/reference/response-res/res-send)和actions2可以在发送之前使数据串联）。
 
-The `customToJSON` function takes no arguments, but provides access to the record as the `this` variable.  This allows you to omit sensitive data and return the sanitized result, which is what `JSON.stringify()` will actually use when generating a JSON string.  For example:
+customToJSON函数没有参数，但提供了对`this`变量的访问。这允许您忽略敏感数据并返回处理结果，这是JSON.stringify()在生成JSON字符串时实际使用的结果。例如:
 
 ```js
 customToJSON: function() {
@@ -86,11 +87,11 @@ customToJSON: function() {
 }
 ```
 
-> Note that the `this` variable available in `customToJSON` is a _direct reference to the actual record object_, so be careful not to modify it.  In other words, avoid writing code like `delete this.password`.  Instead, use methods like `_.omit()` or `_.pick()` to get a _copy_ of the record.  Or just construct a new dictionary and return that (e.g. `return { foo: this.foo }`).
+> 请注意，`customToJSON`中提供的`this`变量是对实际记录object_的direct引用，因此请不要修改它。 换句话说，避免编写像`delete this.password`这样的代码。可以使用`_.omit（）`或`_.pick（）`等方法来获取记录的_copy_。 或者建立一个新的字典并返回（例如`return {foo：this.foo}`）。
 
-### tableName
+### 表名tableName
 
-The name of the SQL table (/MongoDB collection) where a model will store and retrieve its records as rows (/MongoDB documents).
+SQL表或MongoDB集合的名称，模型以行或MongoDB文档的形式存储和检索其记录。
 
 ```
 tableName: 'some_preexisting_table'
@@ -100,20 +101,20 @@ tableName: 'some_preexisting_table'
 | ----------- |:---------------------------|:--------------|
 | ((string))  | `'some_preexisting_table'` | _Same as model's identity._
 
-By default, this is the same as the model's [identity](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings?identity).    But if you find yourself integrating with a shared/legacy database, the ability to customize `tableName` this way can save you a lot of time.
+默认情况下，这与模型的[身份](https://sailsjs.com/documentation/concepts/models-and-orm/model-settings?identity)相同。 但是，如果使用共享/旧数据库集成在，以这种方式自定义`tableName`的功能可以为您节省大量时间。
 
-The **tableName** setting gives you the ability to customize the name of the underlying _physical model_ that a particular model should use.  In other words, it lets you control where a model stores and retrieves records within the database, _without_ affecting the code in your controller actions / helpers.
+**tableName**设置能够自定义特定模型所使用的基础物理模型的名称。换句话说，它允许您控制模型在数据库中存储和检索记录的位置，不会影响控制器contorl/helper程序中的代码。
 
-> But, what's in a name?  That which we call a "table", by any other word would query as swell.  In databases like MySQL and PostgreSQL, this setting refers to a "table".  In other databases like MongoDB and Redis, it refers to a "collection".
+> 但是，名字是什么？在MySQL和PostgreSQL这样的数据库中，这个设置引用了一个“表”。 在MongoDB和Redis等其他数据库中，它指的是一个“集合”。
 
-By default, when no tableName is specified, Waterline uses the model's [identity](#?identity) (e.g. "user"):
+默认情况下，当没有指定tableName时，Waterline使用模型的 [identity]（＃？身份）（例如“user”）:
 
 ```js
 await User.find();
 // => SELECT * FROM user;
 ```
 
-This is a recommended convention, and shouldn't need to be changed in most cases.  But, if you are sharing a database with an existing PHP or Java app, or if you'd like to adhere to a different naming convention, then it may be useful to customize this mapping.  Returning to the example above, if you modified your model definition in `api/models/User.js`, and set `tableName: 'foo_bar'`, then you'd see slightly different results:
+这是推荐的惯例，在大多数情况下不需要改变。但是，如果您要与现有的PHP或Java应用程序共享数据库，或者如果您想遵守不同的命名约定，那么自定义此映射可能会很有用。 回到上面的例子，如果你在`api/models/User.js`中修改了模型定义，并设置了`tableName'foo_bar'`，那么你会看到稍微不同的结果:
 
 ```js
 await User.find();
@@ -121,9 +122,9 @@ await User.find();
 ```
 
 
-### migrate
+### 迁移
 
-The **auto-migration strategy** that Sails will run every time your app loads.
+Sails将在您每次加载应用时运行**自动迁移策略**。
 
 ```
 migrate: 'alter'
@@ -133,25 +134,25 @@ migrate: 'alter'
 | ----------- |:------------------------|:--------------|
 | ((string))  | `'alter'`               | _You'll be prompted._<br/><br/>_**Note**: In production, this is always `'safe'`._
 
-The `migrate` setting controls your app's auto-migration strategy.  In short, this tells Sails whether or not you'd like it to attempt to automatically rebuild the tables/collections/sets/etc. in your database(s).
+“迁移”设置控制您应用的自动迁移策略。这告诉Sails你是否希望在数据库中自动重建tables/collections/sets等。
 
-##### Database migrations
+##### 数据库迁移
 
-In the course of developing an app, you will almost always need to make at least one or two **breaking changes** to the structure of your database.  Exactly _what_ constitutes a "breaking change" depends on the database you're using:  For example, imagine you add a new attribute to one of your model definitions.  If that model is configured to use MongoDB, then this is no big deal; you can keep developing as if nothing happened.  But if that model is configured to use MySQL, then there is an extra step: a column must be added to the corresponding table (otherwise model methods like `.create()` will stop working.)  So for a model using MySQL, adding an attribute is a breaking change to the database schema.
+在开发应用程序的过程中，您几乎总是需要对数据库的结构进行至少一次或两次**重大更改**。 确切地说_什么构成“breaking change”取决于您使用的数据库：例如，假设您为其中一个模型定义添加了新属性。 如果该模型配置为使用MongoDB，那么这没什么大不了的。 但是，如果该模型被配置为使用MySQL，那么还有一个额外的步骤：必须将一列添加到相应的表（否则模型方法，如`.create（）`将停止工作。）因此，对于使用MySQL的模型，添加属性是一个重大改变。
 
-> Even if all of your models use MongoDB, there are still some breaking schema changes to watch out for.  For example, if you add `unique: true` to one of your attributes, a [unique index](https://docs.mongodb.com/manual/core/index-unique/) must be created in MongoDB.
-
-
-In Sails, there are two different modes of operation when it comes to [database migrations](https://en.wikipedia.org/wiki/Schema_migration):
-
-1. **Manual migrations** - The art of updating your database tables/collections/sets/etc. by hand.  For example, writing a SQL query to [add a new column](http://dev.mysql.com/doc/refman/5.7/en/alter-table.html), or sending a [Mongo command to create a unique index](https://docs.mongodb.com/manual/core/index-unique/).  If the database contains data you care about (in production, for example), you must carefully consider whether that data needs to change to fit the new schema, and, if necessary, write scripts to migrate it.  A [number of](https://www.npmjs.com/package/sails-migrations) great [open-source tools](http://knexjs.org/#Migrations-CLI) exist for managing manual migration scripts, as well as hosted products like the [database migration service on AWS](https://aws.amazon.com/blogs/aws/aws-database-migration-service/).
-2. **Auto-migrations** - A convenient, built-in feature in Sails that allows you to make iterative changes to your model definitions during development, without worrying about the reprecussions.  Auto-migrations should _never_ be enabled when connecting to a database with data you care about.  Instead, use auto-migrations with fake data, or with cached data that you can easily recreate.
+> 即使您的所有模型都使用MongoDB，仍然有一些需要注意。例如，如果您为其中一个属性添加“unique：true”，则必须在MongoDB中创建[unique index](https://docs.mongodb.com/manual/core/index-unique/)。
 
 
-Whenever you need to apply breaking changes to your _production database_, you should use manual database migrations. But otherwise, when you're developing on your laptop, or running your automated tests, auto-migrations can save you tons of time.
+在Sails中，当涉及[数据库迁移]时，有两种不同的[操作模式](https://en.wikipedia.org/wiki/Schema_migration):
+
+1. **手动迁移** - The art of updating your database tables/collections/sets/etc. by hand.  For example, writing a SQL query to [add a new column](http://dev.mysql.com/doc/refman/5.7/en/alter-table.html), or sending a [Mongo command to create a unique index](https://docs.mongodb.com/manual/core/index-unique/).  If the database contains data you care about (in production, for example), you must carefully consider whether that data needs to change to fit the new schema, and, if necessary, write scripts to migrate it.  A [number of](https://www.npmjs.com/package/sails-migrations) great [open-source tools](http://knexjs.org/#Migrations-CLI) exist for managing manual migration scripts, as well as hosted products like the [database migration service on AWS](https://aws.amazon.com/blogs/aws/aws-database-migration-service/).
+2. **自动迁移** - A convenient, built-in feature in Sails that allows you to make iterative changes to your model definitions during development, without worrying about the reprecussions.  Auto-migrations should _never_ be enabled when connecting to a database with data you care about.  Instead, use auto-migrations with fake data, or with cached data that you can easily recreate.
 
 
-##### How auto-migrations work
+无论何时您需要对您的_产品数据库_应用重大更改，都应该使用手动数据库迁移。但除此之外，当您在笔记本电脑上开发或运行自动化测试时，自动迁移可为您节省大量时间。
+
+
+##### 自动迁移如何工作
 
 When you lift your Sails app in a development environment (e.g. running `sails lift` in a brand new Sails app), the configured auto-migration strategy will run.  If you are using `migrate: 'safe'`, then nothing extra will happen at all.  But if you are using `drop` or `alter`, Sails will load every record in your development database into memory, then drop and recreate the physical layer representation of the data (i.e. tables/collections/sets/etc.)  This allows any breaking changes you've made in your model definitions, like removing a uniqueness constraint, to be automatically applied to your development database.  Finally, if you are using `alter`, Sails will then attempt to re-seed the freshly generated tables/collections/sets with the records it saved earlier.
 
@@ -165,7 +166,7 @@ When you lift your Sails app in a development environment (e.g. running `sails l
 
 > Keep in mind that when using the `alter` or `drop` strategies, any manual changes you have made to your database since the last time you lifted your app may be lost.  This includes things like custom indexes, foreign key constraints, column order and comments.  In general, tables created by auto-migrations are not guaranteed to be consistent regarding any details of your physical database columns besides setting the column name, type (including character set / encoding if specified) and uniqueness.
 
-##### Can I use auto-migrations in production?
+##### 我可以在产品中使用自动迁移吗？
 
 The `drop` and `alter` auto-migration strategies in Sails exist as a feature for your convenience during development, and when running automated tests.  **They are not designed to be used with data you care about.**  Please take care to never use `drop` or `alter` with a production dataset.  In fact, as a failsafe to help protect you from doing this inadvertently, any time you lift your app [in a production environment](https://sailsjs.com/documentation/reference/configuration/sails-config#?sailsconfigenvironment), Sails _always_ uses `migrate: 'safe'`, no matter what you have configured.
 
@@ -180,9 +181,9 @@ If you are working with a relatively large amount of development/test data, the 
 
 
 
-### schema
+### 关系型
 
-Whether or not a model expects records to conform to a specific set of attributes.
+模型是否期望记录符合特定的一组属性。
 
 ```
 schema: true
@@ -193,15 +194,16 @@ schema: true
 | ((boolean)) | `true`                  | _Depends on the adapter._
 
 
-The `schema` setting allows you to toggle a model between "schemaless" or "schemaful" mode.  More specifically, it governs the behavior of methods like `.create()` and `.update()`.  Normally, you are allowed to store arbitrary data in a record, as long as the adapter you're using supports it.  But if you enable `schema:true`, only properties that correspond with the model's `attributes` will actually be stored.
+`schema`设置允许您在“非关系型”或“关系型”模式之间切换模型。 更具体地说，它支配像`.create（）`和`.update（）`这样的方法的行为。 通常情况下，只要您使用的适配器支持它，就可以将任意数据存储在记录中。 但是，如果启用`schema：true`，则只会存储与模型的“属性”相对应的属性。
 
-> This setting is only relevant for models using schemaless databases like MongoDB.  When hooked up to a relational database like MySQL or PostgreSQL, a model is always effectively `schema:true` (since the underlying database can only store data in tables and columns that have been set up ahead of time.)
+> 此设置仅适用于使用非关系型数据库（如MongoDB）的模型。当连接到像MySQL或PostgreSQL这样的关系型数据库时，模型总是有效的`schema：true`（因为底层数据库只能将数据存储在提前设置的表和列中）。
 
 
 
-### datastore
+### 数据存储
 
-The name of the [datastore configuration](https://sailsjs.com/documentation/reference/sails-config/sails-config-datastores) that a model will use to find records, create records, etc.
+模型将用于查找记录，创建记录等的[数据存储配置](https://sailsjs.com/documentation/reference/sails-config/sails-config-datastores)的名称等等。
+
 
 ```
 datastore: 'legacyECommerceDb'
@@ -211,14 +213,14 @@ datastore: 'legacyECommerceDb'
 | ---------- |:------------------------|:--------------|
 | ((string)) | `'legacyECommerceDb'`   | `'default'`   |
 
-This indicates the database where this model will fetch and save its data.  Unless otherwise specified, every model in your app uses a built-in datastore named "default", which is included in every new Sails app out of the box.  This makes it easy to configure your app's primary database, while still allowing you to override the `datastore` setting for any particular model.
+这表明该模型将获取并保存其数据的数据库。 除非另有说明，否则应用中的每个模型都会使用名为“default”的内置数据存储，该数据存储包含在每个新的Sails应用程序中。 这样可以轻松配置应用程序的主数据库，同时仍然允许您覆盖任何特定模型的`datastore`设置。
 
 For more about configuring your app's datastores, see [Reference > Configuration > Datastores](https://sailsjs.com/documentation/reference/sails-config/sails-config-datastores).
 
 
-### dataEncryptionKeys
+### 数据加密密钥
 
-A set of keys to use when decrypting data.  The `default` data encryption key (or "DEK") is always used for encryption unless configured otherwise.
+解密数据时使用的一组密钥。 除非另行配置，否则“默认”密钥（或“DEK”）始终用于加密。
 
 
 ```javascript
@@ -227,11 +229,11 @@ dataEncryptionKeys: {
 }
 ```
 
-> Unless your use case requires key rotation, the `default` key is all you need.  Any other data encryption keys besides `default` are just there to allow for decrypting older data that was encrypted with them.
+> 除非你需要流动秘钥，否则`default`键就是你所需要的。 除“default”以外的任何其他数据加密密钥都可以解密用它们加密的旧数据。
 
 ##### Key rotation
 
-To retire a data encryption key, you'll need to give it a new key id (like `2028`), and then create a new `default` key for use in any new encryption. For example, if you release a Sails app in year 2028, and your keys are rotated out yearly, then the following year your `dataEncryptionKeys` may look like this:
+如果让数据加密密钥荣归故里，您需要给它一个新的密钥ID（如`2028`），然后创建一个新的“deault”密钥用于任何新的加密。 例如，如果您在2028年发布Sails应用程序，并且您的密钥每年都轮换出来，那么在下一年您的`dataEncryptionKeys`可能看起来像这样:
 
 ```javascript
 dataEncryptionKeys: {
@@ -240,7 +242,7 @@ dataEncryptionKeys: {
 }
 ```
 
-After changing out the default key _the year after that_ in January 2030, you might have:
+在2030年1月之后更改默认密钥后，您可能会有:
 
 ```javascript
 dataEncryptionKeys: {
@@ -251,7 +253,7 @@ dataEncryptionKeys: {
 ```
 
 
-### cascadeOnDestroy
+### 连续销毁
 
 Whether or not to _always_ act like you set `cascade: true` any time you call `.destroy()` using this model.
 
@@ -263,35 +265,35 @@ cascadeOnDestroy: true
 | ----------- |:------------------------|:--------------|
 | ((boolean)) | `true`                  | `false`
 
-This is disabled by default, for performance reasons.  You can enable it with this model setting, or on a per-query basis using [`.meta({cascade: true})`](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
+出于性能原因，这是默认禁用的。 您可以使用此模型设置启用它，或者使用[`.meta（{cascade：true}）`](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta)在每个查询的基础上启用它.
 
 
 
-### dontUseObjectIds
+### 不使用ObjectIds
 
-> ##### _**This feature is for use with the [`sails-mongo` adapter](https://sailsjs.com/documentation/concepts/extending-sails/adapters/available-adapters#?sailsmongo) only.**_
+> ##### _ **此功能只用于[`sails-mongo`适配器](https://sailsjs.com/documentation/concepts/extending-sails/adapters/available-adapters#?sailsmongo)**_
 
-If set to `true`, the model will _not_ use an auto-generated MongoDB ObjectID object as its primary key.  This allows you to create models using the `sails-mongo` adapter with primary keys that are arbitrary strings or numbers, not just big long UUID-looking things.  Note that setting this to `true` means that you will have to provide a value for `id` in every call to [`.create()`](https://sailsjs.com/documentation/reference/waterline-orm/models/create) or [`.createEach()`](https://sailsjs.com/documentation/reference/waterline-orm/models/create-each).
+如果设置为“true”，模型将不使用自动生成的MongoDB ObjectID对象作为其主键。 这允许你使用`sails-mongo`适配器创建模型，其中主键是任意字符串或数字，而不仅仅是很长的UUID。请注意，将此设置为“true”意味着您必须在每次调用[`.create（）`]或[`.createEach（）`]时提供`id`的值或。
 
 
 | Type        | Example                 | Default       |
 | ----------- |:------------------------|:--------------|
 | ((boolean)) | `true`                  | `false`
 
-This is disabled by default, for performance reasons.  You can enable it with this model setting, or on a per-query basis using [`.meta({cascade: true})`](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
+出于性能原因，这是默认禁用的。 您可以使用此模型设置启用它，或者使用[`.meta({cascade: true})`](https://sailsjs.com/documentation/reference/waterline-orm/queries/meta).
 
 
 
-### Seldom-used settings
+### 很少使用的设置
 
-The following low-level settings are included in the spirit of completeness, but in practice, they should rarely (if ever) be changed.
+以下低级设置它们很少（如果曾经）被改变。
 
 
-##### primaryKey
+##### 主键
 
-The name of a model's primary key attribute.
+模型主键属性的名称。
 
-> **You should never need to change this setting, since you set a custom `columnName` on the "id" attribute.**
+> **你不需要改变这个设置，在“id”属性上设置了一个自定义的`columnName`。**
 
 ```javascript
 primaryKey: 'id'
@@ -301,9 +303,9 @@ primaryKey: 'id'
 | ---------- |:--------------|:--------------|
 | ((string)) | `'id'`        | `'id'`        |
 
-Conventionally, this is "id", a default attribute that is included for you automatically in the `config/models.js` file of new apps generated as of Sails v1.0.  The best way to change the primary key for your model is simply to customize the `columnName` of that default attribute.
+通常，这是“id”，这是一个默认属性，自动包含在由Sails v1.0生成的新应用程序的config/models.js文件中。改变模型主键的最好方法就是自定义该默认属性的`columnName`。
 
-For example, imagine you have a User model that needs to integrate with a table in a pre-existing MySQL database.  That table might have a column named something other than "id" (like "email_address") as its primary key.  To make your model respect that primary key, you'd specify an override for your `id` attribute in the model definition; like this:
+例如，假设您有一个用户模型需要与预先存在的MySQL数据库中的表集成。 该表可能会有一个名称不是“id”（如“email_address”）的列作为其主键。 为了让你的模型尊重这个主键，你需要在模型定义中为`id`属性指定一个override:
 
 ```js
 id: {
@@ -313,23 +315,23 @@ id: {
 }
 ```
 
-Then, in your app's code, you'll be able to look up users by primary key, while the mapping to `email_address` in all generated SQL queries is taken care of for you automatically:
+然后，在您应用的代码中，您将能够通过主键查找用户，并生成的SQL查询:
 
 ```js
 await User.find({ id: req.param('emailAddress' });
 ```
 
-> All caveats aside, lets say you're an avid user of MongoDB.  In your new Sails app, you'll start off by setting `columnName: '_id'` on your default "id" attribute in `config/models.js`.  Then you can use Sails and Waterline just like normal, and everything will work just fine.
+> MongoDB忠实粉丝，在您新的Sails应用程序中，您将在`config/models.js`的默认“id”属性中设置`columnName：'_id'`开始。 然后你可以像平常一样使用Sails和Waterline，一切都可以正常工作。
 >
-> But what if you find yourself wishing that you could change the actual name of the "id" attribute itself-- purely for the sake of familiarity?  For example, that way, when you call built-in model methods in your code, instead of the usual "id", you would use syntax like `.destroy({ _id: 'ba8319abd-13810-ab31815' })`.
+> 但是如果你发现自己希望你可以改变“id”属性本身的名称。例如，当您在代码中调用内置模型方法时，而不是通常的“id”时，可以使用`.destroy（{_id：'ba8319abd-13810-ab31815'}）`的语法。
 >
-> That's where this model setting might come in.  All you'd have to do is edit `config/models.js` so that it contains `primaryKey: '_id'`, and then rename the default "id" attribute to "_id".  But there are some [good reasons to reconsider](https://gist.github.com/mikermcneil/9247a420488d86f09be342038e114a08).
+> 这就是该模型设置可能出现的位置。您只需编辑`config/models.js`，以便它包含`primaryKey：'_id'`，然后将默认的“id”属性重命名为“_id”。  But there are some [good reasons to reconsider](https://gist.github.com/mikermcneil/9247a420488d86f09be342038e114a08).
 
-##### identity
+##### 模型identity
 
-The lowercase, unique identifier for a model.
+小写的每个模型唯一的标识符。
 
-> **A model's `identity` is read-only.  It is automatically derived, and should never be set by hand.**
+>  **模型的“identity”是只读的。 它是自动派生的，不应该由手工设置。**
 
 ```
 Something.identity;
@@ -339,8 +341,8 @@ Something.identity;
 | ---------- |:--------------|
 | ((string)) | `'purchase'`  |
 
+在Sails中，通过小写文件名来自动推断模型的“identity”。 例如，`api/models/Purchase.js`的标识就是`purchase`。 它可以作为`sails.models.purchase`访问，并且如果蓝图路由已启用，则可以通过GET/purchase和PATCH/purchase/1等请求到达它。
 
-In Sails, a model's `identity` is inferred automatically by lowercasing its filename and stripping off the file extension.  For example, the identity of `api/models/Purchase.js` would be `purchase`.  It would be accessible as `sails.models.purchase`, and if blueprint routes were enabled, you'd be able to reach it with requests like `GET /purchase` and `PATCH /purchase/1`.
 
 ```javascript
 assert(Purchase.identity === 'purchase');
@@ -350,11 +352,11 @@ assert(Purchase === sails.models.purchase);
 
 
 
-##### globalId
+##### 全局IDglobalId
 
-The unique global identifier for a model, which also determines the name of its corresponding global variable (if relevant).
+模型的唯一全局标识符，它也确定相应全局变量的名称。
 
-> **A model's `globalId` is read-only.  It is automatically derived, and should never be set by hand.**
+> **模型的`globalId`是只读的。 它是自动派生的，不应该由手工设置。**
 
 ```
 Something.globalId;
@@ -364,7 +366,8 @@ Something.globalId;
 | ---------- |:--------------|
 | ((string)) | `'Purchase'`  |
 
-The primary purpose of a model's globalId is to determine the name of the global variable that Sails automatically exposes on its behalf-- that is, unless globalization of models has been [disabled](https://sailsjs.com/documentation/concepts/globals?q=disabling-globals).  In Sails, a model's `globalId` is inferred automatically by from its filename.  For example, the globalId of `api/models/Purchase.js` would be `Purchase`.
+模型globalId的主要目的是确定Sails自动公开到全局变量的名称 - 也就是说，除非模型的全局化已被禁用(https://sailsjs.com/documentation/concepts/globals?q=disabling-globals)。在Sails中，模型的`globalId`是通过文件名自动推断的。 例如，`api/models/Purchase.js`的globalId就是`Purchase`。
+
 
 ```javascript
 assert(Purchase.globalId === 'Purchase');
