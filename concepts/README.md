@@ -1,4 +1,4 @@
-# sails-docs/概念
+# sails-docs概述
 
 本节包含编译为HTML的.md文件，并最终为该链接提供内容 https://sailsjs.com/documentation/concepts。
 
