@@ -1,4 +1,4 @@
-# Cross-Origin Resource Sharing (CORS)
+# 跨源资源共享 (CORS)
 
 <!--
 Every Sails app comes ready to handle AJAX requests from a web page on the same domain.  But what if you need to handle AJAX requests
@@ -9,35 +9,34 @@ originating from other domains?
 
 Sails can be configured to allow cross-origin requests from a list of domains you specify, or from every domain.  This can be done on a per-route basis, or globally for every route in your app.
 
-### Enabling CORS
+### 启用CORS
 
-For security reasons, CORS is disabled by default in Sails.  But enabling it is dead-simple.
+出于安全原因，Sails中默认禁用CORS。 但启用它非常简单。
 
-To allow cross-origin requests from a whitelist of trusted domains to _any_ route in your app, simply enable `allRoutes` and provide an `origin` setting in [`config/cors.js`](https://sailsjs.com/docs/reference/configuration/sails-config-cors):
+要允许"可信域白名单"的"跨域请求"在您的应用中使用路由，只需启用“allRoutes”并提供“origin”，请设置[`config/cors.js`](https://sailsjs.com/docs/reference/configuration/sails-config-cors):
 
 ```javascript
 allRoutes: true,
 allowOrigins: ['http://example.com','https://api.example.com','http://blog.example.com:1337','https://foo.com:8888']
 ```
 
-To allow cross-origin requests from _any_ domain to _any_ route in your app, use `allowOrigins: '*'`:
+要在应用中允许跨域请求，请使用`allowOrigins：'*'`:
 
 ```javascript
 allRoutes: true,
 allowOrigins: '*',
 allowCredentials: false
 ```
-
-Note that when using `allowOrigins: '*'`, the `credentials` setting _must_ be `false`, meaning that requests containing cookies will be blocked.  This restriction exists to prevent third-party sites from being able to trick your logged-in users into making unauthorized requests to your app.  You can lift this restriction (at your own risk!) using the [`allowAnyOriginWithCredentialsUnsafe`](https://sailsjs.com/docs/reference/configuration/sails-config-security-cors) setting.
-
-
-See [`sails.config.security.cors`](https://sailsjs.com/documentation/reference/configuration/sails-config-security-cors) for a comprehensive reference of all available options.
+请注意，在使用`allowOrigins：'*'`时，`credentials`设置_必须为`false`，这意味着包含cookie的请求将被阻止。 此限制防止第三方网站诱骗您的登录用户向应用程序发出未经授权的请求。 您可以使用[`allowAnyOriginWithCredentialsUnsafe`](https://sailsjs.com/docs/reference/configuration/sails-config-security-cors)设置取消此限制（风险自负！）。
 
 
-### Configuring CORS For individual routes
-Besides the global CORS configuration in `config/security.js`, you can also configure these settings on a per-route basis in [`config/routes.js`](https://sailsjs.com/anatomy/config/routes-js).
+请参阅 [`sails.config.security.cors`](https://sailsjs.com/documentation/reference/configuration/sails-config-security-cors)以获取所有可用选项的全面参考。
 
-If you set `allRoutes: true` in `config/cors.js`, but you want to exempt a specific route, set the `cors: false` in the route's target:
+
+### 配置CORS对于单个路由
+除`config / security.js`中的全局CORS配置外，您还可以在[`config / routes.js`]中按照根据路由配置这些设置(https://sailsjs.com/anatomy/config/routes-js).
+
+如果你在`config / cors.js`中设置了`allRoutes：true`，但你想豁免一个特定的路由，那么在路由的目标中设置`cors：false`:
 
 ```javascript
 'POST /signup': {
@@ -46,7 +45,7 @@ If you set `allRoutes: true` in `config/cors.js`, but you want to exempt a speci
 }
 ```
 
-To enable or override global CORS configuration for a particular route, provide `cors` as a dictionary:
+要启用或覆盖特定路由的全局CORS配置，请将`cors`作为字典:
 
 ```javascript
 'GET /videos': {
@@ -58,10 +57,10 @@ To enable or override global CORS configuration for a particular route, provide 
 }
 ```
 
-### Notes
+### 注意
 
-> + CORS support is only relevant for HTTP requests.  Requests made via sockets are not subject to cross-origin restrictions.  To ensure that your app is secure via sockets, configure the [`onlyAllowOrigins`](https://sailsjs.com/documentation/reference/configuration/sails-config-sockets) setting (typically in [`config/env/production.js`](https://sailsjs.com/documentation/anatomy/config/env/production-js).
-> + CORS is not supported in Internet Explorer 7.  Fortunately, it is supported in IE8 and up, as well as in all other modern browsers.
+> + CORS支持仅与HTTP请求相关。 通过socket进行的请求不受限制。为了确保您的应用程序通过socket是安全的，请配置[`onlyAllowOrigins`](https://sailsjs.com/documentation/reference/configuration/sails-config-sockets)设置（通常在[`config/env/production.js`](https://sailsjs.com/documentation/anatomy/config/env/production-js)。
+> + Internet Explorer 7不支持CORS。在IE8及更高版本以及所有其他现代浏览器中均受支持。
 > + Read [more about CORS from MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
 > + Read the [CORS spec](https://www.w3.org/TR/cors/)
 
