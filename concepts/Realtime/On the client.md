@@ -1,12 +1,12 @@
-# Realtime communication between the client and the server
+# 客户端和服务器之间的实时通信
 
-The easiest way to send a realtime message from a client to a Sails app is by using the [sails.io.js](https://sailsjs.com/documentation/reference/web-sockets/sails-io-js) library.  This library allows you to easily connect sockets to a running Sails app, and provides methods for making requests to [Sails routes](https://sailsjs.com/documentation/concepts/routes) that are handled in the same manner as a "regular" HTTP request.
+将实时消息从客户端发送到Sails应用程序的最简单方法是使用[sails.io.js](https://sailsjs.com/documentation/reference/web-sockets/sails-io-js)库。 该库允许您轻松地将socket连接到正在运行的Sails应用程序，并提供用于向[Sails routes](https://sailsjs.com/documentation/concepts/routes)发出请求的方法，这些方法的处理方式很像HTTP请求。
 
-The sails.io.js library is automatically added to the default [layout template](https://sailsjs.com/documentation/concepts/views/layouts) of new Sails apps using a `<script>` tag.  When a web page loads the `sails.io.js` script, it attempts to create a new [client socket](https://sailsjs.com/documentation/reference/web-sockets/socket-client/sails-socket) and connect it to the Sails app, exposing it as the global variable `io.socket`.
+使用`<script>`标签将sails.io.js库自动添加到新Sails应用的[布局模板](https://sailsjs.com/documentation/concepts/views/layouts)中。 当网页加载`sails.io.js`脚本时，它会尝试创建一个新的[client socket](https://sailsjs.com/documentation/reference/web-sockets/socket-client/sails-socket) 并将其连接到Sails应用程序，将其公开为全局变量`io.socket`。
 
-### Examples
+### 示例
 
-Include the `sails.io.js` library, and make a request to the `/hello` route of a Sails app using the automatically-connected socket:
+首先在代码中包含`sails.io.js`库, 并使用自动连接的socket向Sails应用的`/hello`路由发出请求:
 
 ```html
 <script type="text/javascript" src="/js/dependencies/sails.io.js"></script>
@@ -17,7 +17,7 @@ io.socket.get('/hello', function responseFromServer (body, response) {
 </script>
 ```
 
-Now consider this more advanced (and much rarer) use case: Let's disable the eager (auto-connecting) socket, and instead create a new client socket manually.  When it successfully connects to the server, we'll make it log a message:
+更高级的用例：禁用eager（自动连接）socket，手动创建一个新的客户端socket。当它成功连接到服务器时，我们会让它显示一条消息:
 ```html
 <script type="text/javascript" src="/js/dependencies/sails.io.js" autoConnect="false"></script>
 <script type="text/javascript">
@@ -28,11 +28,12 @@ mySocket.on('connect', function onConnect () {
 </script>
 ```
 
-### Socket requests vs traditional AJAX requests
+### Socket请求与传统的AJAX请求
 
-You may have noticed that a client socket `.get()` is very similar to making an AJAX request, for example by using jQuery's `$.get()` method.  This is intentional&mdash;the goal is for you to be able to get the same response from Sails no matter where the request originated from.  The benefit to making the request using a client socket is that the [controller action](https://sailsjs.com/documentation/concepts/controllers#?actions) in your Sails app will have access to the socket which made the request, allowing it to _subscribe_ that socket to realtime notifications (see [sending realtime messages from the server](https://sailsjs.com/documentation/concepts/realtime/on-the-server)).
+您可能已经注意到客户端socket`.get()`与创建AJAX请求非常相似，例如使用jQuery的`.get()`方法。这是故意的 - 无论请求来自何处，您的目标都希望从Sails获得相同的响应。 使用客户端socket进行请求的好处在于，Sails应用中的[controller action](https://sailsjs.com/documentation/concepts/controllers#?actions)）将可以访问发出请求的socket， 允许它将socket订阅到实时通知（请参阅[从服务器发送实时消息](https://sailsjs.com/documentation/concepts/realtime/on-the-server)）。
 
-### Reference
+
+### 参考
 
 * View the full [sails.io.js library](https://sailsjs.com/documentation/reference/web-sockets/socket-client) reference.
 * See the [sails.sockets](https://sailsjs.com/documentation/reference/web-sockets/sails-sockets) reference to learn how to send messages from the server to connected sockets
