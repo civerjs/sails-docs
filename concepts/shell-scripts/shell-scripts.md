@@ -1,11 +1,11 @@
-# Shell scripts
+# Shell脚本
 
-Sails comes bundled with [Whelk](https://github.com/sailshq/whelk), which lets you run JavaScript functions as shell scripts. This can be useful for running scheduled jobs (cron, Heroku scheduler), worker processes, and any other custom, one-off scripts that need access to your Sails app's models, configuration, and helpers.
+Sails与[Whelk](https://github.com/sailshq/whelk)捆绑在一起，它允许您将JavaScript函数作为shell脚本运行。这对于运行预定作业（cron，Heroku调度程序），工作进程以及任何其他需要访问Sails应用程序的模型，配置和帮助程序的自定义一次性脚本都很有用。
 
 
-### Your first script
+### 你的第一个脚本
 
-To add a new script, just create a file in the `scripts/` folder of your app.
+要添加新脚本，只需在应用程序的`scripts /`文件夹中创建一个文件即可。
 
 ```bash
 sails generate script hello
